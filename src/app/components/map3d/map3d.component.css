@@ -1,0 +1,10 @@
+#mapView {
+  height: 100%;
+  width: 100%;
+}
+
+.esri-view {
+  width: 100vw;
+  height: 100vh;
+}
+

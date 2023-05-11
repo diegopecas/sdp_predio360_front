@@ -1,0 +1,25 @@
+<div class="toolbar">
+  <div class="boton-menu" title="Acercar" (click)="emitirEvento('+')">
+    <fa-icon [icon]="faPlus" size="1x"></fa-icon>
+  </div>
+  <hr class="toolbar-separator" />
+  <div class="boton-menu" title="Alejar" (click)="emitirEvento('-')">
+    <fa-icon [icon]="faMinus" size="1x"></fa-icon>
+  </div>
+  <hr class="toolbar-separator" />
+  <div class="boton-menu" title="Vista inicial" (click)="emitirEvento('i')">
+    <fa-icon [icon]="faHouse" size="1x"></fa-icon>
+  </div>
+  <hr class="toolbar-separator" />
+  <div class="boton-menu" title="imprimir" (click)="emitirEvento('print')">
+    <fa-icon [icon]="faPrint" size="1x"></fa-icon>
+  </div>
+  <hr class="toolbar-separator" />
+  <div class="boton-menu" title="2D" (click)="emitirEvento('2D')" [routerLink]="['/2d']" routerLinkActive="router-link-active" >
+    <p class="texto-icono">2D</p>
+  </div>
+  <hr class="toolbar-separator" />
+  <div class="boton-menu" title="3D" (click)="emitirEvento('3D')" [routerLink]="['/3d']" routerLinkActive="router-link-active" >
+    <p class="texto-icono">3D</p>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+.container-home {
+    background-image: url('/assets/images/fondo_predio360.png');
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.start-button-container {
+	position: absolute;
+	right: 10vw;
+	bottom: 10vh;
+}
+
+.start-button {
+	background-color: aqua;
+	color: black;
+	font-size: 36px;
+	border-radius:50px;
+	border: none;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 40px;
+	padding-right: 40px;
+	cursor: pointer;
+	font-weight: lighter;
+}
+
+/*.start-button {
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
+	background-color:#ededed;
+	border-radius:6px;
+	border:1px solid #dcdcdc;
+	display:inline-block;
+	cursor:pointer;
+	color:#777777;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffffff;
+}
+.start-button:hover {
+	background:linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
+	background-color:#dfdfdf;
+}
+.start-button:active {
+	position:relative;
+	top:1px;
+}*/

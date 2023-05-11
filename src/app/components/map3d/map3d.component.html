@@ -1,0 +1,11 @@
+<div class="map-container">
+    <div #mapView id="mapView"></div>
+    <app-consulta *ngIf="opcion == 'menu'" (accion)="accionMenu($event)"></app-consulta>
+    <app-consulta-predial *ngIf="opcion == 'consulta-predial'" (accion)="accionMenu($event)"></app-consulta-predial>
+    <app-consulta-direccion *ngIf="opcion == 'consulta-direccion'" (accion)="accionMenu($event)"></app-consulta-direccion>
+    <app-consulta-cedula *ngIf="opcion == 'consulta-cedula'" (accion)="accionMenu($event)"></app-consulta-cedula>
+    <app-consulta-chip *ngIf="opcion == 'consulta-chip'" (accion)="accionMenu($event)"></app-consulta-chip>
+    <app-consulta-matricula *ngIf="opcion == 'consulta-matricula'" (accion)="accionMenu($event)"></app-consulta-matricula>
+    <app-resultados *ngIf="opcion == 'resultados'"></app-resultados>
+    <app-toolbar></app-toolbar>
+</div>
