@@ -6,6 +6,8 @@
     <app-consulta-cedula *ngIf="opcion == 'consulta-cedula'" (accion)="accionMenu($event)"></app-consulta-cedula>
     <app-consulta-chip *ngIf="opcion == 'consulta-chip'" (accion)="accionMenu($event)"></app-consulta-chip>
     <app-consulta-matricula *ngIf="opcion == 'consulta-matricula'" (accion)="accionMenu($event)"></app-consulta-matricula>
+    <app-consulta-seleccion-espacial *ngIf="opcion == 'consulta-seleccion'" (accion)="accionMenu($event)"></app-consulta-seleccion-espacial>
+    <app-consulta-upl *ngIf="opcion == 'consulta-upl'" (accion)="accionMenu($event)"></app-consulta-upl>
     <app-resultados *ngIf="opcion == 'resultados'"></app-resultados>
     <app-toolbar></app-toolbar>
 </div>
