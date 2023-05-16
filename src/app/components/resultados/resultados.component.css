@@ -1,0 +1,22 @@
+.panel {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .panel-header {
+    background-color: #f1f1f1;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .panel-content {
+    padding: 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  
+  .panel.active .panel-content {
+    max-height: 500px; /* Ajusta la altura máxima del contenido */
+  }

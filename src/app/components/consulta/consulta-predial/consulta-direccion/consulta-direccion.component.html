@@ -8,13 +8,14 @@
   <hr class="separador" />
   <div class="form__group">
     <input type="input" class="form__field" placeholder="Ingrese una dirección" name="direccion" id='direccion' required />
-    <label for="name" class="form__label">Dirección</label>
+    <label for="direccion" class="form__label">Dirección</label>
   </div>
   <hr class="separador" />
   <div class="logo-container">
-    <button class="button-aqua" (click)="seleccion('consulta-predial')">
-      regresar
-    </button>
+    <div class="item-regresar" (click)="seleccion('consulta-predial')">
+      <p>Regresar</p>
+      <p class="icono-item-atras"></p>
+    </div>
   </div>
   <div class="logo-container">
     <img class="logo-sdp" src="/assets/images/logo_sdp_blanco.png" />

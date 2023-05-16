@@ -17,12 +17,15 @@ import { loadModules } from "esri-loader";
 })
 export class Map3dComponent implements AfterViewInit {
   public opcion: string = "menu";
+  public resultados: boolean = false;
 
   private capa2d: any;
   private capa3d: any;
   private simbolo3d: any;
   private view: any;
   private map: any;
+  private vista2d3d = '3D';
+  public valoresResultados: any;
 
   @ViewChild("mapViewNode", { static: true }) private mapViewEl:
     | ElementRef
@@ -143,14 +146,7 @@ export class Map3dComponent implements AfterViewInit {
         // let type = "cartographic";
 
         this.capa3d.visible = true;
-        this.capa2d.visible = true;
-
-        /*this.view.on("click", (event: any) => {
-          this.view.hitTest(event).then((response: any) => {
-            // var graphic = response.results[0].graphic;
-            console.log('CLICK ON MAP', response.results)
-          });
-        });*/
+        this.capa2d.visible = false;
 
         this.view.on("click", (event:any) => {
           var screenPoint = {
@@ -158,17 +154,29 @@ export class Map3dComponent implements AfterViewInit {
             y: event.y
           };
         
-          this.view.hitTest(screenPoint).then((response:any) => {
-            if (response.results.length) {
-              var graphic = response.results.filter((result:any) => {
-              
-                return result.graphic.layer === this.capa3d; // 'capa-construccion-3d';
-              })[0].graphic;
-        
-              // do something with the result graphic
-              console.log('capa-construccion-3d', graphic.attributes);
-            }
-          });
+          if(this.opcion === 'consulta-seleccion') {
+            this.view.hitTest(screenPoint).then((response:any) => {
+              if (response.results.length) {
+                var graphic = response.results.filter((result:any) => {
+                
+                  if(this.vista2d3d === '3D') {
+                    return result.graphic.layer === this.capa3d; // 'capa-construccion-3d';
+                  } else {
+                    return result.graphic.layer === this.capa2d; // 'capa-construccion-3d';
+                  }
+                })[0].graphic;
+  
+                this.resultados = true;
+          
+                this.valoresResultados = {
+                  opcion: this.opcion,
+                  resultados: graphic.attributes
+                };
+                // do something with the result graphic
+                console.log('capa-construccion', graphic.attributes);
+              }
+            });
+          }
         });
 
 
@@ -179,5 +187,24 @@ export class Map3dComponent implements AfterViewInit {
   accionMenu(valor: any) {
     console.log(valor);
     this.opcion = valor;
+  }
+
+  accion2d3d(valor: any) {
+    console.log(valor);
+    this.vista2d3d = valor;
+    console.log('CAMBIO', this.vista2d3d);
+    if(this.vista2d3d === '3D') {
+      this.capa3d.visible = true;
+      this.capa2d.visible = false;
+    } else {
+      this.capa3d.visible = false;
+      this.capa2d.visible = true;
+    }
+  }
+
+  regresarResultados(valor:any) {
+    if(valor) {
+      this.resultados = false;
+    }
   }
 }

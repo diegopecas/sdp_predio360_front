@@ -1,0 +1,76 @@
+<div class="consulta-predial">
+  <div class="logo-container">
+    <img class="logo" src="/assets/images/logo_predio360.png" />
+  </div>
+  <hr class="separador" />
+
+  <div class="panel" [ngClass]="{ active: isIPPanelExpanded }">
+    <div class="panel-header" (click)="togglePanel('IP')">
+      Identificación Predio
+    </div>
+    <div class="panel-content" [ngStyle]="{ 'max-height.px': panelIPHeight }">
+      <!-- Contenido del panel -->
+      <app-resultados-identificacion-predio
+        [valores]="identificacionPredio"
+      ></app-resultados-identificacion-predio>
+    </div>
+  </div>
+  <div class="panel" [ngClass]="{ active: isIFLPanelExpanded }">
+    <div class="panel-header" (click)="togglePanel('IFL')">
+      Información Física Del Lote
+    </div>
+    <div class="panel-content" [ngStyle]="{ 'max-height.px': panelIFLHeight }">
+      <!-- Contenido del panel -->
+      <app-resultados-info-fisica-lote></app-resultados-info-fisica-lote>
+    </div>
+  </div>
+  <div class="panel" [ngClass]="{ active: isLOCPanelExpanded }">
+    <div class="panel-header" (click)="togglePanel('LOC')">
+      Información De Localización
+    </div>
+    <div class="panel-content" [ngStyle]="{ 'max-height.px': panelLOCHeight }">
+      <!-- Contenido del panel -->
+      <app-resultados-localizacion></app-resultados-localizacion>
+    </div>
+  </div>
+  <div class="panel" [ngClass]="{ active: isNORPanelExpanded }">
+    <div class="panel-header" (click)="togglePanel('NOR')">
+      Información Normativa
+    </div>
+    <div class="panel-content" [ngStyle]="{ 'max-height.px': panelNORHeight }">
+      <!-- Contenido del panel -->
+      <app-resultados-normativa></app-resultados-normativa>
+    </div>
+  </div>
+  <div class="panel" [ngClass]="{ active: isIEPanelExpanded }">
+    <div class="panel-header" (click)="togglePanel('IE')">
+      Información Económica
+    </div>
+    <div class="panel-content" [ngStyle]="{ 'max-height.px': panelIEHeight }">
+      <!-- Contenido del panel -->
+      <app-resultados-info-economica></app-resultados-info-economica>
+    </div>
+  </div>
+  <div class="panel" [ngClass]="{ active: isURBPanelExpanded }">
+    <div class="panel-header" (click)="togglePanel('URB')">
+      Identificación Urbanística
+    </div>
+    <div class="panel-content" [ngStyle]="{ 'max-height.px': panelURBHeight }">
+      <!-- Contenido del panel -->
+      <app-resultados-urbanistica></app-resultados-urbanistica>
+    </div>
+  </div>
+
+  <!--<app-resultados-estadisticas></app-resultados-estadisticas>-->
+  <hr class="separador" />
+  <div class="logo-container">
+    <div class="item-regresar" (click)="regresar()">
+      <p>Regresar</p>
+      <p class="icono-item-atras"></p>
+    </div>
+  </div>
+  <div class="logo-container">
+    <img class="logo-sdp" src="/assets/images/logo_sdp_blanco.png" />
+  </div>
+  <div class="barra-pie"></div>
+</div>

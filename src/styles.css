@@ -85,28 +85,135 @@ body {
   cursor: pointer;
 }
 
+.item-regresar {
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 18px;
+  font-weight: lighter;
+  color: #bbbbbb;
+  display: inline-flex;
+  justify-content: space-between;
+  vertical-align: center;
+  text-align: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.item-regresar:hover {
+  color: aqua;
+  cursor: pointer;
+}
+
+.icono-item {
+  background-image: url("/assets/images/adelante-gris.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 40px;
+  height: 40px;
+}
+
+.icono-item:hover {
+  background-image: url("/assets/images/adelante.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 40px;
+  height: 40px;
+}
+
+.icono-item-atras {
+  background-image: url("/assets/images/atras-gris.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+}
+
+.icono-item-atras:hover {
+  background-image: url("/assets/images/atras.png");
+}
+
 .button-aqua {
-	background-color: aqua;
-	color: black;
-	font-size: 18px;
-	border-radius:50px;
-	border: none;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	padding-left: 40px;
-	padding-right: 40px;
-	cursor: pointer;
-	font-weight: lighter;
+  background-color: aqua;
+  color: black;
+  font-size: 18px;
+  border-radius: 50px;
+  border: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 40px;
+  padding-right: 40px;
+  cursor: pointer;
+  font-weight: lighter;
 }
 
 .titulo-seccion {
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 24px;
-    font-weight: lighter;
-    color: aqua;
-    display: block;
-    justify-content: space-between;
-    text-align: center;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  }
+  padding-left: 20px;
+  padding-right: 20px;
+  font-size: 24px;
+  font-weight: lighter;
+  color: aqua;
+  display: block;
+  justify-content: space-between;
+  text-align: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/** Formularios Input **/
+
+.form__group {
+  position: relative;
+  padding: 15px 0 0;
+  margin-top: 10px;
+  width: 80%;
+  margin-left: 10%;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.form__field {
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid #9b9b9b;
+  outline: 0;
+  font-size: 16px;
+  color: #fff;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+}
+.form__field::placeholder {
+  color: transparent;
+}
+.form__field:placeholder-shown ~ .form__label {
+  font-size: 14px;
+  cursor: text;
+  top: 20px;
+}
+.form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 14px;
+  color: #9b9b9b;
+}
+.form__field:focus {
+  padding-bottom: 6px;
+  font-weight: 700;
+  border-width: 3px;
+  border-image: linear-gradient(to right, #11998e, #38ef7d);
+  border-image-slice: 1;
+}
+.form__field:focus ~ .form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: #11998e;
+  font-weight: 700;
+}
+/* reset input */
+.form__field:required,
+.form__field:invalid {
+  box-shadow: none;
+}

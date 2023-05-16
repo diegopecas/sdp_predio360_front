@@ -6,11 +6,16 @@
       <p>Consulta por CHIP</p>
     </div>
     <hr class="separador" />
+    <div class="form__group">
+      <input type="input" class="form__field" placeholder="Ingrese el CHIP" name="chip" id='chip' required />
+      <label for="chip" class="form__label">CHIP</label>
+    </div>
     <hr class="separador" />
     <div class="logo-container">
-      <button class="button-aqua" (click)="seleccion('consulta-predial')">
-        regresar
-      </button>
+      <div class="item-regresar" (click)="seleccion('consulta-predial')">
+        <p>Regresar</p>
+        <p class="icono-item-atras"></p>
+      </div>
     </div>
     <div class="logo-container">
       <img class="logo-sdp" src="/assets/images/logo_sdp_blanco.png" />
