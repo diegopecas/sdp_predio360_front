@@ -9,5 +9,6 @@
     <app-consulta-seleccion-espacial *ngIf="opcion == 'consulta-seleccion' && !resultados" (accion)="accionMenu($event)"></app-consulta-seleccion-espacial>
     <app-consulta-upl *ngIf="opcion == 'consulta-upl' && !resultados" (accion)="accionMenu($event)"></app-consulta-upl>
     <app-resultados *ngIf="resultados" (accion)="regresarResultados($event)" [valores]="valoresResultados"></app-resultados>
+    <app-resultados-estadisticas *ngIf="resultados"></app-resultados-estadisticas>
     <app-toolbar (accion2d3d)="accion2d3d($event)"></app-toolbar>
 </div>

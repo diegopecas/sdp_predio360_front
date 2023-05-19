@@ -19,8 +19,8 @@ export class ResultadosComponent implements OnChanges {
   public identificacionPredio: any;
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("ngOnChanges ResultadosComponent", changes);
     this.identificacionPredio = changes["valores"]["currentValue"];
+    console.log("ngOnChanges ResultadosComponent", this.identificacionPredio.resultados);
   }
 
   regresar() {
@@ -45,17 +45,27 @@ export class ResultadosComponent implements OnChanges {
     switch(opcion){
       case 'IP':
         this.isIPPanelExpanded = !this.isIPPanelExpanded;
-        this.panelIPHeight = this.isIPPanelExpanded ? 500 : 0; // Ajusta la altura máxima del contenido
+        this.panelIPHeight = this.isIPPanelExpanded ? 500 : 0;
         break;
       case 'IFL':
+        this.isIFLPanelExpanded = !this.isIFLPanelExpanded;
+        this.panelIFLHeight = this.isIFLPanelExpanded ? 500 : 0;
         break;
       case 'LOC':
+        this.isLOCPanelExpanded = !this.isLOCPanelExpanded;
+        this.panelLOCHeight = this.isLOCPanelExpanded ? 500 : 0;
         break;
       case 'NOR':
+        this.isNORPanelExpanded = !this.isNORPanelExpanded;
+        this.panelNORHeight = this.isNORPanelExpanded ? 500 : 0;
         break;
       case 'IE':
+        this.isIEPanelExpanded = !this.isIEPanelExpanded;
+        this.panelIEHeight = this.isIEPanelExpanded ? 500 : 0;
         break;
       case 'URB':
+        this.isURBPanelExpanded = !this.isURBPanelExpanded;
+        this.panelURBHeight = this.isURBPanelExpanded ? 500 : 0;
         break;
     }
   }

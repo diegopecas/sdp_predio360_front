@@ -1,0 +1,67 @@
+.panel {
+  width: calc(100vw - 456px); /* Ancho del panel */
+  z-index: 99999999;
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  left: 404px;
+  height: 200px;
+  background: #000000bb;
+}
+
+.contenido {
+  width: max-content;
+  display: flex;
+  flex-wrap: nowrap;
+  transition: transform 0.3s ease;
+}
+
+.scroll-izquierda{
+  left: 0;
+}
+
+.scroll-derecha {
+  right: 0;
+}
+
+.scroll-izquierda,
+.scroll-derecha {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  width: 30px; /* Ancho de los íconos de desplazamiento */
+  height: 30px; /* Alto de los íconos de desplazamiento */
+  background-color: gray; /* Color de fondo de los íconos de desplazamiento */
+  cursor: pointer;
+}
+
+.scroll-izquierda::before,
+.scroll-derecha::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px; /* Ancho de la flecha de desplazamiento */
+  height: 10px; /* Alto de la flecha de desplazamiento */
+  border-left: 2px solid white; /* Color de la flecha de desplazamiento */
+  border-bottom: 2px solid white; /* Color de la flecha de desplazamiento */
+}
+
+.scroll-izquierda::before {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.scroll-derecha::before {
+  transform: translate(-50%, -50%) rotate(135deg);
+}
+
+.scroll-izquierda:hover,
+.scroll-derecha:hover {
+  background-color: darkgray; /* Color de fondo al pasar el mouse por encima de los íconos de desplazamiento */
+}
+
+.scroll-izquierda:hover .scroll-izquierda::before,
+.scroll-derecha:hover .scroll-derecha::before {
+  border-color: white; /* Color de la flecha al pasar el mouse por encima de los íconos de desplazamiento */
+}

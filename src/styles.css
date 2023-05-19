@@ -16,7 +16,8 @@ body {
 /* PARA MENU DE CONSULTAS*/
 
 .consulta-predial {
-  position: absolute;
+  /*position: absolute;*/
+  position: fixed;
   background-color: #000000bb;
   left: 0;
   top: 0;
@@ -27,6 +28,9 @@ body {
   max-height: 100vh;
   overflow-y: auto;
   overflow-x: hidden;
+  /*border-bottom-width: 10px;
+  border-bottom-style: solid;
+  border-image-source: linear-gradient(90deg, rgba(9,250,251,1) 0%, rgba(128,133,182,1) 50%, rgba(237,32,121,1) 100%);*/
 }
 
 .logo-container {
@@ -48,13 +52,14 @@ body {
 }
 
 .barra-pie {
-  width: 100%;
+  width: 400px;
+  max-width: 60vw;
   height: 10px;
-  background-image: url("/assets/images/barra_pie.png");
   background-size: cover;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
+  background: linear-gradient(90deg, rgba(9,250,251,1) 0%, rgba(128,133,182,1) 50%, rgba(237,32,121,1) 100%);
 }
 
 .separador {

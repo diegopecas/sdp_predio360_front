@@ -1,22 +1,27 @@
 .panel {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  
-  .panel-header {
-    background-color: #f1f1f1;
-    padding: 10px;
-    cursor: pointer;
-  }
-  
-  .panel-content {
-    padding: 10px;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-  }
-  
-  .panel.active .panel-content {
-    max-height: 500px; /* Ajusta la altura máxima del contenido */
-  }
+  border: none; /* 1px solid #ccc; */
+  /* border-radius: 4px; */
+  overflow: hidden;
+  font-size: 18px;
+}
+
+.panel-header {
+  background-color: #ffffff44;
+  padding: 10px;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: bolder;
+}
+
+.panel-content {
+  padding: 10px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.panel.active .panel-content {
+  max-height: 1000px; /* Ajusta la altura máxima del contenido */
+}

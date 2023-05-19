@@ -57,8 +57,8 @@ export class Map3dComponent implements AfterViewInit {
         esriConfig.apiKey =
           "AAPK18837c198fe14f849f5237a94fb8c4d9nyUIHfhPmykTR_afDukiTorJHXPimhB05XjXQ6o6rDQ-GAsclkcQJjNfsUX-ulMj";
 
-        const urlServicio =
-          "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/catastro/construccion/MapServer/0";
+        const urlServicio = "https://services8.arcgis.com/2gedZBw4OrdjULOA/ArcGIS/rest/services/Mapa_demo_Predio_360_WFL1/FeatureServer/0";
+        //  "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/catastro/construccion/MapServer/0";
         // const urlServicio = "https://sinupot.sdp.gov.co/serverp/rest/services/CATASTRAL/Division_Fisica/MapServer/0";
 
         this.capa2d = new FeatureLayer({
@@ -116,7 +116,8 @@ export class Map3dComponent implements AfterViewInit {
                 type: "size",
                 // field: "CONNPISOS", // "NUMERO_PISO",
                 valueUnit: "meters",
-                valueExpression: "return Abs($feature.CONNPISOS) * 2.4;",
+                // valueExpression: "return Abs($feature.CONNPISOS) * 2.4;",
+                valueExpression: "return Abs($feature.NUMERO_PISOS) * 2.4;",
               },
             ],
           },
@@ -136,10 +137,13 @@ export class Map3dComponent implements AfterViewInit {
           container: "mapView",
           map: this.map,
           camera: {
-            position: [-74.08643, 4.6543, 314.88439],
-            // heading: 356.82,
-            heading: 15000,
-            tilt: 80,
+            position: {
+              latitude: 4.6,
+              longitude: -74.11,
+              z: 2800  // Altura en metros
+            },
+            heading: 0, // grados de rotación respecto del norte
+            tilt: 70, // grados de rotación respecto de la superficie
           },
           qualityProfile: "high",
         });
@@ -153,7 +157,7 @@ export class Map3dComponent implements AfterViewInit {
             x: event.x,
             y: event.y
           };
-        
+          console.log('clic', screenPoint)
           if(this.opcion === 'consulta-seleccion') {
             this.view.hitTest(screenPoint).then((response:any) => {
               if (response.results.length) {

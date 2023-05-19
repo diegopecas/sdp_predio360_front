@@ -15,40 +15,36 @@
 }
 
 .start-button {
-	background-color: aqua;
-	color: black;
-	font-size: 36px;
-	border-radius:50px;
-	border: none;
 	padding-top: 20px;
 	padding-bottom: 20px;
 	padding-left: 40px;
 	padding-right: 40px;
+	border: none;
+	background-color: aqua;
+	color: black;
+	font-size: 20px;
+	border-radius:50px;
 	cursor: pointer;
 	font-weight: lighter;
 }
 
-/*.start-button {
-	box-shadow:inset 0px 1px 0px 0px #ffffff;
-	background:linear-gradient(to bottom, #ededed 5%, #dfdfdf 100%);
-	background-color:#ededed;
-	border-radius:6px;
-	border:1px solid #dcdcdc;
-	display:inline-block;
-	cursor:pointer;
-	color:#777777;
-	font-family:Arial;
-	font-size:15px;
-	font-weight:bold;
-	padding:6px 24px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #ffffff;
+.logo {
+	position: absolute;
+	left: 15vw;
+	top: 15vw;
 }
-.start-button:hover {
-	background:linear-gradient(to bottom, #dfdfdf 5%, #ededed 100%);
-	background-color:#dfdfdf;
+
+.logo>img {
+	max-width: 40vw;
 }
-.start-button:active {
-	position:relative;
-	top:1px;
-}*/
+
+.logo-sdp {
+	position: absolute;
+	right: 2vw;
+	top: 0vw;
+	text-align: end;
+}
+
+.logo-sdp>img {
+	max-width: 30vw;
+}
