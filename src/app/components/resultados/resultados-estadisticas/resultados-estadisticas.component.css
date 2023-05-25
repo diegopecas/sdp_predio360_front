@@ -5,9 +5,9 @@
   position: fixed;
   bottom: 16px;
   left: 404px;
-  height: 105px;
+  height: 155px;
   background: #ffffffbb;
-  padding-top: 15px;
+  padding-top: 0px;
   padding-bottom: 15px;
 }
 
@@ -112,4 +112,15 @@
 .scroll-izquierda:hover .scroll-izquierda::before,
 .scroll-derecha:hover .scroll-derecha::before {
   border-color: white; /* Color de la flecha al pasar el mouse por encima de los íconos de desplazamiento */
+}
+
+.titulo {
+  width: 100%;
+  color: #000000;
+  /*border-bottom: solid #000000 1px;*/
+  text-align: center;
+  font-weight: bolder;
+  padding-top: 10px;
+  padding-bottom: 0px;
+  height: 30px;
 }

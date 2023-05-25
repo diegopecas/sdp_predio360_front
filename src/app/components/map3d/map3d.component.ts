@@ -22,6 +22,7 @@ export class Map3dComponent implements AfterViewInit {
   private capa2d: any;
   private capa3d: any;
   private capaGaleria:any;
+  private capaPuntosSeleccionados:any;
   private simbolo3d: any;
   private simbolo3dOver: any;
   private view: any;
@@ -50,7 +51,10 @@ export class Map3dComponent implements AfterViewInit {
       "esri/layers/GraphicsLayer",
       "esri/symbols/ExtrudeSymbol3DLayer",
       'esri/symbols/IconSymbol3DLayer',
-      'esri/symbols/PointSymbol3D'
+      'esri/symbols/PointSymbol3D',
+      "esri/geometry/Point",
+      "esri/Graphic",
+      "esri/symbols/SimpleMarkerSymbol"
     ]).then(
       ([
         esriConfig,
@@ -61,7 +65,10 @@ export class Map3dComponent implements AfterViewInit {
         GraphicsLayer,
         ExtrudeSymbol3DLayer,
         IconSymbol3DLayer,
-        PointSymbol3D
+        PointSymbol3D,
+        Point,
+        Graphic,
+        SimpleMarkerSymbol
       ]) => {
         esriConfig.apiKey =
           "AAPK18837c198fe14f849f5237a94fb8c4d9nyUIHfhPmykTR_afDukiTorJHXPimhB05XjXQ6o6rDQ-GAsclkcQJjNfsUX-ulMj";
@@ -176,12 +183,14 @@ export class Map3dComponent implements AfterViewInit {
           visible: true,
         });
 
+        this.capaPuntosSeleccionados = new GraphicsLayer();
+
         // Create Map
         this.map = new Map({
           // basemap: "arcgis-light-gray",
           basemap: "streets-vector",
           ground: "world-elevation",
-          layers: [this.capa2d, this.capa3d, this.capaGaleria],
+          layers: [this.capa2d, this.capa3d, this.capaGaleria, this.capaPuntosSeleccionados],
         });
 
         // Create the SceneView
@@ -203,6 +212,7 @@ export class Map3dComponent implements AfterViewInit {
         this.capa3d.visible = true;
         this.capa2d.visible = false;
         this.capaGaleria.visible = true;
+        this.capaPuntosSeleccionados.visible = true;
 
         this.view.on("click", (event: any) => {
           this.valorPuntoClick = event;
@@ -210,6 +220,31 @@ export class Map3dComponent implements AfterViewInit {
             x: event.x,
             y: event.y,
           };
+
+          /********** */
+
+          var point = new Point({
+            longitude: event.longitude,
+            latitude: event.latitude
+          });
+
+          var markerSymbol = new SimpleMarkerSymbol({
+            color: [226, 119, 40], // color en RGB
+            size: 12,
+            outline: {
+              color: [255, 255, 255], // color del borde en RGB
+              width: 1
+            }
+          });
+
+          const graphicPoint = new Graphic({
+            geometry: point,
+            symbol: markerSymbol
+          });
+
+          this.capaPuntosSeleccionados.add(graphicPoint); // Agrega el gráfico a la capa de gráficos
+          /********** */
+
           const clickedPoint = this.view.toMap(event);
           
           // Centrar el mapa en el punto clicado
