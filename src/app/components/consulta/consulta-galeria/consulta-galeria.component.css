@@ -1,0 +1,21 @@
+.texto-blanco {
+    color: #ffffff;
+}
+
+.item-consulta {
+    font-weight: lighter;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.item-consulta:hover {
+    color: aqua;
+}
+
+.img-consulta {
+    width: 30px;
+    height: 30px;
+}

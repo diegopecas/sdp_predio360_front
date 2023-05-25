@@ -1,0 +1,38 @@
+<div class="consulta-predial">
+  <div class="logo-container">
+    <img class="logo" src="/assets/images/logo_predio360.png" />
+  </div>
+  <div class="titulo-seccion">
+    <p>Consulta por proyectos</p>
+  </div>
+  <hr class="separador" />
+  <ng-container *ngIf="datos">
+    <div class="form__group">
+      <p class="texto-blanco">Proyecto:</p>
+      <select class="form__field" [(ngModel)]="currentIndex">
+        <option *ngFor="let d of datos; let i = index" [value]="i">
+          {{ d.proyecto }}
+        </option>
+      </select>
+    </div>
+    <div class="form__group">
+        <p class="texto-blanco">Código Proyecto: {{datos[currentIndex].cod_proyecto}}</p>
+        <p class="texto-blanco">Vendedor: {{datos[currentIndex].vendedor}}</p>
+        <p class="texto-blanco">Zona: {{datos[currentIndex].zona}}</p>
+        <p class="texto-blanco">Barrio: {{datos[currentIndex].barrio}}</p>
+        <p class="item-consulta" (click)="verDetalle()">Ver detalle <img class="img-consulta" src="/assets/images/adelante.png" /></p>
+        <p class="item-consulta">Ubicar proyecto en el mapa <img class="img-consulta" src="/assets/images/adelante.png" /></p>
+    </div>
+  </ng-container>
+  <hr class="separador" />
+  <div class="logo-container">
+    <div class="item-regresar" (click)="seleccion('menu')">
+      <p>Regresar</p>
+      <p class="icono-item-atras"></p>
+    </div>
+  </div>
+  <div class="logo-container">
+    <img class="logo-sdp" src="/assets/images/logo_sdp_blanco.png" />
+  </div>
+  <div class="barra-pie"></div>
+</div>

@@ -21,11 +21,14 @@ export class Map3dComponent implements AfterViewInit {
 
   private capa2d: any;
   private capa3d: any;
+  private capaGaleria:any;
   private simbolo3d: any;
+  private simbolo3dOver: any;
   private view: any;
   private map: any;
-  private vista2d3d = '3D';
+  private vista2d3d = "3D";
   public valoresResultados: any;
+  public valorPuntoClick:any;
 
   @ViewChild("mapViewNode", { static: true }) private mapViewEl:
     | ElementRef
@@ -44,7 +47,10 @@ export class Map3dComponent implements AfterViewInit {
       "esri/views/SceneView",
       "esri/layers/SceneLayer",
       "esri/layers/FeatureLayer",
+      "esri/layers/GraphicsLayer",
       "esri/symbols/ExtrudeSymbol3DLayer",
+      'esri/symbols/IconSymbol3DLayer',
+      'esri/symbols/PointSymbol3D'
     ]).then(
       ([
         esriConfig,
@@ -52,17 +58,21 @@ export class Map3dComponent implements AfterViewInit {
         SceneView,
         SceneLayer,
         FeatureLayer,
+        GraphicsLayer,
         ExtrudeSymbol3DLayer,
+        IconSymbol3DLayer,
+        PointSymbol3D
       ]) => {
         esriConfig.apiKey =
           "AAPK18837c198fe14f849f5237a94fb8c4d9nyUIHfhPmykTR_afDukiTorJHXPimhB05XjXQ6o6rDQ-GAsclkcQJjNfsUX-ulMj";
 
-        const urlServicio = "https://services8.arcgis.com/2gedZBw4OrdjULOA/ArcGIS/rest/services/Mapa_demo_Predio_360_WFL1/FeatureServer/0";
+        const urlServicio =
+          "https://services8.arcgis.com/2gedZBw4OrdjULOA/ArcGIS/rest/services/Mapa_demo_Predio_360_WFL1/FeatureServer/0";
         //  "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/catastro/construccion/MapServer/0";
         // const urlServicio = "https://sinupot.sdp.gov.co/serverp/rest/services/CATASTRAL/Division_Fisica/MapServer/0";
 
         this.capa2d = new FeatureLayer({
-          id: 'capa-construccion-2d',
+          id: "capa-construccion-2d",
           url: urlServicio,
           outFields: ["*"],
           renderer: {
@@ -80,6 +90,8 @@ export class Map3dComponent implements AfterViewInit {
           },
           visible: false,
         });
+
+        
 
         this.simbolo3d = {
           type: "polygon-3d", // autocasts as new PolygonSymbol3D()
@@ -104,8 +116,50 @@ export class Map3dComponent implements AfterViewInit {
           ],
         };
 
+        this.simbolo3dOver = {
+          type: "polygon-3d", // autocasts as new PolygonSymbol3D()
+          symbolLayers: [
+            {
+              type: "extrude", // autocasts as new ExtrudeSymbol3DLayer()
+              material: {
+                color: [3, 255, 255, 1],
+              },
+              edges: {
+                type: "solid",
+                color: [50, 50, 50, 0.8],
+                size: 1,
+              },
+              size: (geometry: any, graphic: any) => {
+                const height = 0; // graphic.attributes["NUMERO_PISO"] * 2; // Multiplicar por 2 para dar la altura en metros
+                return height;
+              },
+              // Establecer la base de la extrusión en el suelo
+              anchor: "relative-to-ground",
+            },
+          ],
+        };
+
+        const symbolLayerBandera = new IconSymbol3DLayer({
+          resource: {
+            href: "/assets/images/flag.png"
+          },
+          size: 50
+        });
+        
+        const symbolBandera = new PointSymbol3D({
+          symbolLayers: [symbolLayerBandera]
+        });
+
+        this.capaGaleria = new FeatureLayer({
+          url: "https://services8.arcgis.com/2gedZBw4OrdjULOA/ArcGIS/rest/services/galeria_inmobiliaria_demo/FeatureServer/0",
+          renderer: {
+            type: "simple",
+            symbol: symbolBandera,
+          }
+        });
+
         this.capa3d = new FeatureLayer({
-          id: 'capa-construccion-3d',
+          id: "capa-construccion-3d",
           url: urlServicio, // "https://sinupot.sdp.gov.co/serverp/rest/services/CATASTRAL/Division_Fisica/MapServer/0/query?where=1%3D1&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=*&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&havingClause=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&returnExtentOnly=false&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=pjson",
           outFields: ["*"],
           renderer: {
@@ -114,9 +168,7 @@ export class Map3dComponent implements AfterViewInit {
             visualVariables: [
               {
                 type: "size",
-                // field: "CONNPISOS", // "NUMERO_PISO",
                 valueUnit: "meters",
-                // valueExpression: "return Abs($feature.CONNPISOS) * 2.4;",
                 valueExpression: "return Abs($feature.NUMERO_PISOS) * 2.4;",
               },
             ],
@@ -129,7 +181,7 @@ export class Map3dComponent implements AfterViewInit {
           // basemap: "arcgis-light-gray",
           basemap: "streets-vector",
           ground: "world-elevation",
-          layers: [this.capa2d, this.capa3d],
+          layers: [this.capa2d, this.capa3d, this.capaGaleria],
         });
 
         // Create the SceneView
@@ -140,49 +192,62 @@ export class Map3dComponent implements AfterViewInit {
             position: {
               latitude: 4.6,
               longitude: -74.11,
-              z: 2800  // Altura en metros
+              z: 2800, // Altura en metros
             },
             heading: 0, // grados de rotación respecto del norte
             tilt: 70, // grados de rotación respecto de la superficie
           },
           qualityProfile: "high",
         });
-        // let type = "cartographic";
 
         this.capa3d.visible = true;
         this.capa2d.visible = false;
+        this.capaGaleria.visible = true;
 
-        this.view.on("click", (event:any) => {
+        this.view.on("click", (event: any) => {
+          this.valorPuntoClick = event;
           var screenPoint = {
             x: event.x,
-            y: event.y
+            y: event.y,
           };
-          console.log('clic', screenPoint)
-          if(this.opcion === 'consulta-seleccion') {
-            this.view.hitTest(screenPoint).then((response:any) => {
+          const clickedPoint = this.view.toMap(event);
+          
+          // Centrar el mapa en el punto clicado
+          this.view.center = clickedPoint;
+
+          // Acercar 3 niveles de zoom
+          this.view.goTo({
+            target: clickedPoint,
+            zoom: 21,
+          });
+
+          if (this.opcion === "consulta-seleccion") {
+            this.view.hitTest(screenPoint).then((response: any) => {
               if (response.results.length) {
-                var graphic = response.results.filter((result:any) => {
-                
-                  if(this.vista2d3d === '3D') {
+
+
+
+                let graphic = response.results.filter((result: any) => {
+                  if (this.vista2d3d === "3D") {
                     return result.graphic.layer === this.capa3d; // 'capa-construccion-3d';
                   } else {
                     return result.graphic.layer === this.capa2d; // 'capa-construccion-3d';
                   }
                 })[0].graphic;
-  
+
                 this.resultados = true;
-          
+
                 this.valoresResultados = {
                   opcion: this.opcion,
-                  resultados: graphic.attributes
+                  resultados: graphic.attributes,
                 };
+                
                 // do something with the result graphic
-                console.log('capa-construccion', graphic.attributes);
+                console.log("capa-construccion", graphic.attributes);
               }
             });
           }
         });
-
 
       }
     );
@@ -196,8 +261,8 @@ export class Map3dComponent implements AfterViewInit {
   accion2d3d(valor: any) {
     console.log(valor);
     this.vista2d3d = valor;
-    console.log('CAMBIO', this.vista2d3d);
-    if(this.vista2d3d === '3D') {
+    console.log("CAMBIO", this.vista2d3d);
+    if (this.vista2d3d === "3D") {
       this.capa3d.visible = true;
       this.capa2d.visible = false;
     } else {
@@ -206,8 +271,8 @@ export class Map3dComponent implements AfterViewInit {
     }
   }
 
-  regresarResultados(valor:any) {
-    if(valor) {
+  regresarResultados(valor: any) {
+    if (valor) {
       this.resultados = false;
     }
   }

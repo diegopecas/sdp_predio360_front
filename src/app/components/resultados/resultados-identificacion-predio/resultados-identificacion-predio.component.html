@@ -1,10 +1,17 @@
 <ng-container *ngIf="datos">
-    <p>Dirección: {{ datos.DIRECCION }}</p>
-    <p>Código catastral: {{ datos.CEDULA_CATASTRAL }}</p>
-    <p>Matrícula: {{ datos.MATRICULA_INMOBILIARIA }}</p>
-    <p>CHIP: {{ datos.CHIP }}</p>
-    <p>Cédula catastral: {{ datos.CEDULA_CATASTRAL }}</p>
-    <p>Propiedad: </p>
-    <p>Datos de propiedad: </p>
+  <p>
+    Dirección:
+    <select class="form__field" [(ngModel)]="currentIndex">
+      <option *ngFor="let d of datos; let i = index" [value]="i">
+        {{ d.DIRECCION }}
+      </option>
+    </select>
+  </p>
+  <p>Código catastral: {{ datos[currentIndex].CEDULA_CATASTRAL }}</p>
+  <p>Matrícula: {{ datos[currentIndex].MATRICULA_INMOBILIARIA }}</p>
+  <p>CHIP: {{ datos[currentIndex].CHIP }}</p>
+  <p>Cédula catastral: {{ datos[currentIndex].CEDULA_CATASTRAL }}</p>
+  <p>Propiedad:</p>
+  <p>Datos de propiedad:</p>
 </ng-container>
-<br/>
+<br />

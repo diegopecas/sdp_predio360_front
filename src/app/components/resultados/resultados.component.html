@@ -3,7 +3,6 @@
     <img class="logo" src="/assets/images/logo_predio360.png" />
   </div>
   <hr class="separador" />
-
   <div class="panel" [ngClass]="{ active: isIPPanelExpanded }">
     <div class="panel-header" (click)="togglePanel('IP')">
       Identificación Predio
@@ -21,7 +20,9 @@
     </div>
     <div class="panel-content" [ngStyle]="{ 'max-height.px': panelIFLHeight }">
       <!-- Contenido del panel -->
-      <app-resultados-info-fisica-lote></app-resultados-info-fisica-lote>
+      <app-resultados-info-fisica-lote
+        [valores]="identificacionPredio"
+      ></app-resultados-info-fisica-lote>
     </div>
   </div>
   <div class="panel" [ngClass]="{ active: isLOCPanelExpanded }">
@@ -58,6 +59,17 @@
     <div class="panel-content" [ngStyle]="{ 'max-height.px': panelURBHeight }">
       <!-- Contenido del panel -->
       <app-resultados-urbanistica></app-resultados-urbanistica>
+    </div>
+  </div>
+  <div class="panel" [ngClass]="{ active: isGIPanelExpanded }">
+    <div class="panel-header" (click)="togglePanel('GI')">
+      Proyectos cercanos
+    </div>
+    <div class="panel-content" [ngStyle]="{ 'max-height.px': panelGIHeight }">
+      <!-- Contenido del panel -->
+      <app-galeria-inmobiliaria
+        [valores]="identificacionPredio" [valorPuntoClick]="puntoClick"
+      ></app-galeria-inmobiliaria>
     </div>
   </div>
 

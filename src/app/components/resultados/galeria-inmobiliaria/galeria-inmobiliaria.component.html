@@ -1,0 +1,16 @@
+<ng-container *ngIf="datos">
+    <div class="form__group">
+      <p class="texto-blanco">Proyecto:</p>
+      <select class="form__field" [(ngModel)]="currentIndex">
+        <option *ngFor="let d of datos; let i = index" [value]="i">
+          {{ d.proyecto }}
+        </option>
+      </select>
+    </div>
+    <div class="form__group">
+        <p class="texto-blanco">Código Proyecto: {{datos[currentIndex].cod_proyecto}}</p>
+        <p class="texto-blanco">Vendedor: {{datos[currentIndex].vendedor}}</p>
+        <p class="texto-blanco">Zona: {{datos[currentIndex].zona}}</p>
+        <p class="texto-blanco">Barrio: {{datos[currentIndex].barrio}}</p>
+    </div>
+  </ng-container>

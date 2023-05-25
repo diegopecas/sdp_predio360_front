@@ -3,10 +3,12 @@
   z-index: 99999999;
   overflow: hidden;
   position: fixed;
-  bottom: 0;
+  bottom: 16px;
   left: 404px;
   height: 105px;
   background: #ffffffbb;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .contenido {
@@ -17,7 +19,8 @@
 }
 
 .icono-estadistica {
-  width: 100px;
+  max-width: 100px;
+  max-height: 75px;
 }
 
 .seccion-estadistica {
@@ -46,6 +49,19 @@
   padding-right: 20px;
   border-left: solid 2px black;
   text-align: center;
+}
+
+.seccion-estadistica:hover {
+  background-color: #03ffffbb;
+  cursor: pointer;
+}
+.seccion-estadistica-i:hover {
+  background-color: #03ffffbb;
+  cursor: pointer;
+}
+.seccion-estadistica-f:hover {
+  background-color: #03ffffbb;
+  cursor: pointer;
 }
 
 .scroll-izquierda{

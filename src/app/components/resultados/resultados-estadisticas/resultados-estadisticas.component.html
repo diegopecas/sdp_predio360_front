@@ -1,20 +1,108 @@
-<div class="panel">
+<div class="panel" *ngIf="seccion=='general'" #panel>
   <div class="contenido" #contenido>
-    <div class="seccion-estadistica">
-      <img src="/assets/images/equipamiento.png" class="icono-estadistica" />
-      <label>Equipamiento</label>
+    <div class="seccion-estadistica-i" (click)="subseccion('equipamiento')">
+        <img src="/assets/images/equipamiento.png" class="icono-estadistica" /><br/>
+        <label>Equipamiento</label>
     </div>
-    <div class="seccion-estadistica-f">
-      <img src="/assets/images/parques.png" class="icono-estadistica" />
+    <div class="seccion-estadistica" (click)="subseccion('parques')">
+      <img src="/assets/images/parques.png" class="icono-estadistica" /><br/>
       <label>Parques</label>
     </div>
-    <div class="seccion-estadistica">
-      <img src="/assets/images/transporte.png" class="icono-estadistica" />
+    <div class="seccion-estadistica" (click)="subseccion('transporte')">
+      <img src="/assets/images/transporte.png" class="icono-estadistica" /><br/>
       <label>Transporte</label>
     </div>
-    <div class="seccion-estadistica-i">
-      <img src="/assets/images/socioeco.png" class="icono-estadistica" />
+    <div class="seccion-estadistica-f" (click)="subseccion('centros')">
+      <img src="/assets/images/socioeco.png" class="icono-estadistica" /><br/>
       <label>Centros económicos</label>
+    </div>
+  </div>
+  <div class="scroll-izquierda" (mouseover)="desplazarIzquierda()"></div>
+  <div class="scroll-derecha" (mouseover)="desplazarDerecha()"></div>
+</div>
+
+<div class="panel" *ngIf="seccion=='equipamiento'">
+  <div class="contenido" #contenido>
+    <div class="seccion-estadistica-i" (click)="subseccion('general')">
+      <img src="/assets/images/atras-gris.png" class="icono-estadistica" /><br/>
+      <label>Regresar</label>
+    </div>
+    <div class="seccion-estadistica" onclick="subseccion('parques')">
+      <label></label>
+    </div>
+    <div class="seccion-estadistica" onclick="subseccion('transporte')">
+      
+      <label></label>
+    </div>
+    <div class="seccion-estadistica-f" onclick="subseccion('centros')">
+      
+      <label></label>
+    </div>
+  </div>
+  <div class="scroll-izquierda" (mouseover)="desplazarIzquierda()"></div>
+  <div class="scroll-derecha" (mouseover)="desplazarDerecha()"></div>
+</div>
+
+<div class="panel" *ngIf="seccion=='parques'">
+  <div class="contenido" #contenido>
+    <div class="seccion-estadistica-i" (click)="subseccion('general')">
+      <img src="/assets/images/atras-gris.png" class="icono-estadistica" /><br/>
+      <label>Regresar</label>
+    </div>
+    <div class="seccion-estadistica" onclick="subseccion('parques')">
+      <label></label>
+    </div>
+    <div class="seccion-estadistica" onclick="subseccion('transporte')">
+      
+      <label></label>
+    </div>
+    <div class="seccion-estadistica-f" onclick="subseccion('centros')">
+      
+      <label></label>
+    </div>
+  </div>
+  <div class="scroll-izquierda" (mouseover)="desplazarIzquierda()"></div>
+  <div class="scroll-derecha" (mouseover)="desplazarDerecha()"></div>
+</div>
+
+<div class="panel" *ngIf="seccion=='transporte'">
+  <div class="contenido" #contenido>
+    <div class="seccion-estadistica-i" (click)="subseccion('general')">
+      <img src="/assets/images/atras-gris.png" class="icono-estadistica" /><br/>
+      <label>Regresar</label>
+    </div>
+    <div class="seccion-estadistica" onclick="subseccion('parques')">
+      <label></label>
+    </div>
+    <div class="seccion-estadistica" onclick="subseccion('transporte')">
+      
+      <label></label>
+    </div>
+    <div class="seccion-estadistica-f" onclick="subseccion('centros')">
+      
+      <label></label>
+    </div>
+  </div>
+  <div class="scroll-izquierda" (mouseover)="desplazarIzquierda()"></div>
+  <div class="scroll-derecha" (mouseover)="desplazarDerecha()"></div>
+</div>
+
+<div class="panel" *ngIf="seccion=='centros'">
+  <div class="contenido" #contenido>
+    <div class="seccion-estadistica-i" (click)="subseccion('general')">
+      <img src="/assets/images/atras-gris.png" class="icono-estadistica" /><br/>
+      <label>Regresar</label>
+    </div>
+    <div class="seccion-estadistica" onclick="subseccion('parques')">
+      <label></label>
+    </div>
+    <div class="seccion-estadistica" onclick="subseccion('transporte')">
+      
+      <label></label>
+    </div>
+    <div class="seccion-estadistica-f" onclick="subseccion('centros')">
+      
+      <label></label>
     </div>
   </div>
   <div class="scroll-izquierda" (mouseover)="desplazarIzquierda()"></div>

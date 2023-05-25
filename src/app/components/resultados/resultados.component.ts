@@ -15,11 +15,14 @@ import {
 export class ResultadosComponent implements OnChanges {
   @Output() accion = new EventEmitter();
   @Input() valores: any;
+  @Input() valorPuntoClick: any;
 
   public identificacionPredio: any;
+  public puntoClick: any;
 
   ngOnChanges(changes: SimpleChanges): void {
     this.identificacionPredio = changes["valores"]["currentValue"];
+    this.puntoClick = changes["valorPuntoClick"]["currentValue"];
     console.log("ngOnChanges ResultadosComponent", this.identificacionPredio.resultados);
   }
 
@@ -34,12 +37,14 @@ export class ResultadosComponent implements OnChanges {
   isNORPanelExpanded: boolean = false;
   isIEPanelExpanded: boolean = false;
   isURBPanelExpanded: boolean = false;
+  isGIPanelExpanded: boolean = false;
   panelIPHeight: number = 0;
   panelIFLHeight: number = 0;
   panelLOCHeight: number = 0;
   panelNORHeight: number = 0;
   panelIEHeight: number = 0;
   panelURBHeight: number = 0;
+  panelGIHeight: number = 0;
 
   togglePanel(opcion:any) {
     switch(opcion){
@@ -66,6 +71,10 @@ export class ResultadosComponent implements OnChanges {
       case 'URB':
         this.isURBPanelExpanded = !this.isURBPanelExpanded;
         this.panelURBHeight = this.isURBPanelExpanded ? 500 : 0;
+        break;
+      case 'GI':
+        this.isGIPanelExpanded = !this.isGIPanelExpanded;
+        this.panelGIHeight = this.isGIPanelExpanded ? 500 : 0;
         break;
     }
   }

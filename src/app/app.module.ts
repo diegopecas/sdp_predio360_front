@@ -31,6 +31,8 @@ import { ConsultaUplComponent } from './components/consulta/consulta-upl/consult
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MyHttpInterceptor } from './common/interceptors/http.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { GaleriaInmobiliariaComponent } from './components/resultados/galeria-inmobiliaria/galeria-inmobiliaria.component';
+import { ConsultaGaleriaComponent } from './components/consulta/consulta-galeria/consulta-galeria.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +59,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     ConsultaComponent,
     ConsultaSeleccionEspacialComponent,
     ConsultaUplComponent,
+    GaleriaInmobiliariaComponent,
+    ConsultaGaleriaComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,9 @@
-<p>Área: m<sup>2</sup></p>
-<p>Uso actual: </p>
-<p>Número de pisos: </p>
-<p>Unidades prediales: </p>
-<p>Calificación: </p>
-<p>Código lote: </p>
+<ng-container *ngIf="identificacionPredio">
+    <p>Área: {{ identificacionPredio.Shape__Area }} m<sup>2</sup></p>
+    <p>Uso actual: </p>
+    <p>Número de pisos: {{ identificacionPredio.NUMERO_PISOS }}</p>
+    <p>Unidades prediales: </p>
+    <p>Calificación: </p>
+    <p>Código lote: {{ identificacionPredio.CODIGO_LOTE }}</p>
+</ng-container>
 <br/>

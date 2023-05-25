@@ -11,13 +11,11 @@ export class ResultadosIdentificacionPredioComponent implements OnChanges {
 
   private identificacionPredio: any;
   public datos:any;
+  public direccion:any;
+  public currentIndex = 0;
 
   ngOnChanges(changes: SimpleChanges): void {
     this.identificacionPredio = changes["valores"]["currentValue"].resultados;
-    console.log(
-      "ngOnChanges ResultadosIdentificacionPredioComponent",
-      this.identificacionPredio
-    );
     this.consultarDatosPredio(this.identificacionPredio.CODIGO_LOTE);
   }
 
@@ -43,9 +41,9 @@ export class ResultadosIdentificacionPredioComponent implements OnChanges {
             // Manipular los resultados obtenidos
             const features = result.features;
             // Realizar acciones con los datos devueltos
-            console.log('resultadooooo', features)
+            
             if(features.length>0) {
-              this.datos = features[0].attributes;
+              this.datos = features.map((m:any)=>m.attributes);
             }
           })
           .catch((error: any) => {
@@ -55,4 +53,5 @@ export class ResultadosIdentificacionPredioComponent implements OnChanges {
       }
     );
   }
+
 }
