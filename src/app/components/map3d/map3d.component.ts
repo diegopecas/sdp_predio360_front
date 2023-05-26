@@ -9,6 +9,7 @@ import {
 import SceneView from '@arcgis/core/views/SceneView';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';*/
 import { loadModules } from "esri-loader";
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: "app-map3d",
@@ -21,15 +22,15 @@ export class Map3dComponent implements AfterViewInit {
 
   private capa2d: any;
   private capa3d: any;
-  private capaGaleria:any;
-  private capaPuntosSeleccionados:any;
+  private capaGaleria: any;
+  private capaPuntosSeleccionados: any;
   private simbolo3d: any;
   private simbolo3dOver: any;
   private view: any;
   private map: any;
   private vista2d3d = "3D";
   public valoresResultados: any;
-  public valorPuntoClick:any;
+  public valorPuntoClick: any;
 
   @ViewChild("mapViewNode", { static: true }) private mapViewEl:
     | ElementRef
@@ -41,7 +42,40 @@ export class Map3dComponent implements AfterViewInit {
     this.initMap();
   }
 
-  initMap(): void {
+  initMap() {
+    loadModules([
+      "esri/config",
+      "esri/Map",
+      "esri/views/SceneView",
+      "esri/layers/FeatureLayer",
+      "esri/layers/GraphicsLayer",
+      "esri/symbols/IconSymbol3DLayer",
+      "esri/symbols/PointSymbol3D",
+      "esri/Graphic",
+      "esri/geometry/Point",
+      "esri/symbols/SimpleMarkerSymbol",
+    ]).then(([esriConfig, Map, SceneView, FeatureLayer, GraphicsLayer, IconSymbol3DLayer, PointSymbol3D, Graphic, Point, SimpleMarkerSymbol]) => {
+      esriConfig.apiKey = environment.esriConfigApiKey;
+      this.capa2d = this.crearCapa2d(FeatureLayer);
+      this.capa3d = this.crearCapa3d(FeatureLayer);
+      this.capaPuntosSeleccionados = new GraphicsLayer();
+      this.capaGaleria = this.crearCapaGaleria(IconSymbol3DLayer,PointSymbol3D,FeatureLayer);
+      this.map = this.crearMapa(Map);
+      this.view = this.crearVista(SceneView);
+      this.view.on("click", (event: any) => {
+        this.valorPuntoClick = event;
+        this.agregarPuntoSeleccionado(event,1000, Graphic, Point, SimpleMarkerSymbol);
+        this.clickEnVista(event, Graphic);
+      });
+      
+      this.capa3d.visible = true;
+      this.capa2d.visible = false;
+      this.capaGaleria.visible = true;
+      this.capaPuntosSeleccionados.visible = true;
+    });
+  }
+
+  _initMap(): void {
     loadModules([
       "esri/config",
       "esri/Map",
@@ -50,11 +84,11 @@ export class Map3dComponent implements AfterViewInit {
       "esri/layers/FeatureLayer",
       "esri/layers/GraphicsLayer",
       "esri/symbols/ExtrudeSymbol3DLayer",
-      'esri/symbols/IconSymbol3DLayer',
-      'esri/symbols/PointSymbol3D',
+      "esri/symbols/IconSymbol3DLayer",
+      "esri/symbols/PointSymbol3D",
       "esri/geometry/Point",
       "esri/Graphic",
-      "esri/symbols/SimpleMarkerSymbol"
+      "esri/symbols/SimpleMarkerSymbol",
     ]).then(
       ([
         esriConfig,
@@ -68,7 +102,7 @@ export class Map3dComponent implements AfterViewInit {
         PointSymbol3D,
         Point,
         Graphic,
-        SimpleMarkerSymbol
+        SimpleMarkerSymbol,
       ]) => {
         esriConfig.apiKey =
           "AAPK18837c198fe14f849f5237a94fb8c4d9nyUIHfhPmykTR_afDukiTorJHXPimhB05XjXQ6o6rDQ-GAsclkcQJjNfsUX-ulMj";
@@ -97,8 +131,6 @@ export class Map3dComponent implements AfterViewInit {
           },
           visible: false,
         });
-
-        
 
         this.simbolo3d = {
           type: "polygon-3d", // autocasts as new PolygonSymbol3D()
@@ -148,13 +180,13 @@ export class Map3dComponent implements AfterViewInit {
 
         const symbolLayerBandera = new IconSymbol3DLayer({
           resource: {
-            href: "/assets/images/flag.png"
+            href: "/assets/images/flag.png",
           },
-          size: 50
+          size: 50,
         });
-        
+
         const symbolBandera = new PointSymbol3D({
-          symbolLayers: [symbolLayerBandera]
+          symbolLayers: [symbolLayerBandera],
         });
 
         this.capaGaleria = new FeatureLayer({
@@ -162,7 +194,7 @@ export class Map3dComponent implements AfterViewInit {
           renderer: {
             type: "simple",
             symbol: symbolBandera,
-          }
+          },
         });
 
         this.capa3d = new FeatureLayer({
@@ -183,14 +215,24 @@ export class Map3dComponent implements AfterViewInit {
           visible: true,
         });
 
-        this.capaPuntosSeleccionados = new GraphicsLayer();
+        this.capaPuntosSeleccionados = new GraphicsLayer({
+          renderer: {
+            type: "simple",
+            symbol: symbolBandera,
+          },
+        });
 
         // Create Map
         this.map = new Map({
           // basemap: "arcgis-light-gray",
           basemap: "streets-vector",
           ground: "world-elevation",
-          layers: [this.capa2d, this.capa3d, this.capaGaleria, this.capaPuntosSeleccionados],
+          layers: [
+            this.capa2d,
+            this.capa3d,
+            this.capaGaleria,
+            this.capaPuntosSeleccionados,
+          ],
         });
 
         // Create the SceneView
@@ -222,7 +264,7 @@ export class Map3dComponent implements AfterViewInit {
           };
 
           /********** */
-          this.agregarBandera(event.mapPoint.longitude, event.mapPoint.latitude, 100, this.view.spatialReference);
+          
           /*
           var point = new Point({
             longitude: event.mapPoint.longitude,
@@ -249,7 +291,7 @@ export class Map3dComponent implements AfterViewInit {
           /********** */
 
           const clickedPoint = this.view.toMap(event);
-          
+
           // Centrar el mapa en el punto clicado
           this.view.center = clickedPoint;
 
@@ -262,9 +304,6 @@ export class Map3dComponent implements AfterViewInit {
           if (this.opcion === "consulta-seleccion") {
             this.view.hitTest(screenPoint).then((response: any) => {
               if (response.results.length) {
-
-
-
                 let graphic = response.results.filter((result: any) => {
                   if (this.vista2d3d === "3D") {
                     return result.graphic.layer === this.capa3d; // 'capa-construccion-3d';
@@ -279,16 +318,235 @@ export class Map3dComponent implements AfterViewInit {
                   opcion: this.opcion,
                   resultados: graphic.attributes,
                 };
-                
+
                 // do something with the result graphic
                 console.log("capa-construccion", graphic.attributes);
               }
             });
           }
         });
-
       }
     );
+  }
+
+  crearCapa2d(FeatureLayer: any) {
+    return new FeatureLayer({
+      id: "capa-construccion-2d",
+      url: environment.urlServicioPredios,
+      outFields: ["*"],
+      renderer: {
+        type: "simple",
+        symbol: {
+          type: "polygon-3d",
+          symbolLayers: [
+            {
+              type: "fill",
+              material: { color: [255, 237, 204] },
+              outline: { color: [133, 108, 62, 0.5] },
+            },
+          ],
+        },
+      },
+      visible: false,
+    });
+  }
+
+  crearCapa3d(FeatureLayer: any) {
+    this.simbolo3d = {
+      type: "polygon-3d", // autocasts as new PolygonSymbol3D()
+      symbolLayers: [
+        {
+          type: "extrude", // autocasts as new ExtrudeSymbol3DLayer()
+          material: {
+            color: [229, 209, 169, 1],
+          },
+          edges: {
+            type: "solid",
+            color: [50, 50, 50, 0.8],
+            size: 1,
+          },
+          size: (geometry: any, graphic: any) => {
+            const height = 0; // graphic.attributes["NUMERO_PISO"] * 2; // Multiplicar por 2 para dar la altura en metros
+            return height;
+          },
+          // Establecer la base de la extrusión en el suelo
+          anchor: "relative-to-ground",
+        },
+      ],
+    };
+
+    const featureLayer = new FeatureLayer({
+      id: "capa-construccion-3d",
+      url: environment.urlServicioPredios,
+      outFields: ["*"],
+      renderer: {
+        type: "simple",
+        symbol: this.simbolo3d,
+        visualVariables: [
+          {
+            type: "size",
+            valueUnit: "meters",
+            valueExpression: "return Abs($feature.NUMERO_PISOS) * 2.4;",
+          },
+        ],
+      },
+      visible: true,
+    });
+
+    return featureLayer;
+  }
+
+  agregarPuntoSeleccionado(event:any,z:any,Graphic:any, Point:any, SimpleMarkerSymbol:any){
+    console.log('agregarPuntoSeleccionado', event);
+    this.capaPuntosSeleccionados.removeAll();
+    const x = event.mapPoint.longitude;
+    const y = event.mapPoint.latitude;
+
+    const point = new Point({
+      longitude: x,
+      latitude: y,
+      z: z
+    });
+
+    /*const markerSymbol = new SimpleMarkerSymbol({
+      color: [226, 119, 40],
+      outline: {
+        color: [255, 255, 255],
+        width: 2
+      }
+    });*/
+
+    const markerSymbol = {
+      type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
+      color: [226, 119, 40],
+      outline: {
+        // autocasts as new SimpleLineSymbol()
+        color: [255, 255, 255],
+        width: 2
+      }
+    };
+
+    const pointGraphic = new Graphic({
+      geometry: point,
+      symbol: markerSymbol
+    });
+
+    
+    // this.capaPuntosSeleccionados.add(pointGraphic);
+    this.view.graphics.add(pointGraphic);
+/*
+    const polyline = {
+      type: "polyline", // autocasts as new Polyline()
+      paths: [
+        [x, y, 0],
+        [x, y, z]
+      ]
+    };
+
+    const lineSymbol = {
+      type: "simple-line", // autocasts as SimpleLineSymbol()
+      color: [226, 119, 40],
+      width: 4
+    };
+
+    const polylineGraphic = new Graphic({
+      geometry: polyline,
+      symbol: lineSymbol
+    });
+
+    this.capaPuntosSeleccionados.add(polylineGraphic);*/
+  }
+
+  crearCapaGaleria(IconSymbol3DLayer:any, PointSymbol3D:any, FeatureLayer:any){
+    const symbolLayerBandera = new IconSymbol3DLayer({
+      resource: {
+        href: "/assets/images/flag.png",
+      },
+      size: 50,
+    });
+
+    const symbolBandera = new PointSymbol3D({
+      symbolLayers: [symbolLayerBandera],
+    });
+
+    return new FeatureLayer({
+      url: environment.urlServicioGaleria,
+      renderer: {
+        type: "simple",
+        symbol: symbolBandera,
+      },
+    });
+  }
+
+  crearMapa(Map: any) {
+    return new Map({
+      // basemap: "arcgis-light-gray",
+      basemap: "streets-vector",
+      ground: "world-elevation",
+      layers: [
+        this.capa2d,
+        this.capa3d,
+        this.capaGaleria,
+        this.capaPuntosSeleccionados
+      ],
+    });
+  }
+
+  crearVista(SceneView: any) {
+    return new SceneView({
+      container: "mapView",
+      map: this.map,
+      camera: {
+        position: {
+          latitude: 4.6,
+          longitude: -74.11,
+          z: 2800, // Altura en metros
+        },
+        heading: 0, // grados de rotación respecto del norte
+        tilt: 70, // grados de rotación respecto de la superficie
+      },
+      qualityProfile: "high",
+    });
+  }
+
+  clickEnVista(event: any, Graphic:any) {
+    this.valorPuntoClick = event;
+    // Centrar el mapa en el punto seleccionado y hacer zoom
+    const clickedPoint = this.view.toMap(event);
+    this.view.center = clickedPoint;
+
+    this.view.goTo({
+      target: clickedPoint,
+      zoom: 21,
+    });
+
+    if (this.opcion === "consulta-seleccion") {
+      this.seleccionarPredio({
+        x: event.x,
+        y: event.y
+      });
+    }
+  }
+
+  seleccionarPredio(screenPoint:any) {
+    this.view.hitTest(screenPoint).then((response: any) => {
+      if (response.results.length) {
+        let graphic = response.results.filter((result: any) => {
+          if (this.vista2d3d === "3D") {
+            return result.graphic.layer === this.capa3d;
+          } else {
+            return result.graphic.layer === this.capa2d;
+          }
+        })[0].graphic;
+
+        this.resultados = true;
+
+        this.valoresResultados = {
+          opcion: this.opcion,
+          resultados: graphic.attributes,
+        };
+      }
+    });
   }
 
   accionMenu(valor: any) {
@@ -314,67 +572,5 @@ export class Map3dComponent implements AfterViewInit {
       this.resultados = false;
     }
   }
-
-  agregarBandera(longitude:any, latitude:any, elevation:any, sr:any) {
-
-    loadModules([
-      "esri/config",
-      "esri/geometry/Point",
-      "esri/geometry/Polygon",
-      "esri/symbols/FillSymbol3DLayer",
-      "esri/symbols/Symbol3D",
-      "esri/symbols/Symbol3DLayer",
-      "esri/Graphic",
-    ]).then(
-      ([
-        esriConfig,
-        Point, Polygon, FillSymbol3DLayer, Symbol3D, Symbol3DLayer, Graphic
-      ]) => {
-        esriConfig.apiKey =
-          "AAPK18837c198fe14f849f5237a94fb8c4d9nyUIHfhPmykTR_afDukiTorJHXPimhB05XjXQ6o6rDQ-GAsclkcQJjNfsUX-ulMj";
-
-        const height = 50;
-        const width = 10;
-      // Crea un objeto Point con las coordenadas del punto
-      const point = new Point({
-        longitude: longitude,
-        latitude: latitude,
-        z: elevation // Altitud del punto en 3D
-      });
-    
-      // Define las coordenadas de los vértices de la bandera
-      const vertices = [
-        [longitude, latitude, elevation],
-        [longitude, latitude, elevation + height],
-        [longitude + width, latitude, elevation + height / 2]
-      ];
-    
-      // Crea un objeto Polygon utilizando las coordenadas de los vértices
-      const polygon = new Polygon({
-        rings: [vertices],
-        spatialReference: sr
-      });
-    
-      // Crea un objeto FillSymbol3DLayer para definir el relleno de la bandera
-      const fillSymbolLayer = new FillSymbol3DLayer({
-        material: {
-          color: [226, 119, 40] // Color en RGB
-        }
-      });
-    
-      // Crea un objeto Symbol3D que contiene el símbolo de la bandera
-      const symbol3D = new Symbol3D({
-        symbolLayers: [fillSymbolLayer]
-      });
-    
-      // Crea un objeto Graphic que contiene el polígono y el símbolo, y agrégalo a la capa de gráficos
-      const graphic = new Graphic({
-        geometry: polygon,
-        symbol: symbol3D
-      });
-      
-      this.capaPuntosSeleccionados.removeAll();
-      this.capaPuntosSeleccionados.add(graphic); // Agrega el gráfico a la capa de gráficos
-    });
-  }
+  
 }
