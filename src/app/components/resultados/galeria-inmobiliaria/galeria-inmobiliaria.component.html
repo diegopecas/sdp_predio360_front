@@ -1,7 +1,7 @@
 <ng-container *ngIf="datos">
     <div class="form__group">
       <p class="texto-blanco">Proyecto:</p>
-      <select class="form__field" [(ngModel)]="currentIndex">
+      <select style="background: #000000; color: #ffffff;" class="form__field" [(ngModel)]="currentIndex">
         <option *ngFor="let d of datos; let i = index" [value]="i">
           {{ d.proyecto }}
         </option>

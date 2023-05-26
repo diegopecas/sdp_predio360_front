@@ -96,7 +96,7 @@ export class ConsultaGaleriaComponent implements OnInit {
       showCancelButton: false,
       confirmButtonColor: '#acc962',
       confirmButtonText: 'Cerrar'
-    })
+    });
   }
 
 }

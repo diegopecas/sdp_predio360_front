@@ -182,11 +182,11 @@ body {
   font-size: 16px;
   color: #fff;
   padding: 7px 0;
-  background: transparent;
+  background: none;
   transition: border-color 0.2s;
 }
 .form__field::placeholder {
-  color: transparent;
+  color: none;
 }
 .form__field:placeholder-shown ~ .form__label {
   font-size: 14px;

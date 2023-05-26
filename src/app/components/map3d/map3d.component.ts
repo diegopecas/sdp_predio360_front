@@ -10,6 +10,7 @@ import SceneView from '@arcgis/core/views/SceneView';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';*/
 import { loadModules } from "esri-loader";
 import { environment } from "src/environments/environment";
+import swal from 'sweetalert2';
 
 @Component({
   selector: "app-map3d",
@@ -19,6 +20,7 @@ import { environment } from "src/environments/environment";
 export class Map3dComponent implements AfterViewInit {
   public opcion: string = "menu";
   public resultados: boolean = false;
+  public proyectoSeleccionado = 0;
 
   private capa2d: any;
   private capa3d: any;
@@ -54,25 +56,51 @@ export class Map3dComponent implements AfterViewInit {
       "esri/Graphic",
       "esri/geometry/Point",
       "esri/symbols/SimpleMarkerSymbol",
-    ]).then(([esriConfig, Map, SceneView, FeatureLayer, GraphicsLayer, IconSymbol3DLayer, PointSymbol3D, Graphic, Point, SimpleMarkerSymbol]) => {
-      esriConfig.apiKey = environment.esriConfigApiKey;
-      this.capa2d = this.crearCapa2d(FeatureLayer);
-      this.capa3d = this.crearCapa3d(FeatureLayer);
-      this.capaPuntosSeleccionados = new GraphicsLayer();
-      this.capaGaleria = this.crearCapaGaleria(IconSymbol3DLayer,PointSymbol3D,FeatureLayer);
-      this.map = this.crearMapa(Map);
-      this.view = this.crearVista(SceneView);
-      this.view.on("click", (event: any) => {
-        this.valorPuntoClick = event;
-        this.agregarPuntoSeleccionado(event,1000, Graphic, Point, SimpleMarkerSymbol);
-        this.clickEnVista(event, Graphic);
-      });
-      
-      this.capa3d.visible = true;
-      this.capa2d.visible = false;
-      this.capaGaleria.visible = true;
-      this.capaPuntosSeleccionados.visible = true;
-    });
+      "esri/geometry/Polyline",
+      "esri/symbols/SimpleLineSymbol",
+      "esri/Color",
+      "esri/symbols/ObjectSymbol3DLayer",
+    ]).then(
+      ([
+        esriConfig,
+        Map,
+        SceneView,
+        FeatureLayer,
+        GraphicsLayer,
+        IconSymbol3DLayer,
+        PointSymbol3D,
+        Graphic,
+        Point,
+        SimpleMarkerSymbol,
+        Polyline,
+        SimpleLineSymbol,
+        Color,
+        ObjectSymbol3DLayer,
+      ]) => {
+        esriConfig.apiKey = environment.esriConfigApiKey;
+
+        this.capa2d = this.crearCapa2d(FeatureLayer);
+        this.capa3d = this.crearCapa3d(FeatureLayer);
+        this.capaPuntosSeleccionados = new GraphicsLayer();
+        this.capaGaleria = this.crearCapaGaleria(
+          IconSymbol3DLayer,
+          PointSymbol3D,
+          FeatureLayer,
+          ObjectSymbol3DLayer
+        );
+        this.map = this.crearMapa(Map);
+        this.view = this.crearVista(SceneView);
+        this.view.on("click", (event: any) => {
+          this.valorPuntoClick = event;
+          this.clickEnVista(event, Graphic);
+        });
+
+        this.capa3d.visible = true;
+        this.capa2d.visible = false;
+        this.capaGaleria.visible = true;
+        this.capaPuntosSeleccionados.visible = true;
+      }
+    );
   }
 
   _initMap(): void {
@@ -264,7 +292,7 @@ export class Map3dComponent implements AfterViewInit {
           };
 
           /********** */
-          
+
           /*
           var point = new Point({
             longitude: event.mapPoint.longitude,
@@ -396,68 +424,75 @@ export class Map3dComponent implements AfterViewInit {
     return featureLayer;
   }
 
-  agregarPuntoSeleccionado(event:any,z:any,Graphic:any, Point:any, SimpleMarkerSymbol:any){
-    console.log('agregarPuntoSeleccionado', event);
-    this.capaPuntosSeleccionados.removeAll();
-    const x = event.mapPoint.longitude;
-    const y = event.mapPoint.latitude;
+  agregarPuntoSeleccionado(
+    x: any,
+    y: any,
+    z: any 
+  ) {
+    loadModules([
+      "esri/symbols/PointSymbol3D",
+      "esri/Graphic",
+      "esri/geometry/Point",
+      "esri/symbols/ObjectSymbol3DLayer",
+    ]).then(
+      ([
+        PointSymbol3D,
+        Graphic,
+        Point,
+        ObjectSymbol3DLayer,
+      ]) => {
+        const objectSymbol = new PointSymbol3D({
+          symbolLayers: [
+            new ObjectSymbol3DLayer({
+              width: 2,
+              height: z,
+              resource: {
+                primitive: "inverted-cone",
+              },
+              material: {
+                color: "#FFD700",
+              },
+            }),
+          ],
+        });
 
-    const point = new Point({
-      longitude: x,
-      latitude: y,
-      z: z
-    });
+        const point = new Point({
+          longitude: x,
+          latitude: y
+        });
 
-    /*const markerSymbol = new SimpleMarkerSymbol({
-      color: [226, 119, 40],
-      outline: {
-        color: [255, 255, 255],
-        width: 2
+        const graphicPoint = new Graphic({
+          geometry: point,
+          symbol: objectSymbol,
+        });
+
+        this.capaPuntosSeleccionados.removeAll();
+        this.capaPuntosSeleccionados.add(graphicPoint);
       }
-    });*/
-
-    const markerSymbol = {
-      type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
-      color: [226, 119, 40],
-      outline: {
-        // autocasts as new SimpleLineSymbol()
-        color: [255, 255, 255],
-        width: 2
-      }
-    };
-
-    const pointGraphic = new Graphic({
-      geometry: point,
-      symbol: markerSymbol
-    });
-
-    
-    // this.capaPuntosSeleccionados.add(pointGraphic);
-    this.view.graphics.add(pointGraphic);
-/*
-    const polyline = {
-      type: "polyline", // autocasts as new Polyline()
-      paths: [
-        [x, y, 0],
-        [x, y, z]
-      ]
-    };
-
-    const lineSymbol = {
-      type: "simple-line", // autocasts as SimpleLineSymbol()
-      color: [226, 119, 40],
-      width: 4
-    };
-
-    const polylineGraphic = new Graphic({
-      geometry: polyline,
-      symbol: lineSymbol
-    });
-
-    this.capaPuntosSeleccionados.add(polylineGraphic);*/
+    );
   }
 
-  crearCapaGaleria(IconSymbol3DLayer:any, PointSymbol3D:any, FeatureLayer:any){
+  crearCapaGaleria(
+    IconSymbol3DLayer: any,
+    PointSymbol3D: any,
+    FeatureLayer: any,
+    ObjectSymbol3DLayer: any
+  ) {
+    const objectSymbol = new PointSymbol3D({
+      symbolLayers: [
+        new ObjectSymbol3DLayer({
+          width: 5,
+          height: 40,
+          resource: {
+            primitive: "cone",
+          },
+          material: {
+            color: "#00FF00",
+          },
+        }),
+      ],
+    });
+
     const symbolLayerBandera = new IconSymbol3DLayer({
       resource: {
         href: "/assets/images/flag.png",
@@ -471,9 +506,11 @@ export class Map3dComponent implements AfterViewInit {
 
     return new FeatureLayer({
       url: environment.urlServicioGaleria,
+      id: "capa-galeria",
       renderer: {
         type: "simple",
-        symbol: symbolBandera,
+        // symbol: symbolBandera,
+        symbol: objectSymbol,
       },
     });
   }
@@ -487,7 +524,7 @@ export class Map3dComponent implements AfterViewInit {
         this.capa2d,
         this.capa3d,
         this.capaGaleria,
-        this.capaPuntosSeleccionados
+        this.capaPuntosSeleccionados,
       ],
     });
   }
@@ -509,7 +546,7 @@ export class Map3dComponent implements AfterViewInit {
     });
   }
 
-  clickEnVista(event: any, Graphic:any) {
+  clickEnVista(event: any, Graphic: any) {
     this.valorPuntoClick = event;
     // Centrar el mapa en el punto seleccionado y hacer zoom
     const clickedPoint = this.view.toMap(event);
@@ -520,15 +557,38 @@ export class Map3dComponent implements AfterViewInit {
       zoom: 21,
     });
 
-    if (this.opcion === "consulta-seleccion") {
-      this.seleccionarPredio({
-        x: event.x,
-        y: event.y
-      });
+    switch(this.opcion) {
+      case "consulta-seleccion":
+        this.seleccionarPredio(
+          {
+            x: event.x,
+            y: event.y,
+          },
+          event
+        );
+        break;
+      case "consulta-galeria":
+        this.seleccionarProyecto(
+          {
+            x: event.x,
+            y: event.y,
+          },
+          event
+        );
+        break;
     }
+    /*if (this.opcion === "consulta-seleccion") {
+      this.seleccionarPredio(
+        {
+          x: event.x,
+          y: event.y,
+        },
+        event
+      );
+    }*/
   }
 
-  seleccionarPredio(screenPoint:any) {
+  seleccionarPredio(screenPoint: any, event: any) {
     this.view.hitTest(screenPoint).then((response: any) => {
       if (response.results.length) {
         let graphic = response.results.filter((result: any) => {
@@ -545,6 +605,35 @@ export class Map3dComponent implements AfterViewInit {
           opcion: this.opcion,
           resultados: graphic.attributes,
         };
+        console.log("VALORES RESULTADOS", this.valoresResultados);
+
+        this.agregarPuntoSeleccionado(
+          event.mapPoint.longitude,
+          event.mapPoint.latitude,
+          (this.valoresResultados.resultados.NUMERO_PISOS + 1) * 2.4
+        );
+      }
+    });
+  }
+
+  seleccionarProyecto(screenPoint: any, event: any) {
+    console.log('seleccionarProyecto');
+    this.view.hitTest(screenPoint).then((response: any) => {
+      console.log('response', response);
+      if (response.results.length) {
+        let graphic = response.results.filter((result: any) => {
+          console.log('result', result);
+          return result.graphic.layer === this.capaGaleria;
+        })[0].graphic;
+
+        if(graphic) {
+          this.proyectoSeleccionado = graphic.attributes.cod_proyecto;
+          console.log("VALORES RESULTADOS PROYECTO", graphic, this.proyectoSeleccionado);
+          if(this.proyectoSeleccionado) {
+            this.consultarProyectos();
+          }
+        }
+
       }
     });
   }
@@ -572,5 +661,81 @@ export class Map3dComponent implements AfterViewInit {
       this.resultados = false;
     }
   }
-  
+
+  consultarProyectos(){
+    loadModules(["esri/config", "esri/layers/FeatureLayer"]).then(
+      ([esriConfig, FeatureLayer]) => {
+        esriConfig.apiKey =
+          "AAPK18837c198fe14f849f5237a94fb8c4d9nyUIHfhPmykTR_afDukiTorJHXPimhB05XjXQ6o6rDQ-GAsclkcQJjNfsUX-ulMj";
+
+        // Crear un FeatureLayer con la URL del servicio de tabla
+        const featureLayer = new FeatureLayer({
+          url: "https://services8.arcgis.com/2gedZBw4OrdjULOA/ArcGIS/rest/services/galeria_inmobiliaria_demo/FeatureServer/0",
+        });
+
+        // Consultar la tabla y obtener los resultados
+        const query = featureLayer.createQuery();
+        query.where = "cod_proyecto="+this.proyectoSeleccionado; // Establecer una condición opcional para filtrar los resultados
+        query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
+
+        featureLayer
+          .queryFeatures(query)
+          .then((result: any) => {
+            // Manipular los resultados obtenidos
+            const features = result.features;
+            // Realizar acciones con los datos devueltos
+            console.log('PROOO',features);
+            if(features.length>0) {
+              // const datos = features.map((m:any)=>m.attributes);
+              const datos = features[0].attributes;
+
+              swal.fire({
+                html: `
+                <p>Código de proyecto: ${datos.cod_proyecto}</p>
+                <p>Código lote: ${datos.cod_lote}</p>
+                <p><strong>Proyecto: ${datos.proyecto}</strong></p>
+                <p>Vendedor: ${datos.vendedor}</p>
+                <p>Constructor: ${datos.constructor}</p>
+                <p>Dirección: ${datos.direccion}</p>
+                <p>Estrato: ${datos.estrato}</p>
+                <p>Zona: ${datos.zona}</p>
+                <p>Barrio: ${datos.barrio}</p>
+                <p>Subzona: ${datos.subzona}</p>
+                <p>Fecha inicio: ${datos.fecha_inicio}</p>
+                <p>Estado: ${datos.estado}</p>
+                <p>Activo: ${datos.activo}</p>
+                <p>Unidades totales: ${datos.unidades_totales}</p>
+                <p>Unidades ofertadas: ${datos.unidades_ofertadas}</p>
+                <p>Unidades por lanzar: ${datos.unidades_por_lanzar}</p>
+                <p>Unidades vendidas: ${datos.unidades_vendidas}</p>
+                <p>Unidades disponibles: ${datos.unidades_dispobibles_proy}</p>
+                <p>Última etapa lanzada: ${datos.ult_etapa_lanzada}</p>
+                <p>Sótanos: ${datos.sotanos}</p>
+                <p>Semisótanos: ${datos.semisotanos}</p>
+                <p>Pisos de parqueadero: ${datos.pisos_parqueadero}</p>
+                <p>Pisos de parqueadero en edificio: ${datos.pisos_parqueadero_edificio_vivi}</p>
+                <p>Incremento de precio por piso: ${datos.incremento_precio_pisos}</p>
+                <p>Otro uso: ${datos.otro_uso}</p>
+                <p>Fecha de entrega: ${datos.fecha_entrega}</p>
+                <p>Entrega con acabados: ${datos.acabados_entrega}</p>
+                <p>Tipo de inmueble: ${datos.tipo_inmueble}</p>
+                <p>Es vivienda VIS: ${datos.vivienda_vis}</p>
+                <p>Fecha desistido: ${datos.fecha_desistido}</p>
+                <p>Unidades desistidas: ${datos.unidades_desistidas}</p>
+                <p>Certificado sostenible: ${datos.certificado_sostenible}</p>
+                `,
+                showCancelButton: false,
+                confirmButtonColor: '#acc962',
+                confirmButtonText: 'Cerrar'
+              })
+
+            }
+          })
+          .catch((error: any) => {
+            // Manejar cualquier error ocurrido durante la consulta
+            console.error("Error al consultar la tabla:", error);
+          });
+      }
+    );
+  }
 }
