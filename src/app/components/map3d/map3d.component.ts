@@ -222,10 +222,11 @@ export class Map3dComponent implements AfterViewInit {
           };
 
           /********** */
-
+          this.agregarBandera(event.mapPoint.longitude, event.mapPoint.latitude, 100, this.view.spatialReference);
+          /*
           var point = new Point({
-            longitude: event.longitude,
-            latitude: event.latitude
+            longitude: event.mapPoint.longitude,
+            latitude: event.mapPoint.latitude
           });
 
           var markerSymbol = new SimpleMarkerSymbol({
@@ -242,7 +243,9 @@ export class Map3dComponent implements AfterViewInit {
             symbol: markerSymbol
           });
 
+          this.capaPuntosSeleccionados.removeAll();
           this.capaPuntosSeleccionados.add(graphicPoint); // Agrega el gráfico a la capa de gráficos
+          */
           /********** */
 
           const clickedPoint = this.view.toMap(event);
@@ -310,5 +313,68 @@ export class Map3dComponent implements AfterViewInit {
     if (valor) {
       this.resultados = false;
     }
+  }
+
+  agregarBandera(longitude:any, latitude:any, elevation:any, sr:any) {
+
+    loadModules([
+      "esri/config",
+      "esri/geometry/Point",
+      "esri/geometry/Polygon",
+      "esri/symbols/FillSymbol3DLayer",
+      "esri/symbols/Symbol3D",
+      "esri/symbols/Symbol3DLayer",
+      "esri/Graphic",
+    ]).then(
+      ([
+        esriConfig,
+        Point, Polygon, FillSymbol3DLayer, Symbol3D, Symbol3DLayer, Graphic
+      ]) => {
+        esriConfig.apiKey =
+          "AAPK18837c198fe14f849f5237a94fb8c4d9nyUIHfhPmykTR_afDukiTorJHXPimhB05XjXQ6o6rDQ-GAsclkcQJjNfsUX-ulMj";
+
+        const height = 50;
+        const width = 10;
+      // Crea un objeto Point con las coordenadas del punto
+      const point = new Point({
+        longitude: longitude,
+        latitude: latitude,
+        z: elevation // Altitud del punto en 3D
+      });
+    
+      // Define las coordenadas de los vértices de la bandera
+      const vertices = [
+        [longitude, latitude, elevation],
+        [longitude, latitude, elevation + height],
+        [longitude + width, latitude, elevation + height / 2]
+      ];
+    
+      // Crea un objeto Polygon utilizando las coordenadas de los vértices
+      const polygon = new Polygon({
+        rings: [vertices],
+        spatialReference: sr
+      });
+    
+      // Crea un objeto FillSymbol3DLayer para definir el relleno de la bandera
+      const fillSymbolLayer = new FillSymbol3DLayer({
+        material: {
+          color: [226, 119, 40] // Color en RGB
+        }
+      });
+    
+      // Crea un objeto Symbol3D que contiene el símbolo de la bandera
+      const symbol3D = new Symbol3D({
+        symbolLayers: [fillSymbolLayer]
+      });
+    
+      // Crea un objeto Graphic que contiene el polígono y el símbolo, y agrégalo a la capa de gráficos
+      const graphic = new Graphic({
+        geometry: polygon,
+        symbol: symbol3D
+      });
+      
+      this.capaPuntosSeleccionados.removeAll();
+      this.capaPuntosSeleccionados.add(graphic); // Agrega el gráfico a la capa de gráficos
+    });
   }
 }
