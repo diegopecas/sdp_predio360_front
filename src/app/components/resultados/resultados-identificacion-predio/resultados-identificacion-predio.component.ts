@@ -10,13 +10,20 @@ export class ResultadosIdentificacionPredioComponent implements OnChanges {
   @Input() valores: any;
 
   private identificacionPredio: any;
-  public datos:any;
+  public datos = [] as any[];
   public direccion:any;
   public currentIndex = 0;
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log("cambioooooo", changes["valores"]["currentValue"]);
     this.identificacionPredio = changes["valores"]["currentValue"].resultados;
-    this.consultarDatosPredio(this.identificacionPredio.CODIGO_LOTE);
+    if(!this.identificacionPredio.DIRECCION) {
+      this.consultarDatosPredio(this.identificacionPredio.CODIGO_LOTE);
+    } else {
+      if(this.identificacionPredio) {
+        this.datos.push(this.identificacionPredio);
+      }
+    }
   }
 
   consultarDatosPredio(codigo: any) {

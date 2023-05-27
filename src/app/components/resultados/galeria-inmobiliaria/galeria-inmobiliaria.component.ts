@@ -17,10 +17,17 @@ export class GaleriaInmobiliariaComponent implements OnChanges {
   public currentIndex = 0;
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.identificacionPredio = changes["valores"]["currentValue"].resultados;
-    this.puntoClick = changes["valorPuntoClick"]["currentValue"];
-    
-    this.consultarProyectosCercanos(this.puntoClick);
+
+    if (changes["valores"] && !(changes["valores"]["previousValue"] === changes["valores"]["currentValue"])) {
+      console.log('Se ha producido un cambio en "Valores"');
+      this.identificacionPredio = changes["valores"]["currentValue"].resultados;
+    }
+
+    if (changes["valorPuntoClick"] && !(changes["valorPuntoClick"]["previousValue"] === changes["valorPuntoClick"]["currentValue"])) {
+      console.log('Se ha producido un cambio en "valorPuntoClick"');
+      this.puntoClick = changes["valorPuntoClick"]["currentValue"];
+      this.consultarProyectosCercanos(this.puntoClick);
+    }
   }
 
   consultarProyectosCercanos(punto: any) {

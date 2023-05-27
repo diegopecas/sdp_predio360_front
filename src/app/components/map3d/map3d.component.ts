@@ -10,7 +10,7 @@ import SceneView from '@arcgis/core/views/SceneView';
 import FeatureLayer from '@arcgis/core/layers/FeatureLayer';*/
 import { loadModules } from "esri-loader";
 import { environment } from "src/environments/environment";
-import swal from 'sweetalert2';
+import swal from "sweetalert2";
 
 @Component({
   selector: "app-map3d",
@@ -424,52 +424,41 @@ export class Map3dComponent implements AfterViewInit {
     return featureLayer;
   }
 
-  agregarPuntoSeleccionado(
-    x: any,
-    y: any,
-    z: any 
-  ) {
+  agregarPuntoSeleccionado(x: any, y: any, z: any) {
     loadModules([
       "esri/symbols/PointSymbol3D",
       "esri/Graphic",
       "esri/geometry/Point",
       "esri/symbols/ObjectSymbol3DLayer",
-    ]).then(
-      ([
-        PointSymbol3D,
-        Graphic,
-        Point,
-        ObjectSymbol3DLayer,
-      ]) => {
-        const objectSymbol = new PointSymbol3D({
-          symbolLayers: [
-            new ObjectSymbol3DLayer({
-              width: 2,
-              height: z,
-              resource: {
-                primitive: "inverted-cone",
-              },
-              material: {
-                color: "#FFD700",
-              },
-            }),
-          ],
-        });
+    ]).then(([PointSymbol3D, Graphic, Point, ObjectSymbol3DLayer]) => {
+      const objectSymbol = new PointSymbol3D({
+        symbolLayers: [
+          new ObjectSymbol3DLayer({
+            width: 2,
+            height: z,
+            resource: {
+              primitive: "inverted-cone",
+            },
+            material: {
+              color: "#FFD700",
+            },
+          }),
+        ],
+      });
 
-        const point = new Point({
-          longitude: x,
-          latitude: y
-        });
+      const point = new Point({
+        longitude: x,
+        latitude: y,
+      });
 
-        const graphicPoint = new Graphic({
-          geometry: point,
-          symbol: objectSymbol,
-        });
+      const graphicPoint = new Graphic({
+        geometry: point,
+        symbol: objectSymbol,
+      });
 
-        this.capaPuntosSeleccionados.removeAll();
-        this.capaPuntosSeleccionados.add(graphicPoint);
-      }
-    );
+      this.capaPuntosSeleccionados.removeAll();
+      this.capaPuntosSeleccionados.add(graphicPoint);
+    });
   }
 
   crearCapaGaleria(
@@ -557,7 +546,7 @@ export class Map3dComponent implements AfterViewInit {
       zoom: 21,
     });
 
-    switch(this.opcion) {
+    switch (this.opcion) {
       case "consulta-seleccion":
         this.seleccionarPredio(
           {
@@ -617,23 +606,26 @@ export class Map3dComponent implements AfterViewInit {
   }
 
   seleccionarProyecto(screenPoint: any, event: any) {
-    console.log('seleccionarProyecto');
+    console.log("seleccionarProyecto");
     this.view.hitTest(screenPoint).then((response: any) => {
-      console.log('response', response);
+      console.log("response", response);
       if (response.results.length) {
         let graphic = response.results.filter((result: any) => {
-          console.log('result', result);
+          console.log("result", result);
           return result.graphic.layer === this.capaGaleria;
         })[0].graphic;
 
-        if(graphic) {
+        if (graphic) {
           this.proyectoSeleccionado = graphic.attributes.cod_proyecto;
-          console.log("VALORES RESULTADOS PROYECTO", graphic, this.proyectoSeleccionado);
-          if(this.proyectoSeleccionado) {
+          console.log(
+            "VALORES RESULTADOS PROYECTO",
+            graphic,
+            this.proyectoSeleccionado
+          );
+          if (this.proyectoSeleccionado) {
             this.consultarProyectos();
           }
         }
-
       }
     });
   }
@@ -662,20 +654,19 @@ export class Map3dComponent implements AfterViewInit {
     }
   }
 
-  consultarProyectos(){
+  consultarProyectos() {
     loadModules(["esri/config", "esri/layers/FeatureLayer"]).then(
       ([esriConfig, FeatureLayer]) => {
-        esriConfig.apiKey =
-          "AAPK18837c198fe14f849f5237a94fb8c4d9nyUIHfhPmykTR_afDukiTorJHXPimhB05XjXQ6o6rDQ-GAsclkcQJjNfsUX-ulMj";
+        esriConfig.apiKey = environment.esriConfigApiKey;
 
         // Crear un FeatureLayer con la URL del servicio de tabla
         const featureLayer = new FeatureLayer({
-          url: "https://services8.arcgis.com/2gedZBw4OrdjULOA/ArcGIS/rest/services/galeria_inmobiliaria_demo/FeatureServer/0",
+          url: environment.urlServicioGaleria,
         });
 
         // Consultar la tabla y obtener los resultados
         const query = featureLayer.createQuery();
-        query.where = "cod_proyecto="+this.proyectoSeleccionado; // Establecer una condición opcional para filtrar los resultados
+        query.where = "cod_proyecto=" + this.proyectoSeleccionado; // Establecer una condición opcional para filtrar los resultados
         query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
 
         featureLayer
@@ -684,8 +675,8 @@ export class Map3dComponent implements AfterViewInit {
             // Manipular los resultados obtenidos
             const features = result.features;
             // Realizar acciones con los datos devueltos
-            console.log('PROOO',features);
-            if(features.length>0) {
+            console.log("PROOO", features);
+            if (features.length > 0) {
               // const datos = features.map((m:any)=>m.attributes);
               const datos = features[0].attributes;
 
@@ -725,9 +716,55 @@ export class Map3dComponent implements AfterViewInit {
                 <p>Certificado sostenible: ${datos.certificado_sostenible}</p>
                 `,
                 showCancelButton: false,
-                confirmButtonColor: '#acc962',
-                confirmButtonText: 'Cerrar'
-              })
+                confirmButtonColor: "#acc962",
+                confirmButtonText: "Cerrar",
+              });
+            }
+          })
+          .catch((error: any) => {
+            // Manejar cualquier error ocurrido durante la consulta
+            console.error("Error al consultar la tabla:", error);
+          });
+      }
+    );
+  }
+
+  consultaDireccion(dir:any) {
+    loadModules(["esri/config", "esri/layers/FeatureLayer"]).then(
+      ([esriConfig, FeatureLayer]) => {
+        esriConfig.apiKey = environment.esriConfigApiKey;
+
+        // Crear un FeatureLayer con la URL del servicio de tabla
+        const featureLayer = new FeatureLayer({
+          url: environment.urlTablaPredios,
+        });
+
+        // Consultar la tabla y obtener los resultados
+        const query = featureLayer.createQuery();
+        //query.where = `"DIRECCION LIKE %27"`+dir+`"%27"`; // Establecer una condición opcional para filtrar los resultados
+        query.where = "direccion = 'CL 9 30 74'";
+        query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
+
+        featureLayer
+          .queryFeatures(query)
+          .then((result: any) => {
+            // Manipular los resultados obtenidos
+            const features = result.features;
+            // Realizar acciones con los datos devueltos
+            console.log("CONSULTA POR DIRECCION", features);
+            if (features.length > 0) {
+              // const datos = features.map((m:any)=>m.attributes);
+              const jsonResult = features.map((feature:any) => feature.toJSON());
+              console.log("JSONNNN", jsonResult);
+              const datos = jsonResult[0].attributes;
+              console.log("CONSULTA POR DIRECCION DATOS", datos);
+
+              this.resultados = true;
+
+                this.valoresResultados = {
+                  opcion: this.opcion,
+                  resultados: datos,
+                };
 
             }
           })
@@ -737,5 +774,10 @@ export class Map3dComponent implements AfterViewInit {
           });
       }
     );
+    /*this.agregarPuntoSeleccionado(
+      event.mapPoint.longitude,
+      event.mapPoint.latitude,
+      (this.valoresResultados.resultados.NUMERO_PISOS + 1) * 2.4
+    );*/
   }
 }

@@ -2,7 +2,7 @@
     <div #mapView id="mapView"></div>
     <app-consulta *ngIf="opcion == 'menu' && !resultados" (accion)="accionMenu($event)"></app-consulta>
     <app-consulta-predial *ngIf="opcion == 'consulta-predial' && !resultados" (accion)="accionMenu($event)"></app-consulta-predial>
-    <app-consulta-direccion *ngIf="opcion == 'consulta-direccion' && !resultados" (accion)="accionMenu($event)"></app-consulta-direccion>
+    <app-consulta-direccion *ngIf="opcion == 'consulta-direccion' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaDireccion($event)"></app-consulta-direccion>
     <app-consulta-cedula *ngIf="opcion == 'consulta-cedula' && !resultados" (accion)="accionMenu($event)"></app-consulta-cedula>
     <app-consulta-chip *ngIf="opcion == 'consulta-chip' && !resultados" (accion)="accionMenu($event)"></app-consulta-chip>
     <app-consulta-matricula *ngIf="opcion == 'consulta-matricula' && !resultados" (accion)="accionMenu($event)"></app-consulta-matricula>
