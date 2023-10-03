@@ -13,4 +13,11 @@
   <div class="boton-menu" title="3D" (click)="emitirEvento2d3d('3D')" *ngIf="opcion2D3D === '2D'">
     <p class="texto-icono">3D</p>
   </div>
+  <hr class="toolbar-separator" />
+  <div class="boton-menu" title="Capas de Referencia" (click)="activarCapasReferencia()">
+    <p class="texto-icono">R</p>
+  </div>
+  <div class="boton-menu" title="Añadir Capas" (click)="anadirCapas()">
+    <p class="texto-icono">A</p>
+  </div>
 </div>

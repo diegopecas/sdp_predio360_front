@@ -9,6 +9,7 @@ export class ConsultaSeleccionEspacialComponent {
   @Output() accion = new EventEmitter();
 
   seleccion(opcion: any) {
+    console.log(opcion);
     this.accion.emit(opcion);
   }
 }

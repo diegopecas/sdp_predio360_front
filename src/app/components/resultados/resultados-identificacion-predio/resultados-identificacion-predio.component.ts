@@ -25,7 +25,7 @@ export class ResultadosIdentificacionPredioComponent implements OnChanges {
       }
     }
   }
-
+  
   consultarDatosPredio(codigo: any) {
     loadModules(["esri/config", "esri/layers/FeatureLayer"]).then(
       ([esriConfig, FeatureLayer]) => {

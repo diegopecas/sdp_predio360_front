@@ -1,0 +1,141 @@
+[
+  { "name": "OBJECTID", "alias": "OBJECTID" },
+  { "name": "GN_CODIGO_LOTE", "alias": "Código del lote" },
+  { "name": "EC_AVALUO", "alias": "Avalúo" },
+  { "name": "EC_VALOR_ARRIENDO", "alias": "Valor de Arriendo" },
+  { "name": "EC_VALOR_M2_CONSTRUCCION", "alias": "Valor M2 Construcción" },
+  { "name": "EC_VALOR_M2_TERRENO", "alias": "Valor M2 Terreno" },
+  {
+    "name": "EC_VALOR_REFERENCIA_SUELO",
+    "alias": "Valor de Referencia del Suelo M2"
+  },
+  {
+    "name": "EC_VALOR_TOTAL_CONSTRUCCION",
+    "alias": "Valor Total de Construcción"
+  },
+  { "name": "EC_VALOR_TOTAL_TERRENO", "alias": "Valor Total de Terreno" },
+  { "name": "FECHA_ACTUALIZACION", "alias": "Fecha Actualización" },
+  { "name": "FECHA_CAPTURA", "alias": "Fecha Captura" },
+  { "name": "FECHA_INCORPORACION", "alias": "Fecha Incorporación" },
+  { "name": "FS_AREA_CONSTRUIDA", "alias": "Área Construida" },
+  { "name": "FS_AREA_TERRENO", "alias": "Área de Terreno" },
+  {
+    "name": "FS_PUNT_CONST_ACA_CONS",
+    "alias": "Puntaje de Acabados Principales: Fachada"
+  },
+  {
+    "name": "FS_PUNT_CONST_ARMAZON",
+    "alias": "Puntaje del Material de la Estructura: Armazón"
+  },
+  { "name": "FS_PUNT_CONST_BANO_CONS", "alias": "Puntaje de Baño: Tamaño" },
+  { "name": "FS_PUNT_CONST_BANO_ENCHAPE", "alias": "Puntaje de Baño: Tamaño" },
+  {
+    "name": "FS_PUNT_CONST_BANO_MOBILIARIO",
+    "alias": "Puntaje de Baño: Tamaño"
+  },
+  { "name": "FS_PUNT_CONST_BANO_TAM", "alias": "Puntaje de Baño: Tamaño" },
+  {
+    "name": "FS_PUNT_CONST_CERCHAS",
+    "alias": "Puntaje del Material de la Estructura: Armazón"
+  },
+  { "name": "FS_PUNT_CONST_COCI_CONS", "alias": "Puntaje de Baño: Tamaño" },
+  { "name": "FS_PUNT_CONST_COCI_ENCHAPE", "alias": "Puntaje de Baño: Tamaño" },
+  {
+    "name": "FS_PUNT_CONST_COCI_MOBILIARIO",
+    "alias": "Puntaje de Baño: Tamaño"
+  },
+  { "name": "FS_PUNT_CONST_COCI_TAM", "alias": "Puntaje de Baño: Tamaño" },
+  {
+    "name": "FS_PUNT_CONST_CONSERVACION",
+    "alias": "Puntaje del Material de la Estructura: Armazón"
+  },
+  {
+    "name": "FS_PUNT_CONST_CUBIERTA",
+    "alias": "Puntaje del Material de la Estructura: Armazón"
+  },
+  {
+    "name": "FS_PUNT_CONST_CUBRIMIENTO",
+    "alias": "Puntaje de Acabados Principales: Fachada"
+  },
+  {
+    "name": "FS_PUNT_CONST_FACHADA",
+    "alias": "Puntaje de Acabados Principales: Fachada"
+  },
+  {
+    "name": "FS_PUNT_CONST_MUROS",
+    "alias": "Puntaje del Material de la Estructura: Armazón"
+  },
+  {
+    "name": "FS_PUNT_CONST_PISOS",
+    "alias": "Puntaje de Acabados Principales: Fachada"
+  },
+  { "name": "FS_PUNT_CONST_PROM", "alias": "Puntaje Total de Construcción" },
+  { "name": "GN_AREA_USO_COMERCIAL", "alias": "Área en uso comercial" },
+  { "name": "GN_AREA_USO_DOTACIONAL", "alias": "Área en uso dotacional" },
+  { "name": "GN_AREA_USO_INDUSTRIA", "alias": "Área en uso industria" },
+  { "name": "GN_AREA_USO_NO_URB", "alias": "Área en uso no urbano" },
+  { "name": "GN_AREA_USO_PH", "alias": "Área en uso actividad conexa a PH" },
+  { "name": "GN_AREA_USO_RESIDENCIAL", "alias": "Área en uso residencial" },
+  { "name": "GN_AREA_USO_SERVICIOS", "alias": "Área en uso servicios" },
+  { "name": "GN_CEDULA_CATASTRAL", "alias": "Cédula Catastral" },
+  { "name": "GN_CHIP", "alias": "CHIP" },
+  { "name": "GN_CLASE_PREDIO", "alias": "Clase Predio" },
+  { "name": "GN_DIRECCION", "alias": "Dirección" },
+  { "name": "GN_FECHA_DOCUMENTO", "alias": "Fecha escritura pública" },
+  { "name": "GN_MATRICULA_INMOBILIARIA", "alias": "Matrícula Inmobiliaria" },
+  { "name": "GN_NOTARIA", "alias": "Notaria" },
+  { "name": "GN_NUMERO_DOCUMENTO", "alias": "Número de escritura" },
+  { "name": "GN_PROPIETARIO_NOMBRE", "alias": "Nombre del propietario" },
+  {
+    "name": "GN_PROPIETARIO_NUM_DOC",
+    "alias": "Número de documento del propietario"
+  },
+  {
+    "name": "GN_PROPIETARIO_TIPO_DOC",
+    "alias": "Tipo documento del propietario"
+  },
+  { "name": "PREDIO", "alias": "Predio" },
+  { "name": "RESPONSABLE", "alias": "Responsable" },
+  {
+    "name": "UB_LIC_AA_FECHA_EJECUTORIA",
+    "alias": "Fecha Ejecutoria del Acto Administrativo"
+  },
+  {
+    "name": "UB_LIC_AA_FECHA_EXPEDICION",
+    "alias": "Fecha de Expedición del Acto Administrativo"
+  },
+  {
+    "name": "UB_LIC_AA_TIPO_DECISION",
+    "alias": "Tipo de Decisión del Acto Administrativo"
+  },
+  {
+    "name": "UB_LIC_ACTO_ADMNISTRATIVO",
+    "alias": "Acto Administrativo de la Licencia"
+  },
+  { "name": "UB_LIC_DESC_LICENCIA", "alias": "Descipción de la Licencia" },
+  {
+    "name": "UB_LIC_FECHA_RADICACION",
+    "alias": "Fecha de Radicación de la Licencia"
+  },
+  { "name": "UB_LIC_ID_EXPEDIENTE", "alias": "Id. Expediente de la Licencia" },
+  {
+    "name": "UB_LIC_MODALIDAD_TRAMITE",
+    "alias": "Modalidad del trámite de la Licencia"
+  },
+  { "name": "UB_LIC_OBJ_TRAMITE", "alias": "Objeto de la Licencia" },
+  {
+    "name": "UB_LIC_TIPO_TRAMITE",
+    "alias": "Modalidad del trámite de la Licencia"
+  },
+  { "name": "UB_SECTOR_NORMATIVO", "alias": "Decreto de la UPZ" },
+  { "name": "UB_SUBSECTOR_EDIFICABILIDAD", "alias": "Decreto de la UPZ" },
+  { "name": "UB_UPZ_CODIGO", "alias": "Código de la UPZ" },
+  { "name": "UB_UPZ_DECRETO", "alias": "Decreto de la UPZ" },
+  { "name": "UB_UPZ_NOMBRE", "alias": "Nombre de la UPZ" },
+  { "name": "ZONA_GEOECONOMICA", "alias": "Zona Geoeconómica" },
+  { "name": "GN_ESTRATO", "alias": "Estrato" },
+  { "name": "GN_TIPO_PROPIEDAD", "alias": "Tipo Propiedad" },
+  { "name": "FS_AREA", "alias": "Área del Lote" },
+  { "name": "EC_AVALUO_ANO", "alias": "Avalúo Año" },
+  { "name": "FS_VETUSTEZ", "alias": "Vetustez" }
+]

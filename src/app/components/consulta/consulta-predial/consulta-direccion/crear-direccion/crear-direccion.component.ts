@@ -1,14 +1,13 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import swal from "sweetalert2";
 
 @Component({
-  selector: 'app-consulta-direccion',
-  templateUrl: './consulta-direccion.component.html',
-  styleUrls: ['./consulta-direccion.component.css']
+  selector: 'app-crear-direccion',
+  templateUrl: './crear-direccion.component.html',
+  styleUrls: ['./crear-direccion.component.css']
 })
-export class ConsultaDireccionComponent {
+export class CrearDireccionComponent {
+  
   @Output() accion = new EventEmitter();
-  @Output() accionConsultar = new EventEmitter();
 
   public direccion = "";
 
@@ -25,15 +24,6 @@ export class ConsultaDireccionComponent {
     parte10: ''
   }
 
-  seleccion(opcion: any) {
-    this.accion.emit(opcion);
-  }
-
-  consultar() {
-    console.log("Se va a consultar por: ", this.direccion);
-    this.accionConsultar.emit(this.direccion);
-  }
-
   construirDireccion() {
     this.direccion =  (this.consDireccion.parte1 !== '' ? this.consDireccion.parte1+' ' : '')
                       +(this.consDireccion.parte2 !== '' ? this.consDireccion.parte2+ ' ' : '')
@@ -45,31 +35,6 @@ export class ConsultaDireccionComponent {
                       +(this.consDireccion.parte8 !== '' ? this.consDireccion.parte8+ ' ' : '')
                       +(this.consDireccion.parte9 !== '' ? this.consDireccion.parte9+ ' ' : '')
                       +(this.consDireccion.parte10 !== '' ? this.consDireccion.parte10+ ' ' : '');
-  }
-
-  leerDireccion() {
-    //this.openPopup();
-    /*swal.fire({
-      title: 'Generar dirección',
-      html: '<app-crear-direccion></app-crear-direccion>',
-      showCancelButton: false,
-      confirmButtonColor: "#acc962",
-      confirmButtonText: "Cerrar",
-    });*/
-  }
-
-  isPopupOpen: boolean = false;
-
-  openPopup() {
-    this.isPopupOpen = true;
-  }
-
-  closePopup() {
-    this.isPopupOpen = false;
-  }
-
-  cambioDireccion(ev:any){
-    console.log(ev)
-    this.direccion = ev;
+      this.accion.emit(this.direccion);
   }
 }

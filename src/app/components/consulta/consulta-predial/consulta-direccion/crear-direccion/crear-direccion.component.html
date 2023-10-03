@@ -1,0 +1,212 @@
+<h4 class="titulo-seccion">Crear dirección</h4>
+<hr/>
+<table>
+  <tbody>
+    <tr class="text-white">
+      <td colspan="6" class="form__label">Vía principal</td>
+    </tr>
+    <tr class="text-white">
+      <th><sub>Ejemplo: Dg(*)</sub></th>
+      <th><sub>84(*)</sub></th>
+      <th><sub>B</sub></th>
+      <th><sub>Bis</sub></th>
+      <th><sub>A</sub></th>
+      <th><sub>Sur</sub></th>
+    </tr>
+    <tr>
+      <td>
+        <select
+          [(ngModel)]="consDireccion.parte1"
+          (change)="construirDireccion()"
+          class="form__field"
+        >
+          <option value="">--</option>
+          <option value="CL">Calle</option>
+          <option value="KR">Carrera</option>
+          <option value="DG">Diagonal</option>
+          <option value="TR">Transversal</option>
+          <option value="AV CL">Avenida Calle</option>
+          <option value="AV KR">Avenida Carrera</option>
+        </select>
+      </td>
+      <td>
+        <input
+          [(ngModel)]="consDireccion.parte2"
+          type="number"
+          (change)="construirDireccion()"
+          class="form__field"
+        />
+      </td>
+      <td>
+        <select
+          [(ngModel)]="consDireccion.parte3"
+          (change)="construirDireccion()"
+          class="form__field"
+        >
+          <option value="">--</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+          <option value="E">E</option>
+          <option value="F">F</option>
+          <option value="G">G</option>
+          <option value="H">H</option>
+          <option value="I">I</option>
+          <option value="J">J</option>
+          <option value="K">K</option>
+          <option value="L">L</option>
+          <option value="M">M</option>
+          <option value="N">N</option>
+          <option value="O">O</option>
+          <option value="P">P</option>
+          <option value="Q">Q</option>
+          <option value="R">R</option>
+          <option value="S">S</option>
+          <option value="T">T</option>
+          <option value="U">U</option>
+          <option value="V">V</option>
+          <option value="W">W</option>
+          <option value="X">X</option>
+          <option value="Y">Y</option>
+          <option value="Z">Z</option>
+        </select>
+      </td>
+      <td>
+        <input
+          type="checkbox"
+          [(ngModel)]="consDireccion.parte4"
+          (change)="construirDireccion()"
+          class="form__field"
+        />
+      </td>
+      <td>
+        <select
+          [(ngModel)]="consDireccion.parte5"
+          (change)="construirDireccion()"
+          class="form__field"
+        >
+          <option value="">--</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+          <option value="E">E</option>
+          <option value="F">F</option>
+          <option value="G">G</option>
+          <option value="H">H</option>
+          <option value="I">I</option>
+          <option value="J">J</option>
+          <option value="K">K</option>
+          <option value="L">L</option>
+          <option value="M">M</option>
+          <option value="N">N</option>
+          <option value="O">O</option>
+          <option value="P">P</option>
+          <option value="Q">Q</option>
+          <option value="R">R</option>
+          <option value="S">S</option>
+          <option value="T">T</option>
+          <option value="U">U</option>
+          <option value="V">V</option>
+          <option value="W">W</option>
+          <option value="X">X</option>
+          <option value="Y">Y</option>
+          <option value="Z">Z</option>
+        </select>
+      </td>
+      <td>
+        <select
+          [(ngModel)]="consDireccion.parte6"
+          (change)="construirDireccion()"
+          class="form__field"
+        >
+          <option>--</option>
+          <option value="ESTE">Este</option>
+          <option value="SUR">Sur</option>
+        </select>
+      </td>
+    </tr>
+    <tr class="text-white">
+      <td colspan="3" class="form__label">Vía secundaria</td>
+      <td>-</td>
+      <td colspan="2" class="form__label">Complemento</td>
+    </tr>
+    <tr class="text-white">
+      <th><sub>No.</sub></th>
+      <th><sub>8(*)</sub></th>
+      <th><sub>B</sub></th>
+      <th><sub>-</sub></th>
+      <th><sub>62</sub></th>
+      <th><sub>Este</sub></th>
+    </tr>
+    <tr class="text-white">
+      <td>No.</td>
+      <td>
+        <input
+          [(ngModel)]="consDireccion.parte7"
+          type="number"
+          (change)="construirDireccion()"
+          class="form__field"
+        />
+      </td>
+      <td>
+        <select
+          [(ngModel)]="consDireccion.parte8"
+          (change)="construirDireccion()"
+          class="form__field"
+        >
+          <option value="">--</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+          <option value="E">E</option>
+          <option value="F">F</option>
+          <option value="G">G</option>
+          <option value="H">H</option>
+          <option value="I">I</option>
+          <option value="J">J</option>
+          <option value="K">K</option>
+          <option value="L">L</option>
+          <option value="M">M</option>
+          <option value="N">N</option>
+          <option value="O">O</option>
+          <option value="P">P</option>
+          <option value="Q">Q</option>
+          <option value="R">R</option>
+          <option value="S">S</option>
+          <option value="T">T</option>
+          <option value="U">U</option>
+          <option value="V">V</option>
+          <option value="W">W</option>
+          <option value="X">X</option>
+          <option value="Y">Y</option>
+          <option value="Z">Z</option>
+        </select>
+      </td>
+      <td>-</td>
+      <td>
+        <input
+          [(ngModel)]="consDireccion.parte9"
+          type="number"
+          (change)="construirDireccion()"
+          class="form__field"
+        />
+      </td>
+      <td>
+        <select
+          [(ngModel)]="consDireccion.parte10"
+          (change)="construirDireccion()"
+          class="form__field"
+        >
+          <option>--</option>
+          <option value="ESTE">Este</option>
+          <option value="SUR">Sur</option>
+        </select>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br />
+<p class="text-white">La dirección es: {{ direccion }}</p>

@@ -33,6 +33,8 @@ import { MyHttpInterceptor } from './common/interceptors/http.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { GaleriaInmobiliariaComponent } from './components/resultados/galeria-inmobiliaria/galeria-inmobiliaria.component';
 import { ConsultaGaleriaComponent } from './components/consulta/consulta-galeria/consulta-galeria.component';
+import { CrearDireccionComponent } from './components/consulta/consulta-predial/consulta-direccion/crear-direccion/crear-direccion.component';
+import { ResultadosPredioComponent } from './components/resultados/resultados-predio/resultados-predio.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,8 @@ import { ConsultaGaleriaComponent } from './components/consulta/consulta-galeria
     ConsultaUplComponent,
     GaleriaInmobiliariaComponent,
     ConsultaGaleriaComponent,
+    CrearDireccionComponent,
+    ResultadosPredioComponent,
   ],
   imports: [
     BrowserModule,

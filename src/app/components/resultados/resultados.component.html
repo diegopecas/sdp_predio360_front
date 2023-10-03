@@ -3,23 +3,38 @@
     <img class="logo" src="/assets/images/logo_predio360.png" />
   </div>
   <hr class="separador" />
-  <div class="panel" [ngClass]="{ active: isIPPanelExpanded }">
+  <!--<div class="panel" [ngClass]="{ active: isIPPanelExpanded }">
     <div class="panel-header" (click)="togglePanel('IP')">
       Identificación Predio
     </div>
     <div class="panel-content" [ngStyle]="{ 'max-height.px': panelIPHeight }">
-      <!-- Contenido del panel -->
       <app-resultados-identificacion-predio
         [valores]="identificacionPredio"
       ></app-resultados-identificacion-predio>
     </div>
+  </div>-->
+  <div class="panel" [ngClass]="{ active: true }">
+    <div class="panel-header">
+      Selección de Predio
+    </div>
+    <div class="panel-content">
+      <p>
+        Dirección:
+        <select style="background: #000000; color: #ffffff;" class="form__field" [(ngModel)]="currentIndex" (change)="seleccionarPredio()">
+          <option>Seleccionar...</option>
+          <option *ngFor="let d of datos; let i = index" [value]="i">
+            {{ d.GN_DIRECCION }}
+          </option>
+        </select>
+      </p>
+    </div>
   </div>
-  <div class="panel" [ngClass]="{ active: isIFLPanelExpanded }">
+  <app-resultados-predio [predio]="predioSeleccionado"></app-resultados-predio>
+  <!--<div class="panel" [ngClass]="{ active: isIFLPanelExpanded }">
     <div class="panel-header" (click)="togglePanel('IFL')">
       Información Física Del Lote
     </div>
     <div class="panel-content" [ngStyle]="{ 'max-height.px': panelIFLHeight }">
-      <!-- Contenido del panel -->
       <app-resultados-info-fisica-lote
         [valores]="identificacionPredio"
       ></app-resultados-info-fisica-lote>
@@ -30,7 +45,6 @@
       Información De Localización
     </div>
     <div class="panel-content" [ngStyle]="{ 'max-height.px': panelLOCHeight }">
-      <!-- Contenido del panel -->
       <app-resultados-localizacion></app-resultados-localizacion>
     </div>
   </div>
@@ -39,7 +53,6 @@
       Información Normativa
     </div>
     <div class="panel-content" [ngStyle]="{ 'max-height.px': panelNORHeight }">
-      <!-- Contenido del panel -->
       <app-resultados-normativa></app-resultados-normativa>
     </div>
   </div>
@@ -48,7 +61,6 @@
       Información Económica
     </div>
     <div class="panel-content" [ngStyle]="{ 'max-height.px': panelIEHeight }">
-      <!-- Contenido del panel -->
       <app-resultados-info-economica></app-resultados-info-economica>
     </div>
   </div>
@@ -57,21 +69,19 @@
       Información Urbanística
     </div>
     <div class="panel-content" [ngStyle]="{ 'max-height.px': panelURBHeight }">
-      <!-- Contenido del panel -->
       <app-resultados-urbanistica></app-resultados-urbanistica>
     </div>
-  </div>
-  <div class="panel" [ngClass]="{ active: isGIPanelExpanded }">
+  </div>-->
+  <!--<div class="panel" [ngClass]="{ active: isGIPanelExpanded }">
     <div class="panel-header" (click)="togglePanel('GI')">
       Proyectos cercanos
     </div>
     <div class="panel-content" [ngStyle]="{ 'max-height.px': panelGIHeight }">
-      <!-- Contenido del panel -->
       <app-galeria-inmobiliaria
         [valores]="identificacionPredio" [valorPuntoClick]="puntoClick"
       ></app-galeria-inmobiliaria>
     </div>
-  </div>
+  </div>-->
 
   <!--<app-resultados-estadisticas></app-resultados-estadisticas>-->
   <hr class="separador" />

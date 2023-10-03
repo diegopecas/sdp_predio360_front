@@ -1,0 +1,31 @@
+.panel {
+    border: none; /* 1px solid #ccc; */
+    /* border-radius: 4px; */
+    overflow: hidden;
+    font-size: 18px;
+  }
+  
+  .panel-header {
+    background-color: #ffffff44;
+    padding: 10px;
+    cursor: pointer;
+    color: #ffffff;
+    font-weight: bolder;
+  }
+  
+  .panel-content {
+    padding: 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+    color: #ffffff;
+    font-weight: 500;
+  }
+  
+  .panel.active .panel-content {
+    max-height: 1000px; /* Ajusta la altura máxima del contenido */
+  }
+  
+  .titulo-azul {
+    color: #0fffff !important;
+  }

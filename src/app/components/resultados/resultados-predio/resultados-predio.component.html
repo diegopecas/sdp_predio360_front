@@ -1,0 +1,11 @@
+<div *ngFor="let panel of paneles" class="panel" [ngClass]="{ active: panel.activo }">
+    <!--<div class="panel-header" (click)="togglePanel('IFL')">-->
+    <div class="panel-header" (click)="togglePanel(panel)">
+      {{ panel.nombre }}
+    </div>
+    <div class="panel-content">
+      <ng-container *ngFor="let titulo of panel.atributos">
+        <p *ngIf="!(titulo.valor === 0)"><strong class="titulo-azul">{{ titulo.clave }}:</strong> {{ titulo.valor === 1 ? 'SÍ' : titulo.valor === 0 ? 'NO' : titulo.valor }}</p>
+      </ng-container>
+    </div>
+  </div>

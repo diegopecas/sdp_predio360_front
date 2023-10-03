@@ -1,0 +1,11 @@
+select {
+    color: white;
+}
+
+input {
+    color: white;
+}
+
+.text-white {
+    color: #ffffff !important;
+}

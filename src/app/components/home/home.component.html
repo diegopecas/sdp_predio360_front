@@ -1,11 +1,43 @@
 <div class="container-home">
-    <div class="start-button-container">
-      <button class="start-button" [routerLink]="['/3d']" routerLinkActive="router-link-active">Iniciar Consulta</button>
+  <div class="container-login">
+    <div class="form__group">
+      <input
+        type="usuario"
+        class="form__field"
+        name="usuario"
+        id="usuario"
+        placeholder=""
+        required
+        [(ngModel)]="usuario.usuario"
+      />
+      <label for="usuario" class="form__label">Usuario</label>
     </div>
-    <div class="logo">
-      <img src="/assets/images/logo_grande.png" />
+    <div class="form__group">
+      <input
+        type="password"
+        class="form__field"
+        name="password"
+        id="password"
+        placeholder=""
+        required
+        [(ngModel)]="usuario.password"
+      />
+      <label for="password" class="form__label">Contraseña</label>
     </div>
-    <div class="logo-sdp">
-      <img src="/assets/images/logo_sdp_b.png" />
+    <div class="form__group start-button-container">
+      <button
+        class="start-button"
+        [routerLink]="['/3d']"
+        routerLinkActive="router-link-active"
+      >
+        Iniciar Consulta
+      </button>
     </div>
+  </div>
+  <div class="logo">
+    <img src="/assets/images/logo_grande.png" />
+  </div>
+  <div class="logo-sdp">
+    <img src="/assets/images/logo_sdp_b.png" />
+  </div>
 </div>
