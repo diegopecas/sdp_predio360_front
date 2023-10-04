@@ -9,19 +9,57 @@
   <ng-container *ngIf="datos">
     <div class="form__group">
       <p class="texto-blanco">Proyecto:</p>
-      <select style="background: #000000; color: #ffffff;" class="form__field" [(ngModel)]="currentIndex">
+      <select style="background: #000000; color: #ffffff;" class="form__field" [(ngModel)]="currentIndex" (change)="seleccionar()">
         <option *ngFor="let d of datos; let i = index" [value]="i">
           {{ d.proyecto }}
         </option>
       </select>
     </div>
     <div class="form__group">
-        <p class="texto-blanco">Código Proyecto: {{datos[currentIndex].cod_proyecto}}</p>
-        <p class="texto-blanco">Vendedor: {{datos[currentIndex].vendedor}}</p>
-        <p class="texto-blanco">Zona: {{datos[currentIndex].zona}}</p>
-        <p class="texto-blanco">Barrio: {{datos[currentIndex].barrio}}</p>
-        <p class="item-consulta" (click)="verDetalle()">Ver detalle <img class="img-consulta" src="/assets/images/adelante.png" /></p>
-        <p class="item-consulta">Ubicar proyecto en el mapa <img class="img-consulta" src="/assets/images/adelante.png" /></p>
+        <p><strong class="titulo-azul">Código Proyecto:</strong> {{datos[currentIndex].cod_proyecto}}</p>
+        <p><strong class="titulo-azul">Vendedor:</strong> {{datos[currentIndex].vendedor}}</p>
+        <p><strong class="titulo-azul">Zona:</strong> {{datos[currentIndex].zona}}</p>
+        <p><strong class="titulo-azul">Barrio:</strong> {{datos[currentIndex].barrio}}</p>
+        <!--<p class="item-consulta" (click)="verDetalle()">Ver detalle <img class="img-consulta" src="/assets/images/adelante.png" /></p>
+        <p class="item-consulta">Ubicar proyecto en el mapa <img class="img-consulta" src="/assets/images/adelante.png" /></p>-->
+        <button class="button-aqua" (click)="ver()">{{ verMasGaleria ? 'Ver menos' : 'Ver más' }}</button>
+        <ng-container *ngIf="verMasGaleria">
+          <p><strong class="titulo-azul">Código de proyecto:</strong> {{ datos[currentIndex].cod_proyecto}}</p>
+          <p><strong class="titulo-azul">Código lote:</strong> {{ datos[currentIndex].cod_lote}}</p>
+          <p><strong class="titulo-azul"><strong>Proyecto:</strong> {{ datos[currentIndex].proyecto}}</strong></p>
+          <p><strong class="titulo-azul">Vendedor:</strong> {{ datos[currentIndex].vendedor}}</p>
+          <p><strong class="titulo-azul">Constructor:</strong> {{ datos[currentIndex].constructor}}</p>
+          <p><strong class="titulo-azul">Dirección:</strong> {{ datos[currentIndex].direccion}}</p>
+          <p><strong class="titulo-azul">Estrato:</strong> {{ datos[currentIndex].estrato}}</p>
+          <p><strong class="titulo-azul">Zona:</strong> {{ datos[currentIndex].zona}}</p>
+          <p><strong class="titulo-azul">Barrio:</strong> {{ datos[currentIndex].barrio}}</p>
+          <p><strong class="titulo-azul">Subzona:</strong> {{ datos[currentIndex].subzona}}</p>
+          <p><strong class="titulo-azul">Fecha inicio:</strong> {{ datos[currentIndex].fecha_inicio}}</p>
+          <p><strong class="titulo-azul">Estado:</strong> {{ datos[currentIndex].estado}}</p>
+          <p><strong class="titulo-azul">Activo:</strong> {{ datos[currentIndex].activo}}</p>
+          <p><strong class="titulo-azul">Unidades totales:</strong> {{ datos[currentIndex].unidades_totales}}</p>
+          <p><strong class="titulo-azul">Unidades ofertadas:</strong> {{ datos[currentIndex].unidades_ofertadas}}</p>
+          <p><strong class="titulo-azul">Unidades por lanzar:</strong> {{ datos[currentIndex].unidades_por_lanzar}}</p>
+          <p><strong class="titulo-azul">Unidades vendidas:</strong> {{ datos[currentIndex].unidades_vendidas}}</p>
+          <p><strong class="titulo-azul">Unidades disponibles:</strong> {{ datos[currentIndex].unidades_dispobibles_proy}}</p>
+          <p><strong class="titulo-azul">Última etapa lanzada:</strong> {{ datos[currentIndex].ult_etapa_lanzada}}</p>
+          <p><strong class="titulo-azul">Sótanos:</strong> {{ datos[currentIndex].sotanos}}</p>
+          <p><strong class="titulo-azul">Semisótanos:</strong> {{ datos[currentIndex].semisotanos}}</p>
+          <p><strong class="titulo-azul">Pisos de parqueadero:</strong> {{ datos[currentIndex].pisos_parqueadero}}</p>
+          <p><strong class="titulo-azul">
+            Pisos de parqueadero en edificio:</strong>
+            {{ datos[currentIndex].pisos_parqueadero_edificio_vivi}}
+          </p>
+          <p><strong class="titulo-azul">Incremento de precio por piso:</strong> {{ datos[currentIndex].incremento_precio_pisos}}</p>
+          <p><strong class="titulo-azul">Otro uso:</strong> {{ datos[currentIndex].otro_uso}}</p>
+          <p><strong class="titulo-azul">Fecha de entrega:</strong> {{ datos[currentIndex].fecha_entrega}}</p>
+          <p><strong class="titulo-azul">Entrega con acabados:</strong> {{ datos[currentIndex].acabados_entrega}}</p>
+          <p><strong class="titulo-azul">Tipo de inmueble:</strong> {{ datos[currentIndex].tipo_inmueble}}</p>
+          <p><strong class="titulo-azul">Es vivienda VIS:</strong> {{ datos[currentIndex].vivienda_vis}}</p>
+          <p><strong class="titulo-azul">Fecha desistido:</strong> {{ datos[currentIndex].fecha_desistido}}</p>
+          <p><strong class="titulo-azul">Unidades desistidas:</strong> {{ datos[currentIndex].unidades_desistidas}}</p>
+          <p><strong class="titulo-azul">Certificado sostenible:</strong> {{ datos[currentIndex].certificado_sostenible}}</p>
+        </ng-container>
     </div>
   </ng-container>
   <hr class="separador" />

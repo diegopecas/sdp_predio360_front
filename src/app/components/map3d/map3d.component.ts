@@ -62,6 +62,8 @@ export class Map3dComponent implements AfterViewInit {
       "esri/symbols/SimpleLineSymbol",
       "esri/Color",
       "esri/symbols/ObjectSymbol3DLayer",
+      "esri/core/reactiveUtils",
+      "esri/symbols/WebStyleSymbol"
     ]).then(
       ([
         esriConfig,
@@ -78,9 +80,10 @@ export class Map3dComponent implements AfterViewInit {
         SimpleLineSymbol,
         Color,
         ObjectSymbol3DLayer,
+        reactiveUtils,
+        WebStyleSymbol
       ]) => {
         esriConfig.apiKey = environment.esriConfigApiKey;
-
         /*let count = 0;
         esriConfig.request.interceptors.push({
           / / urls: /^https?:\/\/serviciosgeopr.sdp.gov.co\/. * /,
@@ -113,7 +116,8 @@ export class Map3dComponent implements AfterViewInit {
           IconSymbol3DLayer,
           PointSymbol3D,
           FeatureLayer,
-          ObjectSymbol3DLayer
+          ObjectSymbol3DLayer,
+          WebStyleSymbol
         );
         this.map = this.crearMapa(Map);
         this.view = this.crearVista(SceneView);
@@ -122,6 +126,17 @@ export class Map3dComponent implements AfterViewInit {
           this.clickEnVista(event, Graphic);
         });
 
+        reactiveUtils.on(
+          () => this.view.popup,
+          "trigger-action",
+          (event:any) => {
+            // Execute the measureThis() function if the measure-this action is clicked
+            if (event.action.id === "verStreetView") {
+              this.verStreetView();
+            }
+          }
+        );
+        
         this.capa3d.visible = true;
         this.capa2d.visible = false;
         this.capaGaleria.visible = true;
@@ -249,16 +264,48 @@ export class Map3dComponent implements AfterViewInit {
     const povLayer = new FeatureLayer({
       url: environment.urlServicioPredios,
       renderer: renderer,
-      title: "Predio {CODIGO_PREDIO}",
+      // title: "Código lote {CODIGO_LOTE}",
       outFields: ["*"],
       popupTemplate: {
         // autocasts as new PopupTemplate()
-        title: "Código predio: {CODIGO_PREDIO}",
+        title: "Código lote {CODIGO_LOTE}",
+        content: [
+          {
+            type: "fields",
+            fieldInfos: [
+              {
+                fieldName: "CODIGO_CONSTRUCCION", // The field whose values you want to format
+                label: "Código construcción"
+              },
+              {
+                fieldName: "NUMERO_PISOS", // The field whose values you want to format
+                label: "Número de pisos"
+              },
+              {
+                fieldName: "RESPONSABLE", // The field whose values you want to format
+                label: "Responsable"
+              },
+            ]
+          }],
+          actions: [this.streetViewAction]
       },
       // definitionExpression: defExp.join(" OR ") // only display counties from states in defExp
     });
 
     return povLayer;
+  }
+
+  private streetViewAction = {
+    title: "Google Street View",
+    id: "verStreetView",
+    image: "/assets/images/Street_View_logo.png"
+  };
+
+  verStreetView() {
+    const geom = this.view.popup.selectedFeature.geometry;
+    console.log('POPUP SV', geom);
+    window.open("http://maps.google.com/?cbll="+geom.centroid.latitude+","+geom.centroid.longitude+"&cbp=12,90,0,0,5&layer=c","_blank");
+    // window.open("https://www.google.com/maps/@4.8657416,-74.0382613","_blank");    
   }
 
   agregarPuntoSeleccionado(x: any, y: any, z: any) {
@@ -302,8 +349,15 @@ export class Map3dComponent implements AfterViewInit {
     IconSymbol3DLayer: any,
     PointSymbol3D: any,
     FeatureLayer: any,
-    ObjectSymbol3DLayer: any
+    ObjectSymbol3DLayer: any,
+    WebStyleSymbol:any
   ) {
+
+    const webStyleSymbol = new WebStyleSymbol({
+      name: "Tower_Crane",
+      styleName: "EsriRealisticTransportationStyle"
+    });
+    
     const objectSymbol = new PointSymbol3D({
       symbolLayers: [
         new ObjectSymbol3DLayer({
@@ -336,7 +390,31 @@ export class Map3dComponent implements AfterViewInit {
       renderer: {
         type: "simple",
         // symbol: symbolBandera,
-        symbol: objectSymbol,
+        // symbol: objectSymbol,
+        symbol: webStyleSymbol,
+      },
+      popupTemplate: {
+        // autocasts as new PopupTemplate()
+        title: "Proyecto {proyecto}",
+        content: [
+          {
+            type: "fields",
+            fieldInfos: [
+              {
+                fieldName: "cod_proyecto", // The field whose values you want to format
+                label: "Código proyecto"
+              },
+              {
+                fieldName: "cod_lote", // The field whose values you want to format
+                label: "Código lote"
+              },
+              {
+                fieldName: "constructor", // The field whose values you want to format
+                label: "Constructor"
+              },
+            ]
+          }],
+          // actions: [this.streetViewAction]
       },
     });
   }
@@ -362,12 +440,12 @@ export class Map3dComponent implements AfterViewInit {
       map: this.map,
       camera: {
         position: {
-          latitude: 4.6,
-          longitude: -74.11,
-          z: 2800, // Altura en metros
+          latitude: 4.618554114844545,
+          longitude: -74.08188893966589,
+          z: 3200, // Altura en metros
         },
         heading: 0, // grados de rotación respecto del norte
-        tilt: 70, // grados de rotación respecto de la superficie
+        tilt: 45, // grados de rotación respecto de la superficie
       },
       qualityProfile: "high",
     });
@@ -376,8 +454,10 @@ export class Map3dComponent implements AfterViewInit {
   clickEnVista(event: any, Graphic: any) {
     // this.valorPuntoClick = event;
     // Centrar el mapa en el punto seleccionado y hacer zoom
+    console.log('Click en el mapa', event)
     const clickedPoint = this.view.toMap(event);
-    this.view.center = clickedPoint;
+    console.log('ClickedPoint', clickedPoint)
+    // this.view.center = clickedPoint;
 
     this.view.goTo({
       target: clickedPoint,
@@ -395,13 +475,13 @@ export class Map3dComponent implements AfterViewInit {
         );
         break;
       case "consulta-galeria":
-        this.seleccionarProyecto(
+        /*this.seleccionarProyecto(
           {
             x: event.x,
             y: event.y,
           },
           event
-        );
+        );*/
         break;
     }
   }
@@ -426,6 +506,41 @@ export class Map3dComponent implements AfterViewInit {
         console.log('SELECCIONAR PREDIO', this.valoresResultados);
       }
     });
+  }
+
+  seleccionarPredioByLote(lote:any) {
+    let capa = this.capa3d;
+    if (this.vista2d3d === "3D") {
+      capa === this.capa3d;
+    } else {
+      capa === this.capa2d;
+    }
+    console.log('seleccionarPredioByLote', this.view, lote);
+    const query = capa.createQuery();
+      query.where = "CODIGO_LOTE like '"+lote+"'";
+      query.outFields = "CODIGO_LOTE";
+      query.returnGeometry = true;
+      query.returnCentroid = true;
+      console.log('QUERY seleccionarPredioByLote',query);
+      capa
+        .queryFeatures(query)
+        .then((result: any) => {
+          console.log('UBICACION', result)
+          if(result.features.length > 0) {
+            const punto = result.features[0].geometry.centroid;
+            console.log('punto',punto)
+            // this.view.center = punto;
+
+            this.view.goTo({
+              target: punto,
+              zoom: 21,
+            });
+          }
+        })
+        .catch((error: any) => {
+          console.error("Error al consultar el servicio:", error);
+        });
+    
   }
 
   seleccionarProyecto(screenPoint: any, event: any) {
@@ -543,63 +658,56 @@ export class Map3dComponent implements AfterViewInit {
     );
   }
 
+  seleccionProyectoGaleria(proyecto:any) {
+    console.log('seleccionProyectoGaleria', proyecto)
+    this.view.goTo(
+      {
+        position: {
+          x: proyecto.longitud,
+          y: proyecto.latitud,
+          z: 3000,
+          spatialReference: {
+            wkid: 4326
+          }
+        }
+      }
+    );
+  }
+
   consultaDireccion(dir: any) {
     console.log('CONSULTA POR DIRECCION', dir)
     this.valoresResultados = {
       opcion: this.opcion,
-      // resultados: graphic.attributes,
       direccion: dir
     };
     this.resultados = true;
-    /*loadModules(["esri/config", "esri/layers/FeatureLayer"]).then(
-      ([esriConfig, FeatureLayer]) => {
-        esriConfig.apiKey = environment.esriConfigApiKey;
+  }
 
-        // Crear un FeatureLayer con la URL del servicio de tabla
-        const featureLayer = new FeatureLayer({
-          url: environment.urlTablaPredios,
-        });
+  consultaMatricula(mat: any) {
+    console.log('CONSULTA POR matricula', mat)
+    this.valoresResultados = {
+      opcion: this.opcion,
+      matricula: mat
+    };
+    this.resultados = true;
+  }
 
-        // Consultar la tabla y obtener los resultados
-        const query = featureLayer.createQuery();
-        query.where = `"DIRECCION LIKE %27"` + dir + `"%27"`; // Establecer una condición opcional para filtrar los resultados
-        // query.where = "direccion = 'CL 9 30 74'";
-        query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
+  consultaCedula(ced: any) {
+    console.log('CONSULTA POR cedula', ced)
+    this.valoresResultados = {
+      opcion: this.opcion,
+      cedula: ced
+    };
+    this.resultados = true;
+  }
 
-        featureLayer
-          .queryFeatures(query)
-          .then((result: any) => {
-            // Manipular los resultados obtenidos
-            const features = result.features;
-            // Realizar acciones con los datos devueltos
-            if (features.length > 0) {
-              // const datos = features.map((m:any)=>m.attributes);
-              const jsonResult = features.map((feature: any) =>
-                feature.toJSON()
-              );
-              const datos = jsonResult[0].attributes;
-              
-              this.resultados = true;
-
-              this.valoresResultados = {
-                opcion: this.opcion,
-                resultados: datos,
-              };
-              
-
-            }
-          })
-          .catch((error: any) => {
-            // Manejar cualquier error ocurrido durante la consulta
-            console.error("Error al consultar la tabla:", error);
-          });
-      }
-    );*/
-    /*this.agregarPuntoSeleccionado(
-      event.mapPoint.longitude,
-      event.mapPoint.latitude,
-      (this.valoresResultados.resultados.NUMERO_PISOS + 1) * 2.4
-    );*/
+  consultaChip(chip: any) {
+    console.log('CONSULTA POR chip', chip)
+    this.valoresResultados = {
+      opcion: this.opcion,
+      chip: chip
+    };
+    this.resultados = true;
   }
 
   controlCapaSinupot() {

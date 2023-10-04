@@ -7,8 +7,11 @@
     </div>
     <hr class="separador" />
     <div class="form__group">
-      <input type="input" class="form__field" placeholder="Ingrese una matrícula" name="matricula" id='matricula' required />
+      <input type="input" class="form__field" placeholder="Ingrese una matrícula" name="matricula" id='matricula' required [(ngModel)]="matricula" />
       <label for="matricula" class="form__label">Matrícula</label>
+    </div>
+    <div class="form__group text-center">
+      <button class="button-aqua" (click)="consultar()">Consultar</button>
     </div>
     <hr class="separador" />
     <div class="logo-container">

@@ -16,6 +16,7 @@ import { environment } from "src/environments/environment";
 })
 export class ResultadosComponent implements OnChanges {
   @Output() accion = new EventEmitter();
+  @Output() loteSeleccionado = new EventEmitter();
   // @Input() valores: any;
   // @Input() valorPuntoClick: any;
   @Input() parametros: any;
@@ -33,35 +34,31 @@ export class ResultadosComponent implements OnChanges {
   public predioSeleccionado = {} as any;
 
   ngOnChanges(changes: SimpleChanges): void {
-    /*this.identificacionPredio = changes["valores"]["currentValue"];
-    this.puntoClick = changes["valorPuntoClick"]["currentValue"];
-    console.log("ngOnChanges ResultadosComponent", this.identificacionPredio.resultados);*/
     this.params = changes["parametros"]["currentValue"];
     if (this.params) {
       console.log("PARAMS", this.params);
       switch(this.params.opcion) {
         case "consulta-seleccion":
           this.id = this.params.resultados.CODIGO_LOTE;
-          this.consultarPrediosByLote(this.params);
+          this.consultarPrediosByLote();
         break;
         case "consulta-direccion":
           this.direccion = this.params.direccion;
           this.consultarPrediosByDireccion();
           break;
-      }
-        /*if(this.params.chip) {
+        case "consulta-chip":
           this.chip = this.params.chip;
           this.consultarPrediosByChip();
-        }
-        if(this.params.cedula) {
-          this.cedula = this.params.cedula;
-          this.consultarPrediosByCedula();
-        }
-        if(this.params.matricula) {
+          break;
+        case "consulta-matricula":
           this.matricula = this.params.matricula;
           this.consultarPrediosByMatricula();
-        }
-      }*/
+          break;
+        case "consulta-cedula":
+          this.cedula = this.params.cedula;
+          this.consultarPrediosByCedula();
+          break;
+      }
     }
   }
 
@@ -70,7 +67,7 @@ export class ResultadosComponent implements OnChanges {
     this.accion.emit(true);
   }
 
-  consultarPrediosByLote(params: any) {
+  consultarPrediosByLote() {
     loadModules([
       "esri/config",
       "esri/layers/FeatureLayer",
@@ -128,6 +125,7 @@ export class ResultadosComponent implements OnChanges {
           
           if (features.length > 0) {
             this.datos = features.map((m: any) => m.attributes);
+            this.loteSeleccionado.emit(this.datos[0].GN_CODIGO_LOTE);
           }
           this.currentIndex = 0;
         })
@@ -138,6 +136,7 @@ export class ResultadosComponent implements OnChanges {
   }
 
   consultarPrediosByChip() {
+    console.log('consultarPrediosByChip()')
     loadModules([
       "esri/config",
       "esri/layers/FeatureLayer",
@@ -150,10 +149,10 @@ export class ResultadosComponent implements OnChanges {
 
       const query = featureLayer.createQuery();
       query.where =
-        environment.capaConsultaPredio.porChip.atributo+" like '"+this.direccion+"'";
+        environment.capaConsultaPredio.porChip.atributo+" like '"+this.chip+"'";
       query.outFields = "OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION";
       query.returnGeometry = false;
-
+      console.log('QUERY', query);
       featureLayer
         .queryFeatures(query)
         .then((result: any) => {

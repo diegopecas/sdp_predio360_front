@@ -7,8 +7,16 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class ConsultaCedulaComponent {
   @Output() accion = new EventEmitter();
+  @Output() accionConsultar = new EventEmitter();
 
+  public cedula = "";
+  
   seleccion(opcion: any) {
     this.accion.emit(opcion);
+  }
+
+  consultar() {
+    console.log("Se va a consultar por: ", this.cedula);
+    this.accionConsultar.emit(this.cedula);
   }
 }

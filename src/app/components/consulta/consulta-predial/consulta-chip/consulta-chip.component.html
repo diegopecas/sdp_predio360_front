@@ -7,8 +7,11 @@
     </div>
     <hr class="separador" />
     <div class="form__group">
-      <input type="input" class="form__field" placeholder="" name="chip" id='chip' required />
+      <input type="input" class="form__field" placeholder="" name="chip" id='chip' required [(ngModel)]="chip"/>
       <label for="chip" class="form__label">CHIP</label>
+    </div>
+    <div class="form__group text-center">
+      <button class="button-aqua" (click)="consultar()">Consultar</button>
     </div>
     <hr class="separador" />
     <div class="logo-container">

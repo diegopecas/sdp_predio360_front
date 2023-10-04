@@ -9,6 +9,7 @@ import swal from 'sweetalert2';
 })
 export class ConsultaGaleriaComponent implements OnInit {
   @Output() accion = new EventEmitter();
+  @Output() seleccionProyecto = new EventEmitter();
 
   public datos:any;
 
@@ -20,6 +21,11 @@ export class ConsultaGaleriaComponent implements OnInit {
 
   ngOnInit(): void {
       this.consultarProyectos();
+  }
+
+  seleccionar() {
+    console.log('PROYECTO SELECCIONADO', this.datos[this.currentIndex])
+    this.seleccionProyecto.emit({latitud: this.datos[this.currentIndex].latitud, longitud: this.datos[this.currentIndex].longitud});
   }
 
   consultarProyectos(){
@@ -57,7 +63,7 @@ export class ConsultaGaleriaComponent implements OnInit {
     );
   }
 
-  verDetalle() {
+  /*verDetalle() {
     swal.fire({
       html: `
       <p>Código de proyecto: ${this.datos[this.currentIndex].cod_proyecto}</p>
@@ -97,6 +103,12 @@ export class ConsultaGaleriaComponent implements OnInit {
       confirmButtonColor: '#acc962',
       confirmButtonText: 'Cerrar'
     });
+  }*/
+
+  public verMasGaleria = false;
+
+  ver(){
+    this.verMasGaleria = !this.verMasGaleria;
   }
 
 }

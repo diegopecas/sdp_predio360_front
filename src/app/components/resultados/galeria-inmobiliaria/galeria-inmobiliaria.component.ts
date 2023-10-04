@@ -16,6 +16,12 @@ export class GaleriaInmobiliariaComponent implements OnChanges {
   public datos: any;
   public currentIndex = 0;
 
+  public verMasGaleria = false;
+
+  ver(){
+    this.verMasGaleria = !this.verMasGaleria;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
 
     if (changes["valores"] && !(changes["valores"]["previousValue"] === changes["valores"]["currentValue"])) {
