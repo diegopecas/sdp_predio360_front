@@ -15,7 +15,7 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
   public predioEvaluado: any;
 
   ngOnInit(): void {
-    console.log(environment.panelesResultados)
+    // // console.log(environment.panelesResultados)
     this.paneles = environment.panelesResultados.map(pr => {
       return {
           id: pr.id,
@@ -30,7 +30,7 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this.predioEvaluado = changes["predio"]["currentValue"];
     if(this.predioEvaluado) {
-      console.log('cambio de predio',this.predioEvaluado);
+      // // console.log('cambio de predio',this.predioEvaluado);
       // this.configurarAtributos();
       this.cargarInformacion();
     }
@@ -67,30 +67,20 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
             url: sr.url,
           });
     
-          // console.log('CONSULTAR', sr.name);
-    
           const query = featureLayer.createQuery();
           query.where =
             sr.filter[0]+" like '"+this.predioEvaluado[sr.filter[1]]+"'";
-          // query.where =
-          //   "{environment.capaConsultaPredio.porLote.atributo} like '{params.resultados.codigo_lote}'";
           query.outFields = "*";
           query.returnGeometry = false;
     
-          // console.log('FILTRO', sr.filter[0]+" like '"+this.predioEvaluado[sr.filter[1]]+"'");
-    
-          // console.log("QUERY", query);
           featureLayer
             .queryFeatures(query)
             .then((result: any) => {
-              // Manipular los resultados obtenidos
-              console.log("RESULTADOS QUERY", result);
               const features = result.features;
               if (features.length > 0) {
                 const attr = features[0].attributes;
                 this.paneles.forEach((p:any) => {
                   p.atributos.forEach((a:any) => {
-                    // console.log('MAPEO',attr,a);
                     const valor = attr[a.name];
                     if(valor){
                       a.valor = valor;

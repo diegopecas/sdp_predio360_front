@@ -35,6 +35,7 @@ import { GaleriaInmobiliariaComponent } from './components/resultados/galeria-in
 import { ConsultaGaleriaComponent } from './components/consulta/consulta-galeria/consulta-galeria.component';
 import { CrearDireccionComponent } from './components/consulta/consulta-predial/consulta-direccion/crear-direccion/crear-direccion.component';
 import { ResultadosPredioComponent } from './components/resultados/resultados-predio/resultados-predio.component';
+import { LoadingBarComponent } from './common/utils/loading-bar/loading-bar.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { ResultadosPredioComponent } from './components/resultados/resultados-pr
     ConsultaGaleriaComponent,
     CrearDireccionComponent,
     ResultadosPredioComponent,
+    LoadingBarComponent,
   ],
   imports: [
     BrowserModule,

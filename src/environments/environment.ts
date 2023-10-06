@@ -1,25 +1,13 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
-
 export const environment = {
   production: false,
   esriConfigApiKey:
     "AAPK18837c198fe14f849f5237a94fb8c4d9nyUIHfhPmykTR_afDukiTorJHXPimhB05XjXQ6o6rDQ-GAsclkcQJjNfsUX-ulMj",
-  /*urlServicioPredios:
-    "https://services8.arcgis.com/2gedZBw4OrdjULOA/ArcGIS/rest/services/Mapa_demo_Predio_360_WFL1/FeatureServer/0",*/
   urlServicioPredios:
-    "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",
-  /*urlServicioPredios:
-    "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",*/
-  /*urlServicioPredios:
-    "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/4",*/
-  /* no funciona en SDP: urlServicioPredios:
-    "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",*/
+   "https://services8.arcgis.com/2gedZBw4OrdjULOA/arcgis/rest/services/construccion_predio_360/FeatureServer/0",
+  // urlServicioPredios:
+  //  "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",
   urlServicioGaleria:
     "https://services8.arcgis.com/2gedZBw4OrdjULOA/ArcGIS/rest/services/galeria_inmobiliaria_demo/FeatureServer/0",
-  /*urlTablaPredios:
-    "https://services8.arcgis.com/2gedZBw4OrdjULOA/ArcGIS/rest/services/Mapa_demo_Predio_360_WFL1/FeatureServer/1",*/
   urlTablaPredios:
     "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
   urlLoteCatastral:
@@ -27,8 +15,12 @@ export const environment = {
   urlConstruccion:
     "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/4",
   urlSinupot: "https://sinupot.sdp.gov.co/serverp/rest/services/",
+  capaArbolado: {
+    url: "https://geoportal.jbb.gov.co/agc/rest/services/SIGAU/CensoArbol/MapServer/0",
+  },
   capaConsultaClick : {
     url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/4",
+    /*url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",*/
     id: "CODIGO_LOTE"
   },
   capaConsultaPredio: {
@@ -73,6 +65,10 @@ export const environment = {
       nombre: "Información De Localización",
     },
     {
+      id: "US",
+      nombre: "Información De Uso de Suelo",
+    },
+    {
       id: "IF",
       nombre: "Información Física Del Lote",
     },
@@ -89,8 +85,16 @@ export const environment = {
       nombre: "Información Urbanística",
     },
   ],
+  panelesIndicadores: [
+    {
+      nombre: "Estructura socioeconómica",
+      icono: "",
+      id: "I-ES"
+    }
+  ],
   serviciosResultados: [
     {
+      // url: "https://services8.arcgis.com/2gedZBw4OrdjULOA/arcgis/rest/services/construccion_predio_360/FeatureServer/0",
       url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",
       id: "construccion",
       name: "Construcción",
@@ -127,7 +131,7 @@ export const environment = {
         { name: "NR_ES_SECTOR_CONSOLIDADO", alias: "Sectores consolidados", panel: "NR", orden: 6 },
         {
           name: "FS_AREA_CONSTRUIDA",
-          alias: "Área Construida del Lote",
+          alias: "Área Construida del Lote m<sup>2</sup>",
           panel: "IF",
         },
         {
@@ -615,37 +619,37 @@ export const environment = {
         {
           name: "GN_AREA_USO_COMERCIAL",
           alias: "Área en uso comercial",
-          panel: "",
+          panel: "US",
         },
         {
           name: "GN_AREA_USO_DOTACIONAL",
           alias: "Área en uso dotacional",
-          panel: "",
+          panel: "US",
         },
         {
           name: "GN_AREA_USO_INDUSTRIA",
           alias: "Área en uso industria",
-          panel: "",
+          panel: "US",
         },
         {
           name: "GN_AREA_USO_NO_URB",
           alias: "Área en uso no urbano",
-          panel: "",
+          panel: "US",
         },
         {
           name: "GN_AREA_USO_PH",
           alias: "Área en uso actividad conexa a PH",
-          panel: "",
+          panel: "US",
         },
         {
           name: "GN_AREA_USO_RESIDENCIAL",
           alias: "Área en uso residencial",
-          panel: "",
+          panel: "US",
         },
         {
           name: "GN_AREA_USO_SERVICIOS",
           alias: "Área en uso servicios",
-          panel: "",
+          panel: "US",
         },
         { name: "GN_CEDULA_CATASTRAL", alias: "Cédula Catastral", panel: "" },
         { name: "GN_CHIP", alias: "CHIP", panel: "" },

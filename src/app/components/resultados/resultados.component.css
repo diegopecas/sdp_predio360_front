@@ -25,3 +25,7 @@
 .panel.active .panel-content {
   max-height: 1000px; /* Ajusta la altura máxima del contenido */
 }
+
+.titulo-azul {
+  color: #0fffff !important;
+}

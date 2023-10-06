@@ -1,4 +1,5 @@
 <div class="map-container">
+    <app-loading-bar *ngIf="countSpinner > 0"></app-loading-bar>
     <div #mapView id="mapView"></div>
     <app-consulta *ngIf="opcion == 'menu' && !resultados" (accion)="accionMenu($event)"></app-consulta>
     <app-consulta-predial *ngIf="opcion == 'consulta-predial' && !resultados" (accion)="accionMenu($event)"></app-consulta-predial>

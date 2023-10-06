@@ -1,6 +1,6 @@
 <ng-container *ngIf="datos">
   <div class="form__group">
-    <p class="texto-blanco">Proyecto:</p>
+    <p><strong class="texto-azul">Proyecto:</strong></p>
     <select
       style="background: #000000; color: #ffffff"
       class="form__field"
@@ -12,17 +12,17 @@
     </select>
   </div>
   <div class="form__group">
-    <p class="texto-blanco">
-      Código Proyecto: {{ datos[currentIndex].cod_proyecto }}
+    <p>
+      <strong class="texto-azul">Código Proyecto:</strong> {{ datos[currentIndex].cod_proyecto }}
     </p>
-    <p class="texto-blanco">Vendedor: {{ datos[currentIndex].vendedor }}</p>
-    <p class="texto-blanco">Zona: {{ datos[currentIndex].zona }}</p>
-    <p class="texto-blanco">Barrio: {{ datos[currentIndex].barrio }}</p>
+    <p><strong class="texto-azul">Vendedor:</strong> {{ datos[currentIndex].vendedor }}</p>
+    <p><strong class="texto-azul">Zona:</strong> {{ datos[currentIndex].zona }}</p>
+    <p><strong class="texto-azul">Barrio:</strong> {{ datos[currentIndex].barrio }}</p>
     <button class="button-aqua" (click)="ver()">{{ verMasGaleria ? 'Ver menos' : 'Ver más' }}</button>
     <ng-container *ngIf="verMasGaleria">
       <p><strong class="texto-azul">Código de proyecto:</strong> {{ datos[currentIndex].cod_proyecto}}</p>
       <p><strong class="texto-azul">Código lote:</strong> {{ datos[currentIndex].cod_lote}}</p>
-      <p><strong class="texto-azul"><strong>Proyecto:</strong> {{ datos[currentIndex].proyecto}}</strong></p>
+      <p><strong class="texto-azul">Proyecto:</strong> {{ datos[currentIndex].proyecto}}</p>
       <p><strong class="texto-azul">Vendedor:</strong> {{ datos[currentIndex].vendedor}}</p>
       <p><strong class="texto-azul">Constructor:</strong> {{ datos[currentIndex].constructor}}</p>
       <p><strong class="texto-azul">Dirección:</strong> {{ datos[currentIndex].direccion}}</p>

@@ -1,20 +1,26 @@
-<div class="panel" *ngIf="seccion=='general'" #panel>
+<div class="panel" *ngIf="seccion == 'general'" #panel>
   <div class="titulo">Indicadores de proximidad</div>
   <div class="contenido" #contenido>
     <div class="seccion-estadistica-i" (click)="subseccion('equipamiento')">
-        <img src="/assets/images/equipamiento.png" class="icono-estadistica" /><br/>
-        <label>Equipamiento</label>
+      <img
+        src="/assets/images/equipamiento.png"
+        class="icono-estadistica"
+      /><br />
+      <label>Equipamiento</label>
     </div>
     <div class="seccion-estadistica" (click)="subseccion('parques')">
-      <img src="/assets/images/parques.png" class="icono-estadistica" /><br/>
+      <img src="/assets/images/parques.png" class="icono-estadistica" /><br />
       <label>Parques</label>
     </div>
     <div class="seccion-estadistica" (click)="subseccion('transporte')">
-      <img src="/assets/images/transporte.png" class="icono-estadistica" /><br/>
+      <img
+        src="/assets/images/transporte.png"
+        class="icono-estadistica"
+      /><br />
       <label>Transporte</label>
     </div>
     <div class="seccion-estadistica-f" (click)="subseccion('centros')">
-      <img src="/assets/images/socioeco.png" class="icono-estadistica" /><br/>
+      <img src="/assets/images/socioeco.png" class="icono-estadistica" /><br />
       <label>Centros económicos</label>
     </div>
   </div>
@@ -22,92 +28,204 @@
   <div class="scroll-derecha" (mouseover)="desplazarDerecha()"></div>
 </div>
 
-<div class="panel" *ngIf="seccion=='equipamiento'">
+<div class="panel" *ngIf="seccion == 'equipamiento'">
   <div class="titulo">Indicadores de proximidad</div>
   <div class="contenido" #contenido>
     <div class="seccion-estadistica-i" (click)="subseccion('general')">
-      <img src="/assets/images/atras-gris.png" class="icono-estadistica" /><br/>
+      <img
+        src="/assets/images/atras-gris.png"
+        class="icono-estadistica"
+      /><br />
       <label>Regresar</label>
     </div>
-    <div class="seccion-estadistica" onclick="subseccion('parques')">
-      <label></label>
+    <div class="seccion-estadistica">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento de
+        abastecimiento más cercano (Minutos)</label
+      >
     </div>
-    <div class="seccion-estadistica" onclick="subseccion('transporte')">
-      
-      <label></label>
+    <div class="seccion-estadistica">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento de
+        abastecimiento más cercano (Metros)</label
+      >
     </div>
-    <div class="seccion-estadistica-f" onclick="subseccion('centros')">
-      
-      <label></label>
+    <div class="seccion-estadistica">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento de bienestar más
+        cercano (Minutos)</label
+      >
+    </div>
+    <div class="seccion-estadistica">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento de bienestar más
+        cercano (Metros)</label
+      >
+    </div>
+    <div class="seccion-estadistica">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento deportivo más
+        cercano (Minutos)</label
+      >
+    </div>
+    <div class="seccion-estadistica">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento deportivo más
+        cercano (Metros)</label
+      >
+    </div>
+    <div class="seccion-estadistica">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento de educación más
+        cercano (Minutos)</label
+      >
+    </div>
+    <div class="seccion-estadistica">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento de educación más
+        cercano (Metros)</label
+      >
+    </div>
+    <div class="seccion-estadistica">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento de educación
+        superior más cercano (Minutos)</label
+      >
+    </div>
+    <div class="seccion-estadistica">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento de educación
+        superior más cercano (Metros)</label
+      >
+    </div>
+    <div class="seccion-estadistica">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento de salud más
+        cercano (Minutos)</label
+      >
+    </div>
+    <div class="seccion-estadistica">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento de salud más
+        cercano (Metros)</label
+      >
+    </div>
+    <div class="seccion-estadistica">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento administrativo
+        más cercano (Minutos)</label
+      >
+    </div>
+    <div class="seccion-estadistica">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento administrativo
+        más cercano (Metros)</label
+      >
+    </div>
+    <div class="seccion-estadistica">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento de seguridad más
+        cercano (Minutos)</label
+      >
+    </div>
+    <div class="seccion-estadistica-f">
+      <label>
+        de desplazamiento caminando para acceder a equipamiento de seguridad más
+        cercano (Metros)</label
+      >
     </div>
   </div>
   <div class="scroll-izquierda" (mouseover)="desplazarIzquierda()"></div>
   <div class="scroll-derecha" (mouseover)="desplazarDerecha()"></div>
 </div>
 
-<div class="panel" *ngIf="seccion=='parques'">
+<div class="panel" *ngIf="seccion == 'parques'">
   <div class="titulo">Indicadores de proximidad</div>
   <div class="contenido" #contenido>
     <div class="seccion-estadistica-i" (click)="subseccion('general')">
-      <img src="/assets/images/atras-gris.png" class="icono-estadistica" /><br/>
+      <img
+        src="/assets/images/atras-gris.png"
+        class="icono-estadistica"
+      /><br />
       <label>Regresar</label>
     </div>
-    <div class="seccion-estadistica" onclick="subseccion('parques')">
-      <label></label>
+    <div class="seccion-estadistica">
+      <label
+        >Tiempo de desplazamiento caminando para acceder a un parque de la red
+        parques de proximidad (Minutos)</label
+      >
     </div>
-    <div class="seccion-estadistica" onclick="subseccion('transporte')">
-      
-      <label></label>
+    <div class="seccion-estadistica">
+      <label
+        >Distancia de desplazamiento caminando para acceder a un parque de la
+        red parques de proximidad (Metros)</label
+      >
     </div>
-    <div class="seccion-estadistica-f" onclick="subseccion('centros')">
-      
-      <label></label>
+    <div class="seccion-estadistica">
+      <label
+        >Tiempo de desplazamiento caminando para acceder a un parque de parques
+        estructurantes (Minutos)</label
+      >
+    </div>
+    <div class="seccion-estadistica-f">
+      <label
+        >Distancia de desplazamiento caminando para acceder a un parque de
+        parques estructurantes (Metros)</label
+      >
     </div>
   </div>
   <div class="scroll-izquierda" (mouseover)="desplazarIzquierda()"></div>
   <div class="scroll-derecha" (mouseover)="desplazarDerecha()"></div>
 </div>
 
-<div class="panel" *ngIf="seccion=='transporte'">
+<div class="panel" *ngIf="seccion == 'transporte'">
   <div class="titulo">Indicadores de proximidad</div>
   <div class="contenido" #contenido>
     <div class="seccion-estadistica-i" (click)="subseccion('general')">
-      <img src="/assets/images/atras-gris.png" class="icono-estadistica" /><br/>
+      <img
+        src="/assets/images/atras-gris.png"
+        class="icono-estadistica"
+      /><br />
       <label>Regresar</label>
     </div>
-    <div class="seccion-estadistica" onclick="subseccion('parques')">
-      <label></label>
+    <div class="seccion-estadistica">
+      <label>Tiempo de desplazamiento caminando para acceder a una estación del Sistema Troncal de Transmilenio más cercana	(Minutos)</label>
     </div>
-    <div class="seccion-estadistica" onclick="subseccion('transporte')">
-      
-      <label></label>
-    </div>
-    <div class="seccion-estadistica-f" onclick="subseccion('centros')">
-      
-      <label></label>
+    <div class="seccion-estadistica-f" onclick="subseccion('transporte')">
+      <label>Distancia de desplazamiento caminando para acceder a una estación del Sistema Troncal de Transmilenio más cercana (Metros)</label>
     </div>
   </div>
   <div class="scroll-izquierda" (mouseover)="desplazarIzquierda()"></div>
   <div class="scroll-derecha" (mouseover)="desplazarDerecha()"></div>
 </div>
 
-<div class="panel" *ngIf="seccion=='centros'">
+<div class="panel" *ngIf="seccion == 'centros'">
   <div class="titulo">Indicadores de proximidad</div>
   <div class="contenido" #contenido>
     <div class="seccion-estadistica-i" (click)="subseccion('general')">
-      <img src="/assets/images/atras-gris.png" class="icono-estadistica" /><br/>
+      <img
+        src="/assets/images/atras-gris.png"
+        class="icono-estadistica"
+      /><br />
       <label>Regresar</label>
     </div>
-    <div class="seccion-estadistica" onclick="subseccion('parques')">
-      <label></label>
+    <div class="seccion-estadistica">
+      <label>Tiempo de desplazamiento caminando para acceder a una manzana de los Corazones productivos escala urbana	(Minutos)</label>
     </div>
-    <div class="seccion-estadistica" onclick="subseccion('transporte')">
-      
-      <label></label>
+    <div class="seccion-estadistica">
+      <label>Distancia de desplazamiento caminando para acceder a una manzana de los Corazones productivos escala urbana (Metros)</label>
     </div>
-    <div class="seccion-estadistica-f" onclick="subseccion('centros')">
-      
-      <label></label>
+    <div class="seccion-estadistica">
+      <label>Tiempo de desplazamiento caminando para acceder al Cluster de servicios médicos y hospitalarios (Minutos)</label>
+    </div>
+    <div class="seccion-estadistica">
+      <label>Distancia de desplazamiento caminando para acceder al Cluster de servicios médicos y hospitalarios	(Metros)</label>
+    </div>
+    <div class="seccion-estadistica">
+      <label>Tiempo de desplazamiento caminando para acceder a una manzana del Distrito de Ciencia Tecnología e innovación (Minutos)</label>
+    </div>
+    <div class="seccion-estadistica-f">
+      <label>Distancia de desplazamiento caminando para acceder a una manzana del Distrito de Ciencia Tecnología e innovación	(Metros)</label>
     </div>
   </div>
   <div class="scroll-izquierda" (mouseover)="desplazarIzquierda()"></div>

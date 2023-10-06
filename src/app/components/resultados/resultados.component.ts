@@ -32,6 +32,7 @@ export class ResultadosComponent implements OnChanges {
   public matricula: any;
   public currentIndex = 0;
   public predioSeleccionado = {} as any;
+  public puntoGaleria = {} as any;
 
   ngOnChanges(changes: SimpleChanges): void {
     this.params = changes["parametros"]["currentValue"];
@@ -41,6 +42,7 @@ export class ResultadosComponent implements OnChanges {
         case "consulta-seleccion":
           this.id = this.params.resultados.CODIGO_LOTE;
           this.consultarPrediosByLote();
+          this.obtenerUbicacionLote(this.params.resultados.CODIGO_LOTE);
         break;
         case "consulta-direccion":
           this.direccion = this.params.direccion;
@@ -63,7 +65,7 @@ export class ResultadosComponent implements OnChanges {
   }
 
   regresar() {
-    console.log("Regresar de resultados");
+    // console.log("Regresar de resultados");
     this.accion.emit(true);
   }
 
@@ -84,7 +86,7 @@ export class ResultadosComponent implements OnChanges {
         environment.capaConsultaPredio.porLote.atributo+" like '"+this.id+"'";
       query.outFields = "OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION";
       query.returnGeometry = false;
-
+      console.log("consultar predio por lote query", query);
       featureLayer
         .queryFeatures(query)
         .then((result: any) => {
@@ -92,6 +94,7 @@ export class ResultadosComponent implements OnChanges {
           
           if (features.length > 0) {
             this.datos = features.map((m: any) => m.attributes);
+            console.log("datos", this.datos);
           }
           this.currentIndex = 0;
         })
@@ -117,7 +120,7 @@ export class ResultadosComponent implements OnChanges {
         environment.capaConsultaPredio.porDireccion.atributo+" like '"+this.direccion.replaceAll(' ','%')+"'";
       query.outFields = "OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION";
       query.returnGeometry = false;
-      console.log('consulta por dirección', query)
+      // console.log('consulta por dirección', query)
       featureLayer
         .queryFeatures(query)
         .then((result: any) => {
@@ -126,6 +129,7 @@ export class ResultadosComponent implements OnChanges {
           if (features.length > 0) {
             this.datos = features.map((m: any) => m.attributes);
             this.loteSeleccionado.emit(this.datos[0].GN_CODIGO_LOTE);
+            this.obtenerUbicacionLote(this.datos[0].GN_CODIGO_LOTE);
           }
           this.currentIndex = 0;
         })
@@ -136,7 +140,7 @@ export class ResultadosComponent implements OnChanges {
   }
 
   consultarPrediosByChip() {
-    console.log('consultarPrediosByChip()')
+    // console.log('consultarPrediosByChip()')
     loadModules([
       "esri/config",
       "esri/layers/FeatureLayer",
@@ -152,7 +156,7 @@ export class ResultadosComponent implements OnChanges {
         environment.capaConsultaPredio.porChip.atributo+" like '"+this.chip+"'";
       query.outFields = "OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION";
       query.returnGeometry = false;
-      console.log('QUERY', query);
+      // console.log('QUERY', query);
       featureLayer
         .queryFeatures(query)
         .then((result: any) => {
@@ -160,6 +164,8 @@ export class ResultadosComponent implements OnChanges {
           
           if (features.length > 0) {
             this.datos = features.map((m: any) => m.attributes);
+            this.loteSeleccionado.emit(this.datos[0].GN_CODIGO_LOTE);
+            this.obtenerUbicacionLote(this.datos[0].GN_CODIGO_LOTE);
           }
           this.currentIndex = 0;
         })
@@ -193,6 +199,8 @@ export class ResultadosComponent implements OnChanges {
           
           if (features.length > 0) {
             this.datos = features.map((m: any) => m.attributes);
+            this.loteSeleccionado.emit(this.datos[0].GN_CODIGO_LOTE);
+            this.obtenerUbicacionLote(this.datos[0].GN_CODIGO_LOTE);
           }
           this.currentIndex = 0;
         })
@@ -226,6 +234,8 @@ export class ResultadosComponent implements OnChanges {
           
           if (features.length > 0) {
             this.datos = features.map((m: any) => m.attributes);
+            this.loteSeleccionado.emit(this.datos[0].GN_CODIGO_LOTE);
+            this.obtenerUbicacionLote(this.datos[0].GN_CODIGO_LOTE);
           }
           this.currentIndex = 0;
         })
@@ -244,16 +254,17 @@ export class ResultadosComponent implements OnChanges {
   isNORPanelExpanded: boolean = false;
   isIEPanelExpanded: boolean = false;
   isURBPanelExpanded: boolean = false;*/
-  isGIPanelExpanded: boolean = false;
+  public isGIPanelExpanded: boolean = false;
   /* panelIPHeight: number = 0;
   panelIFLHeight: number = 0;
   panelLOCHeight: number = 0;
   panelNORHeight: number = 0;
   panelIEHeight: number = 0;
   panelURBHeight: number = 0;*/
-  panelGIHeight: number = 0;
+  public panelGIHeight: number = 0;
 
   togglePanel(opcion: any) {
+    console.log('CAMBIO PANEL', opcion);
     switch (opcion) {
       /*case 'IP':
         this.isIPPanelExpanded = !this.isIPPanelExpanded;
@@ -281,14 +292,49 @@ export class ResultadosComponent implements OnChanges {
         break;*/
       case "GI":
         this.isGIPanelExpanded = !this.isGIPanelExpanded;
-        this.panelGIHeight = this.isGIPanelExpanded ? 500 : 0;
+        console.log('CAMBIO PANEL VALOR', this.isGIPanelExpanded);
+        // this.panelGIHeight = this.isGIPanelExpanded ? 500 : 0;
         break;
     }
   }
 
   seleccionarPredio() {
     this.predioSeleccionado = this.datos[this.currentIndex];
-    console.log(this.predioSeleccionado);
+    console.log("predioSeleccionado",this.predioSeleccionado);
+  }
+
+  obtenerUbicacionLote(lote:any) {
+    console.log("obtenerUbicacionLote", lote);
+    loadModules([
+      "esri/config",
+      "esri/layers/FeatureLayer",
+      "esri/geometry/Point",
+    ]).then(([esriConfig, FeatureLayer, Point]) => {
+      esriConfig.apiKey = environment.esriConfigApiKey;
+
+      const capa = new FeatureLayer({
+        url: environment.urlServicioPredios,
+      });
+    
+    const query = capa.createQuery();
+      query.where = "CODIGO_LOTE like '"+lote+"'";
+      query.outFields = "CODIGO_LOTE";
+      query.returnGeometry = true;
+      query.returnCentroid = true;
+      
+      capa
+        .queryFeatures(query)
+        .then((result: any) => {
+          if(result.features.length > 0) {
+            this.puntoGaleria = result.features[0].geometry.centroid;            
+            console.log("puntoGaleria", this.puntoGaleria);
+          }
+        })
+        .catch((error: any) => {
+          console.error("Error al consultar el servicio:", error);
+        });
+      });
+    
   }
 
 }

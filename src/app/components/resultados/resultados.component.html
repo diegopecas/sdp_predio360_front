@@ -72,16 +72,17 @@
       <app-resultados-urbanistica></app-resultados-urbanistica>
     </div>
   </div>-->
-  <!--<div class="panel" [ngClass]="{ active: isGIPanelExpanded }">
+  <!--<div class="panel" [ngClass]="{ active: isGIPanelExpanded }" *ngIf="puntoGaleria">-->
+  <div class="panel" [ngClass]="{ active: isGIPanelExpanded }">
     <div class="panel-header" (click)="togglePanel('GI')">
       Proyectos cercanos
     </div>
-    <div class="panel-content" [ngStyle]="{ 'max-height.px': panelGIHeight }">
+    <div class="panel-content">
       <app-galeria-inmobiliaria
-        [valores]="identificacionPredio" [valorPuntoClick]="puntoClick"
+        [valorPuntoClick]="puntoGaleria"
       ></app-galeria-inmobiliaria>
     </div>
-  </div>-->
+  </div>
 
   <!--<app-resultados-estadisticas></app-resultados-estadisticas>-->
   <hr class="separador" />
