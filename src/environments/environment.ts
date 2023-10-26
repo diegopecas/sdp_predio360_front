@@ -61,6 +61,10 @@ export const environment = {
   ],
   panelesResultados: [
     {
+      id: "DG",
+      nombre: "Datos generales del predio",
+    },
+    {
       id: "LC",
       nombre: "Información De Localización",
     },
@@ -318,7 +322,7 @@ export const environment = {
         {
           name: "FS_PUNT_CONST_PROM",
           alias: "Puntación promedio de las construcciones",
-          panel: "",
+          panel: "IF",
         },
         { name: "FS_VETUSTEZ", alias: "Vetustez", panel: "" },
         {
@@ -651,25 +655,25 @@ export const environment = {
           alias: "Área en uso servicios",
           panel: "US",
         },
-        { name: "GN_CEDULA_CATASTRAL", alias: "Cédula Catastral", panel: "" },
-        { name: "GN_CHIP", alias: "CHIP", panel: "" },
-        { name: "GN_CLASE_PREDIO", alias: "Clase Predio", panel: "" },
-        { name: "GN_DIRECCION", alias: "Dirección", panel: "" },
+        { name: "GN_CEDULA_CATASTRAL", alias: "Cédula Catastral", panel: "DG" },
+        { name: "GN_CHIP", alias: "CHIP", panel: "DG" },
+        { name: "GN_CLASE_PREDIO", alias: "Clase Predio", panel: "DG" },
+        { name: "GN_DIRECCION", alias: "Dirección", panel: "DG" },
         {
           name: "GN_FECHA_DOCUMENTO",
           alias: "Fecha escritura pública",
-          panel: "",
+          panel: "DG",
         },
         {
           name: "GN_MATRICULA_INMOBILIARIA",
           alias: "Matrícula Inmobiliaria",
-          panel: "",
+          panel: "DG",
         },
-        { name: "GN_NOTARIA", alias: "Notaria", panel: "" },
+        { name: "GN_NOTARIA", alias: "Notaria", panel: "DG" },
         {
           name: "GN_NUMERO_DOCUMENTO",
           alias: "Número de escritura",
-          panel: "",
+          panel: "DG",
         },
         {
           name: "GN_PROPIETARIO_NOMBRE",
@@ -686,7 +690,7 @@ export const environment = {
           alias: "Tipo documento del propietario",
           panel: "",
         },
-        { name: "PREDIO", alias: "Predio", panel: "" },
+        { name: "PREDIO", alias: "Predio", panel: "DG" },
         { name: "RESPONSABLE", alias: "Responsable", panel: "" },
         {
           name: "UB_LIC_AA_FECHA_EJECUTORIA",
@@ -756,4 +760,74 @@ export const environment = {
       ],
     },
   ],
+  estadisticas: [
+    {
+      id: 1,
+      categoria: 'Equipamiento',
+      imagen: '/assets/images/equipamiento.png',
+      valores: [
+        {
+          nombre: 'sub 1',
+          valor: '129',
+          imagen: 'https://static.vecteezy.com/system/resources/previews/012/686/903/non_2x/statistics-icon-design-free-vector.jpg'
+        },
+        {
+          nombre: 'sub 2',
+          valor: '13',
+          imagen: 'https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160704280/59599587-documento-comercial-con-icono-de-estad%C3%ADsticas-gr%C3%A1fico-de-ilustraci%C3%B3n-vectorial.jpg'
+        }
+      ]
+    },
+    {
+      id: 2,
+      categoria: 'Parques',
+      imagen: '/assets/images/parques.png',
+      valores: [
+        {
+          nombre: 'sub 3',
+          valor: '129',
+          imagen: 'https://static.vecteezy.com/system/resources/previews/012/686/903/non_2x/statistics-icon-design-free-vector.jpg'
+        },
+        {
+          nombre: 'sub 4',
+          valor: '13',
+          imagen: 'https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160704280/59599587-documento-comercial-con-icono-de-estad%C3%ADsticas-gr%C3%A1fico-de-ilustraci%C3%B3n-vectorial.jpg'
+        }
+      ]
+    },
+    {
+      id: 3,
+      categoria: 'Transporte',
+      imagen: '/assets/images/transporte.png',
+      valores: [
+        {
+          nombre: 'sub 3',
+          valor: '129',
+          imagen: 'https://static.vecteezy.com/system/resources/previews/012/686/903/non_2x/statistics-icon-design-free-vector.jpg'
+        },
+        {
+          nombre: 'sub 4',
+          valor: '13',
+          imagen: 'https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160704280/59599587-documento-comercial-con-icono-de-estad%C3%ADsticas-gr%C3%A1fico-de-ilustraci%C3%B3n-vectorial.jpg'
+        }
+      ]
+    },
+    {
+      id: 4,
+      categoria: 'Centros económicos',
+      imagen: '/assets/images/socioeco.png',
+      valores: [
+        {
+          nombre: 'sub 3',
+          valor: '129',
+          imagen: 'https://static.vecteezy.com/system/resources/previews/012/686/903/non_2x/statistics-icon-design-free-vector.jpg'
+        },
+        {
+          nombre: 'sub 4',
+          valor: '13',
+          imagen: 'https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160704280/59599587-documento-comercial-con-icono-de-estad%C3%ADsticas-gr%C3%A1fico-de-ilustraci%C3%B3n-vectorial.jpg'
+        }
+      ]
+    }
+  ]
 };

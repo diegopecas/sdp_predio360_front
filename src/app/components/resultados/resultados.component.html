@@ -21,7 +21,7 @@
       <p>
         Dirección:
         <select style="background: #000000; color: #ffffff;" class="form__field" [(ngModel)]="currentIndex" (change)="seleccionarPredio()">
-          <option>Seleccionar...</option>
+          <option value="-1">Seleccionar...</option>
           <option *ngFor="let d of datos; let i = index" [value]="i">
             {{ d.GN_DIRECCION }}
           </option>
@@ -81,6 +81,14 @@
       <app-galeria-inmobiliaria
         [valorPuntoClick]="puntoGaleria"
       ></app-galeria-inmobiliaria>
+    </div>
+  </div>
+  <div class="panel" [ngClass]="{ active: isESPanelExpanded }">
+    <div class="panel-header" (click)="togglePanel('ES')">
+      Estadísticas de proximidad
+    </div>
+    <div class="panel-content">
+      <app-resultados-estadisticas-predio></app-resultados-estadisticas-predio>
     </div>
   </div>
 

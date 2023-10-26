@@ -12,6 +12,8 @@ import { loadModules } from "esri-loader";
 import { NgxSpinnerService } from "ngx-spinner";
 import { environment } from "src/environments/environment";
 import swal from "sweetalert2";
+import { SlideInOutAnimation } from './animations';
+import { RenderedSymbols } from "src/app/common/symbols/rendered-symbols";
 
 @Component({
   selector: "app-map3d",
@@ -24,7 +26,9 @@ export class Map3dComponent implements AfterViewInit {
   public proyectoSeleccionado = 0;
 
   private capa2d: any;
+  private capa2dView: any;
   private capa3d: any;
+  private capa3dView: any;
   private capaGaleria: any;
   private capaArbolado: any;
   private capaPuntosSeleccionados: any;
@@ -36,6 +40,7 @@ export class Map3dComponent implements AfterViewInit {
   public valoresResultados: any;
   public valorPuntoClick: any;
   private capaSinupot: any;
+  private _FeatureFilter: any;
   
   public countSpinner = 0;
 
@@ -43,7 +48,10 @@ export class Map3dComponent implements AfterViewInit {
     | ElementRef
     | undefined;
 
-  constructor(private spinner: NgxSpinnerService) {}
+  constructor(
+    private spinner: NgxSpinnerService,
+    private renderedSymbols: RenderedSymbols
+    ) {}
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -59,6 +67,7 @@ export class Map3dComponent implements AfterViewInit {
       "esri/symbols/IconSymbol3DLayer",
       "esri/symbols/PointSymbol3D",
       "esri/Graphic",
+      "esri/layers/support/FeatureFilter",
       "esri/geometry/Point",
       "esri/symbols/SimpleMarkerSymbol",
       "esri/geometry/Polyline",
@@ -78,6 +87,7 @@ export class Map3dComponent implements AfterViewInit {
         IconSymbol3DLayer,
         PointSymbol3D,
         Graphic,
+        FeatureFilter,
         Point,
         SimpleMarkerSymbol,
         Polyline,
@@ -89,6 +99,7 @@ export class Map3dComponent implements AfterViewInit {
         LayerList
       ]) => {
         esriConfig.apiKey = environment.esriConfigApiKey;
+        this._FeatureFilter = FeatureFilter;
         // let count = 0;
         esriConfig.request.interceptors.push({
           // urls: /^https?:\/\/serviciosgeopr.sdp.gov.co\/.,
@@ -130,11 +141,19 @@ export class Map3dComponent implements AfterViewInit {
         });
         this.view.when(() => {
           const layerList = new LayerList({
-            view: this.view
+            view: this.view,
+            listItemCreatedFunction: this.defineActions
           });
 
           // Add widget to the top right corner of the view
           this.view.ui.add(layerList, "top-right");
+        });
+
+        this.view.whenLayerView(this.capa3d).then((layerView:any) => {
+          this.capa3dView = layerView;
+        });
+        this.view.whenLayerView(this.capa2d).then((layerView:any) => {
+          this.capa2dView = layerView;
         });
 
         reactiveUtils.on(
@@ -155,6 +174,50 @@ export class Map3dComponent implements AfterViewInit {
         this.capaPuntosSeleccionados.visible = true;
       }
     );
+  }
+
+  async defineActions(event:any) {
+    // The event object contains an item property.
+    // is is a ListItem referencing the associated layer
+    // and other properties. You can control the visibility of the
+    // item, its title, and actions using this object.
+  
+    const item = event.item;
+  
+    await item.layer.when();
+  
+    // if (item.title === "US Demographics") {
+      // An array of objects defining actions to place in the LayerList.
+      // By making this array two-dimensional, you can separate similar
+      // actions into separate groups with a breaking line.
+  
+      item.actionsSections = [
+        [
+          {
+            title: "Go to full extent",
+            className: "esri-icon-zoom-out-fixed",
+            id: "full-extent"
+          },
+          {
+            title: "Layer information",
+            className: "esri-icon-description",
+            id: "information"
+          }
+        ],
+        [
+          {
+            title: "Increase opacity",
+            className: "esri-icon-up",
+            id: "increase-opacity"
+          },
+          {
+            title: "Decrease opacity",
+            className: "esri-icon-down",
+            id: "decrease-opacity"
+          }
+        ]
+      ];
+    // }
   }
 
   crearCapa2d(FeatureLayer: any) {
@@ -224,7 +287,7 @@ export class Map3dComponent implements AfterViewInit {
   }*/
 
   crearCapa3dClas(FeatureLayer: any) {
-    const renderer = {
+    /*const renderer = {
       type: "simple", // autocasts as new SimpleRenderer()
       symbol: {
         type: "polygon-3d", // autocasts as new PolygonSymbol3D()
@@ -264,18 +327,19 @@ export class Map3dComponent implements AfterViewInit {
               label: "1 piso",
             },
             {
-              value: 20,
+              value: 40,
               color: [153, 83, 41],
               label: "80 o más pisos",
             },
           ],
         },
       ],
-    };
+    };*/
 
     const povLayer = new FeatureLayer({
+      id: 'Capa3D',
       url: environment.urlServicioPredios,
-      renderer: renderer,
+      renderer: this.renderedSymbols.build3D, // renderer,
       // title: "Código lote {CODIGO_LOTE}",
       outFields: ["*"],
       popupTemplate: {
@@ -565,13 +629,33 @@ export class Map3dComponent implements AfterViewInit {
     });
   }
 
+  /*seleccionarPredioByLote(lote:any) {
+    this.capa3dView
+    this.capa3dView.filter = {
+      where: "CODIGO_LOTE like '"+lote+"'"
+    };
+    / *this.capa2dView.featureEffect = {
+      filter: {
+        where: "CODIGO_LOTE like '"+lote+"'"
+      },
+      excludedEffect: "grayscale(90%) opacity(40%)"
+    };* /
+    console.log('CAPA FILTRADA',this.capa3dView)
+  }*/
+
   seleccionarPredioByLote(lote:any) {
     let capa = this.capa3d;
+    let simbolo = {};
     if (this.vista2d3d === "3D") {
       capa === this.capa3d;
+      simbolo = {}
     } else {
       capa === this.capa2d;
+      simbolo = {}
     }
+
+    console.log('CONSULTA POR LOTE SELECCIONADO POR ATRIBUTO', lote)
+    console.log('LA VISTA', this.view.layerViews);
     
     const query = capa.createQuery();
       query.where = "CODIGO_LOTE like '"+lote+"'";
@@ -592,6 +676,15 @@ export class Map3dComponent implements AfterViewInit {
               target: punto,
               zoom: 21,
             });
+
+            /*capa.featureEffect = {
+              filter: new this._FeatureFilter({
+                where: "CODIGO_LOTE like '"+lote+"'"
+              }),
+              // excludedEffect: "grayscale(90%) opacity(40%)"
+            };
+            console.log('CAMBIO EN EL ESTILO DE LA CAPA', capa)*/
+
           }
         })
         .catch((error: any) => {
@@ -599,6 +692,7 @@ export class Map3dComponent implements AfterViewInit {
         });
     
   }
+  
 
   seleccionarProyecto(screenPoint: any, event: any) {
     
@@ -717,6 +811,7 @@ export class Map3dComponent implements AfterViewInit {
 
   seleccionProyectoGaleria(proyecto:any) {
     // console.log('seleccionProyectoGaleria', proyecto)
+    // this.view
     this.view.goTo(
       {
         position: {
@@ -725,14 +820,16 @@ export class Map3dComponent implements AfterViewInit {
           z: 3000,
           spatialReference: {
             wkid: 4326
-          }
+          },
+          heading: 0, // grados de rotación respecto del norte
+          tilt: 90
         }
       }
     );
   }
 
   consultaDireccion(dir: any) {
-    // console.log('CONSULTA POR DIRECCION', dir)
+    console.log('CONSULTA POR DIRECCION', dir)
     this.valoresResultados = {
       opcion: this.opcion,
       direccion: dir

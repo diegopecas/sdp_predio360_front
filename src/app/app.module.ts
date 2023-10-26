@@ -36,6 +36,8 @@ import { ConsultaGaleriaComponent } from './components/consulta/consulta-galeria
 import { CrearDireccionComponent } from './components/consulta/consulta-predial/consulta-direccion/crear-direccion/crear-direccion.component';
 import { ResultadosPredioComponent } from './components/resultados/resultados-predio/resultados-predio.component';
 import { LoadingBarComponent } from './common/utils/loading-bar/loading-bar.component';
+import { ResultadosEstadisticasPredioComponent } from './components/resultados/resultados-estadisticas-predio/resultados-estadisticas-predio.component';
+import { RenderedSymbols } from './common/symbols/rendered-symbols';
 
 @NgModule({
   declarations: [
@@ -67,6 +69,7 @@ import { LoadingBarComponent } from './common/utils/loading-bar/loading-bar.comp
     CrearDireccionComponent,
     ResultadosPredioComponent,
     LoadingBarComponent,
+    ResultadosEstadisticasPredioComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,6 +82,7 @@ import { LoadingBarComponent } from './common/utils/loading-bar/loading-bar.comp
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: MyHttpInterceptor, multi: true },
+    RenderedSymbols
   ],
   bootstrap: [AppComponent],
 })

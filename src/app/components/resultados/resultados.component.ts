@@ -8,6 +8,7 @@ import {
 } from "@angular/core";
 import { loadModules } from "esri-loader";
 import { environment } from "src/environments/environment";
+import swal from 'sweetalert2';
 
 @Component({
   selector: "app-resultados",
@@ -46,7 +47,7 @@ export class ResultadosComponent implements OnChanges {
         break;
         case "consulta-direccion":
           this.direccion = this.params.direccion;
-          this.consultarPrediosByDireccion();
+          this.consultarPrediosByDireccion(this.direccion[0]);
           break;
         case "consulta-chip":
           this.chip = this.params.chip;
@@ -104,7 +105,7 @@ export class ResultadosComponent implements OnChanges {
     });
   }
 
-  consultarPrediosByDireccion() {
+  consultarPrediosByDireccion(direccionConsulta:any) {
     loadModules([
       "esri/config",
       "esri/layers/FeatureLayer",
@@ -116,8 +117,10 @@ export class ResultadosComponent implements OnChanges {
       });
 
       const query = featureLayer.createQuery();
+      // query.where =
+      //  environment.capaConsultaPredio.porDireccion.atributo+" like '"+this.direccion.replaceAll(' ','%')+"'";
       query.where =
-        environment.capaConsultaPredio.porDireccion.atributo+" like '"+this.direccion.replaceAll(' ','%')+"'";
+        environment.capaConsultaPredio.porDireccion.atributo+" like '"+direccionConsulta+"%'"; //this.direccion[0]
       query.outFields = "OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION";
       query.returnGeometry = false;
       // console.log('consulta por dirección', query)
@@ -130,8 +133,23 @@ export class ResultadosComponent implements OnChanges {
             this.datos = features.map((m: any) => m.attributes);
             this.loteSeleccionado.emit(this.datos[0].GN_CODIGO_LOTE);
             this.obtenerUbicacionLote(this.datos[0].GN_CODIGO_LOTE);
+            this.currentIndex = -1;
+          } else if(direccionConsulta !== this.direccion[1]) {
+            swal.fire({
+              title: 'No se encontraron resultados, desea hacer una búsqueda aproximada?',
+              showDenyButton: true,
+              showCancelButton: true,
+              confirmButtonText: 'Sí',
+              denyButtonText: 'No',
+            }).then((result:any) => {
+              /* Read more about isConfirmed, isDenied below */
+              if (result.isConfirmed) {
+                this.consultarPrediosByDireccion(this.direccion[1]);
+                this.currentIndex = -1;
+              }
+            })
+            
           }
-          this.currentIndex = 0;
         })
         .catch((error: any) => {
           console.error("Error al consultar la tabla:", error);
@@ -255,6 +273,7 @@ export class ResultadosComponent implements OnChanges {
   isIEPanelExpanded: boolean = false;
   isURBPanelExpanded: boolean = false;*/
   public isGIPanelExpanded: boolean = false;
+  public isESPanelExpanded: boolean = false;
   /* panelIPHeight: number = 0;
   panelIFLHeight: number = 0;
   panelLOCHeight: number = 0;
@@ -295,12 +314,18 @@ export class ResultadosComponent implements OnChanges {
         console.log('CAMBIO PANEL VALOR', this.isGIPanelExpanded);
         // this.panelGIHeight = this.isGIPanelExpanded ? 500 : 0;
         break;
+      case "ES":
+        this.isESPanelExpanded = !this.isESPanelExpanded;
+        console.log('CAMBIO PANEL VALOR', this.isESPanelExpanded);
+        // this.panelGIHeight = this.isGIPanelExpanded ? 500 : 0;
+        break;
     }
   }
 
   seleccionarPredio() {
     this.predioSeleccionado = this.datos[this.currentIndex];
     console.log("predioSeleccionado",this.predioSeleccionado);
+    this.loteSeleccionado.emit(this.predioSeleccionado.GN_CODIGO_LOTE);
   }
 
   obtenerUbicacionLote(lote:any) {

@@ -207,7 +207,7 @@
 </div>
 <div class="popup-overlay" *ngIf="isPopupOpen">
   <div class="popup-content">
-    <app-crear-direccion (accion)="cambioDireccion($event)"></app-crear-direccion>
+    <app-crear-direccion [direccionInput]="consDireccion" (accion)="cambioDireccion($event)"></app-crear-direccion>
     <button class="button-aqua" (click)="closePopup()">Guardar</button>
   </div>
 </div>

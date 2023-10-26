@@ -1,6 +1,30 @@
 <div class="panel" *ngIf="seccion == 'general'" #panel>
   <div class="titulo">Indicadores de proximidad</div>
   <div class="contenido" #contenido>
+    <button type="button" (click)="onPrevious()" [disabled]="counter === 0">
+      Previous
+    </button>
+    <button
+      type="button"
+      (click)="onNext()"
+      [disabled]="this.counter == this.images.length - 1"
+    >
+      Next
+    </button>
+    <div class="container" [@animImageSlider]="counter">
+      <ng-container *ngFor="let est of estadisticas; let i = index">
+        <div *ngIf="i === counter">
+          <h1 class="titulo-2">{{ est.categoria }}</h1>
+          <img [src]="est.imagen" style="height:40px; width:40px" />
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<!--
+<div class="panel" *ngIf="seccion == 'general'" #panel>
+  <div class="titulo">Indicadores de proximidad</div>
+  <div class="contenido" #contenido>
     <div class="seccion-estadistica-i" (click)="subseccion('equipamiento')">
       <img
         src="/assets/images/equipamiento.png"
@@ -231,3 +255,4 @@
   <div class="scroll-izquierda" (mouseover)="desplazarIzquierda()"></div>
   <div class="scroll-derecha" (mouseover)="desplazarDerecha()"></div>
 </div>
+-->

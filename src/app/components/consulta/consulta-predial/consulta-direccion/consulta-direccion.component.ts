@@ -11,6 +11,7 @@ export class ConsultaDireccionComponent {
   @Output() accionConsultar = new EventEmitter();
 
   public direccion = "";
+  private esquina = "";
 
   public consDireccion = {
     parte1: '',
@@ -31,31 +32,21 @@ export class ConsultaDireccionComponent {
 
   consultar() {
     console.log("Se va a consultar por: ", this.direccion);
-    this.accionConsultar.emit(this.direccion);
+    this.accionConsultar.emit([this.direccion, this.esquina]);
   }
 
   construirDireccion() {
-    this.direccion =  (this.consDireccion.parte1 !== '' ? this.consDireccion.parte1+' ' : '')
-                      +(this.consDireccion.parte2 !== '' ? this.consDireccion.parte2+ ' ' : '')
-                      +(this.consDireccion.parte3 !== '' ? this.consDireccion.parte3+ ' ' : '')
-                      +(this.consDireccion.parte4 ? 'BIS ' : '')
-                      +(this.consDireccion.parte5 !== '' ? this.consDireccion.parte5+ ' ' : '')
-                      +(this.consDireccion.parte6 !== '' ? this.consDireccion.parte6+ ' ' : '')
-                      +(this.consDireccion.parte7 !== '' ? this.consDireccion.parte7+ ' ' : '')
-                      +(this.consDireccion.parte8 !== '' ? this.consDireccion.parte8+ ' ' : '')
-                      +(this.consDireccion.parte9 !== '' ? this.consDireccion.parte9+ ' ' : '')
-                      +(this.consDireccion.parte10 !== '' ? this.consDireccion.parte10+ ' ' : '');
-  }
-
-  leerDireccion() {
-    //this.openPopup();
-    /*swal.fire({
-      title: 'Generar dirección',
-      html: '<app-crear-direccion></app-crear-direccion>',
-      showCancelButton: false,
-      confirmButtonColor: "#acc962",
-      confirmButtonText: "Cerrar",
-    });*/
+    this.direccion =  (this.consDireccion.parte1 !== '' ? this.consDireccion.parte1 : '')
+                      +(this.consDireccion.parte2 !== '' ? ' '+ this.consDireccion.parte2 : '')
+                      +(this.consDireccion.parte3 !== '' ? this.consDireccion.parte3 : '')
+                      +(this.consDireccion.parte4 ? ' BIS ' : '')
+                      +(this.consDireccion.parte5 !== '' ? ' ' + this.consDireccion.parte5 : '')
+                      +(this.consDireccion.parte6 !== '' ? ' ' + this.consDireccion.parte6 : '')
+                      +(this.consDireccion.parte7 !== '' ? ' ' + this.consDireccion.parte7 : '')
+                      +(this.consDireccion.parte8 !== '' ? this.consDireccion.parte8 : '')
+                      +(this.consDireccion.parte9 !== '' ? ' ' + this.consDireccion.parte9 : '')
+                      +(this.consDireccion.parte10 !== '' ? ' ' + this.consDireccion.parte10 : '');
+      // this.accion.emit(this.direccion);
   }
 
   isPopupOpen: boolean = false;
@@ -70,6 +61,8 @@ export class ConsultaDireccionComponent {
 
   cambioDireccion(ev:any){
     console.log(ev)
-    this.direccion = ev;
+    this.direccion = ev[0];
+    this.consDireccion = ev[1];
+    this.esquina = ev[2];
   }
 }

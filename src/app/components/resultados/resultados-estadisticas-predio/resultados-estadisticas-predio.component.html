@@ -1,0 +1,28 @@
+<div class="container" [@animImageSlider]="counter">
+  <ng-container *ngFor="let est of estadisticas; let i = index">
+    <div *ngIf="i === counter" (click)="verDetalle(i)">
+      <h3 class="titulo-2">{{ est.categoria }}</h3>
+      <img [src]="est.imagen" style="height: 40px; width: 40px" class="icono-estadistica" />
+    </div>
+  </ng-container>
+</div>
+
+<div class="container">
+      <button
+      class="button-aqua"
+        type="button"
+        (click)="onPrevious()"
+        [disabled]="counter === 0"
+      >
+        Previous
+      </button>
+      <button
+      class="button-aqua"
+        type="button"
+        (click)="onNext()"
+        [disabled]="this.counter == this.estadisticas.length - 1"
+      >
+        Next
+      </button>
+  
+</div>
