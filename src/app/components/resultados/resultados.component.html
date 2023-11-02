@@ -29,7 +29,7 @@
       </p>
     </div>
   </div>
-  <app-resultados-predio [predio]="predioSeleccionado"></app-resultados-predio>
+  <app-resultados-predio *ngIf="currentIndex >= 0" [predio]="predioSeleccionado"></app-resultados-predio>
   <!--<div class="panel" [ngClass]="{ active: isIFLPanelExpanded }">
     <div class="panel-header" (click)="togglePanel('IFL')">
       Información Física Del Lote
@@ -73,7 +73,7 @@
     </div>
   </div>-->
   <!--<div class="panel" [ngClass]="{ active: isGIPanelExpanded }" *ngIf="puntoGaleria">-->
-  <div class="panel" [ngClass]="{ active: isGIPanelExpanded }">
+  <div class="panel" [ngClass]="{ active: isGIPanelExpanded }" *ngIf="currentIndex >= 0">
     <div class="panel-header" (click)="togglePanel('GI')">
       Proyectos cercanos
     </div>
@@ -83,7 +83,7 @@
       ></app-galeria-inmobiliaria>
     </div>
   </div>
-  <div class="panel" [ngClass]="{ active: isESPanelExpanded }">
+  <div class="panel" [ngClass]="{ active: isESPanelExpanded }" *ngIf="currentIndex >= 0">
     <div class="panel-header" (click)="togglePanel('ES')">
       Estadísticas de proximidad
     </div>

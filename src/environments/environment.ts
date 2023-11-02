@@ -18,6 +18,9 @@ export const environment = {
   capaArbolado: {
     url: "https://geoportal.jbb.gov.co/agc/rest/services/SIGAU/CensoArbol/MapServer/0",
   },
+  capaParques: {
+    url: 'https://visorsrv.idrd.gov.co/srv/rest/services/Parques_IDRD_Publicos/ServiciosIDRD_Publico/FeatureServer/12'
+  },
   capaConsultaClick : {
     url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/4",
     /*url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",*/

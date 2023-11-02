@@ -4,3 +4,12 @@
     text-align: center;
     padding: 20px;
 }
+
+.panel-buffer {
+    background: none;
+    height: fit-content;
+    margin: 18px;
+    color: aqua;
+    width: 90%;
+    margin: 2.5em auto 0;
+}

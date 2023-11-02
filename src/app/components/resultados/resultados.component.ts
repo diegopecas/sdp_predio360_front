@@ -31,7 +31,7 @@ export class ResultadosComponent implements OnChanges {
   public chip: any;
   public cedula: any;
   public matricula: any;
-  public currentIndex = 0;
+  public currentIndex = -1;
   public predioSeleccionado = {} as any;
   public puntoGaleria = {} as any;
 
@@ -126,7 +126,7 @@ export class ResultadosComponent implements OnChanges {
       // console.log('consulta por dirección', query)
       featureLayer
         .queryFeatures(query)
-        .then((result: any) => {
+        .then(async (result: any) => {
           const features = result.features;
           
           if (features.length > 0) {
@@ -135,19 +135,65 @@ export class ResultadosComponent implements OnChanges {
             this.obtenerUbicacionLote(this.datos[0].GN_CODIGO_LOTE);
             this.currentIndex = -1;
           } else if(direccionConsulta !== this.direccion[1]) {
+
+
+            /* inputOptions can be an object or Promise */
+            /*const inputOptions = new Promise((resolve) => {
+              setTimeout(() => {
+                resolve({
+                  'Esquina': this.direccion[1],
+                  'Aproximada': this.direccion[1].replace('KR','AK').replace('CL','AC'),
+                  'Comomdin': 'Comodín'
+                })
+              }, 1000)
+            });*/
+
             swal.fire({
+              title: 'No se encontraron resultados, desea hacer una búsqueda aproximada?',
+              input: 'radio',
+              inputOptions: {
+                'Esquina': this.direccion[1].replaceAll('%',' '),
+                'Aproximada': this.direccion[0].replaceAll('%',' ').replace('KR','AK').replace('CL','AC'),
+                'Comomdin': 'Comodín: '+this.direccion[0].replaceAll(' ','%')
+              },
+              showDenyButton: true,
+              showCancelButton: false,
+              confirmButtonText: 'Buscar',
+              denyButtonText: 'No',
+            }).then((result:any) => {
+              console.log(result);
+              if (result.isConfirmed) {
+                switch(result.value) {
+                  case 'Esquina': 
+                    this.consultarPrediosByDireccion(this.direccion[1]);
+                    break;
+                  case 'Aproximada': 
+                    this.consultarPrediosByDireccion(this.direccion[0].replace('KR','AK').replace('CL','AC'));
+                    break;
+                  case 'Comodin': 
+                    this.consultarPrediosByDireccion(this.direccion[0].replaceAll(' ','%'));
+                    break;
+                }
+                this.currentIndex = -1;
+              }
+            })
+
+            /*if (color) {
+              Swal.fire({ html: `You selected: ${color}` })
+            }*/
+
+            /*swal.fire({
               title: 'No se encontraron resultados, desea hacer una búsqueda aproximada?',
               showDenyButton: true,
               showCancelButton: true,
               confirmButtonText: 'Sí',
               denyButtonText: 'No',
             }).then((result:any) => {
-              /* Read more about isConfirmed, isDenied below */
               if (result.isConfirmed) {
                 this.consultarPrediosByDireccion(this.direccion[1]);
                 this.currentIndex = -1;
               }
-            })
+            })*/
             
           }
         })

@@ -12,7 +12,7 @@ import { loadModules } from "esri-loader";
 import { NgxSpinnerService } from "ngx-spinner";
 import { environment } from "src/environments/environment";
 import swal from "sweetalert2";
-import { SlideInOutAnimation } from './animations';
+import { SlideInOutAnimation } from "./animations";
 import { RenderedSymbols } from "src/app/common/symbols/rendered-symbols";
 
 @Component({
@@ -28,9 +28,12 @@ export class Map3dComponent implements AfterViewInit {
   private capa2d: any;
   private capa2dView: any;
   private capa3d: any;
+  private capa3dSelected: any;
   private capa3dView: any;
+  private capa3dSelectedView: any;
   private capaGaleria: any;
   private capaArbolado: any;
+  private capaParques: any;
   private capaPuntosSeleccionados: any;
   private simbolo3d: any;
   private simbolo3dOver: any;
@@ -41,7 +44,9 @@ export class Map3dComponent implements AfterViewInit {
   public valorPuntoClick: any;
   private capaSinupot: any;
   private _FeatureFilter: any;
-  
+  private Query:any;
+  private highlight = null;
+
   public countSpinner = 0;
 
   @ViewChild("mapViewNode", { static: true }) private mapViewEl:
@@ -51,7 +56,7 @@ export class Map3dComponent implements AfterViewInit {
   constructor(
     private spinner: NgxSpinnerService,
     private renderedSymbols: RenderedSymbols
-    ) {}
+  ) {}
 
   ngAfterViewInit(): void {
     this.initMap();
@@ -77,6 +82,8 @@ export class Map3dComponent implements AfterViewInit {
       "esri/core/reactiveUtils",
       "esri/symbols/WebStyleSymbol",
       "esri/widgets/LayerList",
+      "esri/rest/support/Query",
+      "esri/widgets/Slider"
     ]).then(
       ([
         esriConfig,
@@ -96,22 +103,25 @@ export class Map3dComponent implements AfterViewInit {
         ObjectSymbol3DLayer,
         reactiveUtils,
         WebStyleSymbol,
-        LayerList
+        LayerList,
+        Query,
+        Slider
       ]) => {
         esriConfig.apiKey = environment.esriConfigApiKey;
         this._FeatureFilter = FeatureFilter;
+        this.Query = Query;
         // let count = 0;
         esriConfig.request.interceptors.push({
           // urls: /^https?:\/\/serviciosgeopr.sdp.gov.co\/.,
           // urls: "/^https?:\/\/serviciosgeopr.sdp.gov.co\/server\/rest\/services\/predio360\/.",
-          urls: environment.serviciosResultados.map(s => s.url),
+          urls: environment.serviciosResultados.map((s) => s.url),
           before: () => {
             this.countSpinner++;
             // console.log("spinner", this.countSpinner);
           },
           after: () => {
             this.countSpinner--;
-            if(this.countSpinner < 0) {
+            if (this.countSpinner < 0) {
               this.countSpinner = 0;
             }
             // console.log("spinner", this.countSpinner);
@@ -119,12 +129,17 @@ export class Map3dComponent implements AfterViewInit {
           error: () => {
             this.countSpinner = 0;
             // console.log("spinner", this.countSpinner);
-          }
+          },
         });
 
         this.capa2d = this.crearCapa2d(FeatureLayer);
         this.capa3d = this.crearCapa3dClas(FeatureLayer);
-        this.capaArbolado = this.crearCapaArbolado(FeatureLayer,WebStyleSymbol);
+        this.capa3dSelected = this.crearCapa3dSelect(FeatureLayer);
+        this.capaArbolado = this.crearCapaArbolado(
+          FeatureLayer,
+          WebStyleSymbol
+        );
+        this.capaParques = this.crearCapaParques(FeatureLayer);
         this.capaPuntosSeleccionados = new GraphicsLayer();
         this.capaGaleria = this.crearCapaGaleria(
           IconSymbol3DLayer,
@@ -142,87 +157,119 @@ export class Map3dComponent implements AfterViewInit {
         this.view.when(() => {
           const layerList = new LayerList({
             view: this.view,
-            listItemCreatedFunction: this.defineActions
+            listItemCreatedFunction: this.defineActions,
           });
 
           // Add widget to the top right corner of the view
           this.view.ui.add(layerList, "top-right");
         });
 
-        this.view.whenLayerView(this.capa3d).then((layerView:any) => {
+        this.view.whenLayerView(this.capa3d).then((layerView: any) => {
           this.capa3dView = layerView;
         });
-        this.view.whenLayerView(this.capa2d).then((layerView:any) => {
+        this.view.whenLayerView(this.capa3dSelected).then((layerView: any) => {
+          this.capa3dSelectedView = layerView;
+        });
+        this.view.whenLayerView(this.capa2d).then((layerView: any) => {
           this.capa2dView = layerView;
         });
 
         reactiveUtils.on(
           () => this.view.popup,
           "trigger-action",
-          (event:any) => {
+          (event: any) => {
             // Execute the measureThis() function if the measure-this action is clicked
             if (event.action.id === "verStreetView") {
               this.verStreetView();
             }
           }
         );
-        
+
         this.capa3d.visible = true;
+        this.capa3dSelected.visible = false;
         this.capaArbolado.visible = true;
+        this.capaParques.visible = true;
         this.capa2d.visible = false;
         this.capaGaleria.visible = true;
         this.capaPuntosSeleccionados.visible = true;
+
+        const bufferNumSlider = new Slider({
+          container: "bufferNum",
+          min: 0,
+          max: 500,
+          steps: 1,
+          visibleElements: {
+            labels: true
+          },
+          precision: 0,
+          labelFormatFunction: (value:any, type:any) => {
+            return `${value.toString()}m`;
+          },
+          values: [0]
+        });
+        // get user entered values for buffer
+        bufferNumSlider.on(
+          ["thumb-change", "thumb-drag"],
+          this.bufferVariablesChanged
+        );
       }
     );
   }
 
-  async defineActions(event:any) {
+  bufferVariablesChanged(event:any) {
+    const bufferSize = event.value;
+    console.log('bufferSize', bufferSize);
+    // runQuery();
+  }
+
+  async defineActions(event: any) {
     // The event object contains an item property.
     // is is a ListItem referencing the associated layer
     // and other properties. You can control the visibility of the
     // item, its title, and actions using this object.
-  
+
     const item = event.item;
-  
+
     await item.layer.when();
-  
+
     // if (item.title === "US Demographics") {
-      // An array of objects defining actions to place in the LayerList.
-      // By making this array two-dimensional, you can separate similar
-      // actions into separate groups with a breaking line.
-  
-      item.actionsSections = [
-        [
-          {
-            title: "Go to full extent",
-            className: "esri-icon-zoom-out-fixed",
-            id: "full-extent"
-          },
-          {
-            title: "Layer information",
-            className: "esri-icon-description",
-            id: "information"
-          }
-        ],
-        [
-          {
-            title: "Increase opacity",
-            className: "esri-icon-up",
-            id: "increase-opacity"
-          },
-          {
-            title: "Decrease opacity",
-            className: "esri-icon-down",
-            id: "decrease-opacity"
-          }
-        ]
-      ];
+    // An array of objects defining actions to place in the LayerList.
+    // By making this array two-dimensional, you can separate similar
+    // actions into separate groups with a breaking line.
+
+    item.actionsSections = [
+      [
+        {
+          title: "Go to full extent",
+          className: "esri-icon-zoom-out-fixed",
+          id: "full-extent",
+        },
+        {
+          title: "Layer information",
+          className: "esri-icon-description",
+          id: "information",
+        },
+      ],
+      [
+        {
+          title: "Increase opacity",
+          className: "esri-icon-up",
+          id: "increase-opacity",
+        },
+        {
+          title: "Decrease opacity",
+          className: "esri-icon-down",
+          id: "decrease-opacity",
+        },
+      ],
+    ];
     // }
   }
 
   crearCapa2d(FeatureLayer: any) {
     return new FeatureLayer({
       id: "capa-construccion-2d",
+      title: "Predio 2D",
       url: environment.urlServicioPredios,
       outFields: ["*"],
       renderer: {
@@ -287,100 +334,61 @@ export class Map3dComponent implements AfterViewInit {
   }*/
 
   crearCapa3dClas(FeatureLayer: any) {
-    /*const renderer = {
-      type: "simple", // autocasts as new SimpleRenderer()
-      symbol: {
-        type: "polygon-3d", // autocasts as new PolygonSymbol3D()
-        symbolLayers: [
-          {
-            type: "extrude", // autocasts as new ExtrudeSymbol3DLayer()
-          },
-        ],
-      },
-      visualVariables: [
-        {
-          type: "size",
-          field: "NUMERO_PISOS",
-          stops: [
-            {
-              value: 1,
-              size: 2.4,
-              label: "1 piso",
-            },
-            {
-              value: 80,
-              size: 192,
-              label: "80 o más pisos",
-            },
-          ],
-        },
-        {
-          type: "color",
-          field: "NUMERO_PISOS",
-          legendOptions: {
-            title: "Número de pisos",
-          },
-          stops: [
-            {
-              value: 1,
-              color: "#FFFCD4",
-              label: "1 piso",
-            },
-            {
-              value: 40,
-              color: [153, 83, 41],
-              label: "80 o más pisos",
-            },
-          ],
-        },
-      ],
-    };*/
-
     const povLayer = new FeatureLayer({
-      id: 'Capa3D',
+      id: "Capa3D",
+      title: "Predios 3D",
       url: environment.urlServicioPredios,
-      renderer: this.renderedSymbols.build3D, // renderer,
+      renderer: this.renderedSymbols.build3D,
       // title: "Código lote {CODIGO_LOTE}",
       outFields: ["*"],
       popupTemplate: {
-        // autocasts as new PopupTemplate()
         title: "Código lote {CODIGO_LOTE}",
         content: [
           {
             type: "fields",
             fieldInfos: [
               {
-                fieldName: "CODIGO_CONSTRUCCION", // The field whose values you want to format
-                label: "Código construcción"
+                fieldName: "CODIGO_CONSTRUCCION",
+                label: "Código construcción",
               },
               {
-                fieldName: "NUMERO_PISOS", // The field whose values you want to format
-                label: "Número de pisos"
+                fieldName: "NUMERO_PISOS",
+                label: "Número de pisos",
               },
               {
-                fieldName: "RESPONSABLE", // The field whose values you want to format
-                label: "Responsable"
+                fieldName: "RESPONSABLE",
+                label: "Responsable",
               },
-            ]
-          }],
-          actions: [this.streetViewAction]
+            ],
+          },
+        ],
+        actions: [this.streetViewAction],
       },
-      // definitionExpression: defExp.join(" OR ") // only display counties from states in defExp
     });
 
     return povLayer;
   }
 
-  crearCapaArbolado(FeatureLayer: any, WebStyleSymbol:any
-    ) {
-  
-      const webStyleSymbol = new WebStyleSymbol({
-        name: "Pinus",
-        styleName: "EsriRealisticTreesStyle"
-      });
+  crearCapa3dSelect(FeatureLayer: any) {
+    const povLayer = new FeatureLayer({
+      id: "Capa3DSelected",
+      title: "Predio 3D seleccionado",
+      url: environment.urlServicioPredios,
+      renderer: this.renderedSymbols.selectedBuild3D,
+    });
+
+    return povLayer;
+  }
+
+  crearCapaArbolado(FeatureLayer: any, WebStyleSymbol: any) {
+    const webStyleSymbol = new WebStyleSymbol({
+      name: "Pinus",
+      styleName: "EsriRealisticTreesStyle",
+    });
 
     const povLayer = new FeatureLayer({
       url: environment.capaArbolado.url,
+      title: 'Arbolado',
       renderer: {
         type: "simple",
         symbol: webStyleSymbol,
@@ -388,13 +396,13 @@ export class Map3dComponent implements AfterViewInit {
           {
             type: "size",
             field: "altura_total",
-            axis: "height" // take the real height of the plant from the SIZE field
+            axis: "height", // take the real height of the plant from the SIZE field
           },
           {
             type: "rotation",
-            valueExpression: "random() * 360" // we use a random rotation, so that plants look different
-          }
-        ]
+            valueExpression: "random() * 360", // we use a random rotation, so that plants look different
+          },
+        ],
       },
       outFields: ["*"],
       popupTemplate: {
@@ -406,31 +414,47 @@ export class Map3dComponent implements AfterViewInit {
             fieldInfos: [
               {
                 fieldName: "Altura_Total", // The field whose values you want to format
-                label: "Altura total"
+                label: "Altura total",
               },
               {
                 fieldName: "Tipo_Emplazamiento", // The field whose values you want to format
-                label: "Tipo de emplazamiento"
-              }
-            ]
-          }]
+                label: "Tipo de emplazamiento",
+              },
+            ],
+          },
+        ],
       },
     });
 
     return povLayer;
   }
 
+  crearCapaParques(FeatureLayer:any) {
+    const povLayer = new FeatureLayer({
+      url: environment.capaParques.url,
+      title: 'Parques'
+    });
+    return povLayer;
+  }
+
   private streetViewAction = {
     title: "Google Street View",
     id: "verStreetView",
-    image: "/assets/images/Street_View_logo.png"
+    image: "/assets/images/Street_View_logo.png",
   };
 
   verStreetView() {
     const geom = this.view.popup.selectedFeature.geometry;
     // console.log('POPUP SV', geom);
-    window.open("http://maps.google.com/?cbll="+geom.centroid.latitude+","+geom.centroid.longitude+"&cbp=12,90,0,0,5&layer=c","_blank");
-    // window.open("https://www.google.com/maps/@4.8657416,-74.0382613","_blank");    
+    window.open(
+      "http://maps.google.com/?cbll=" +
+        geom.centroid.latitude +
+        "," +
+        geom.centroid.longitude +
+        "&cbp=12,90,0,0,5&layer=c",
+      "_blank"
+    );
+    // window.open("https://www.google.com/maps/@4.8657416,-74.0382613","_blank");
   }
 
   agregarPuntoSeleccionado(x: any, y: any, z: any) {
@@ -475,14 +499,13 @@ export class Map3dComponent implements AfterViewInit {
     PointSymbol3D: any,
     FeatureLayer: any,
     ObjectSymbol3DLayer: any,
-    WebStyleSymbol:any
+    WebStyleSymbol: any
   ) {
-
     const webStyleSymbol = new WebStyleSymbol({
       name: "Tower_Crane",
-      styleName: "EsriRealisticTransportationStyle"
+      styleName: "EsriRealisticTransportationStyle",
     });
-    
+
     /*const objectSymbol = new PointSymbol3D({
       symbolLayers: [
         new ObjectSymbol3DLayer({
@@ -527,19 +550,20 @@ export class Map3dComponent implements AfterViewInit {
             fieldInfos: [
               {
                 fieldName: "cod_proyecto", // The field whose values you want to format
-                label: "Código proyecto"
+                label: "Código proyecto",
               },
               {
                 fieldName: "cod_lote", // The field whose values you want to format
-                label: "Código lote"
+                label: "Código lote",
               },
               {
                 fieldName: "constructor", // The field whose values you want to format
-                label: "Constructor"
+                label: "Constructor",
               },
-            ]
-          }],
-          // actions: [this.streetViewAction]
+            ],
+          },
+        ],
+        // actions: [this.streetViewAction]
       },
     });
   }
@@ -551,11 +575,13 @@ export class Map3dComponent implements AfterViewInit {
       // basemap: "gray-vector",
       ground: "world-elevation",
       layers: [
+        // this.capaParques,
         this.capa2d,
         this.capa3d,
+        // this.capa3dSelected,
         this.capaGaleria,
         this.capaPuntosSeleccionados,
-        this.capaArbolado
+        this.capaArbolado,
       ],
     });
   }
@@ -574,12 +600,22 @@ export class Map3dComponent implements AfterViewInit {
         tilt: 45, // grados de rotación respecto de la superficie
       },
       qualityProfile: "high",
+      environment: {
+        lighting: {
+          directShadowsEnabled: true
+        }
+      },
+      highlightOptions: {
+        haloColor: [3, 255, 255],
+        color: [3, 255, 255],
+        fillOpacity: 0.3
+      }
     });
   }
 
   clickEnVista(event: any, Graphic: any) {
     const clickedPoint = this.view.toMap(event);
-    
+
     this.view.goTo({
       target: clickedPoint,
       zoom: 21,
@@ -587,13 +623,18 @@ export class Map3dComponent implements AfterViewInit {
 
     switch (this.opcion) {
       case "consulta-seleccion":
-        this.seleccionarPredio(
-          {
-            x: event.x,
-            y: event.y,
-          },
-          event
-        );
+        if (this.medidaBuffer > 0) {
+          this.seleccionarPredioByBuffer(clickedPoint);
+          return;
+        } else {
+          this.seleccionarPredio(
+            {
+              x: event.x,
+              y: event.y,
+            },
+            event
+          );
+        }
         break;
       case "consulta-galeria":
         /*this.seleccionarProyecto(
@@ -624,89 +665,100 @@ export class Map3dComponent implements AfterViewInit {
           opcion: this.opcion,
           resultados: graphic.attributes,
         };
-        // console.log('SELECCIONAR PREDIO', this.valoresResultados);
       }
     });
   }
 
-  /*seleccionarPredioByLote(lote:any) {
-    this.capa3dView
-    this.capa3dView.filter = {
-      where: "CODIGO_LOTE like '"+lote+"'"
-    };
-    / *this.capa2dView.featureEffect = {
-      filter: {
-        where: "CODIGO_LOTE like '"+lote+"'"
-      },
-      excludedEffect: "grayscale(90%) opacity(40%)"
-    };* /
-    console.log('CAPA FILTRADA',this.capa3dView)
-  }*/
+  seleccionarPredioByBuffer(screenPoint:any){
+    console.log('consulta por buffer', this.medidaBuffer, screenPoint);
+    let capa = this.capa3d;
+    const query = capa.createQuery();
+    query.where = "1=1";
+    query.outFields = "CODIGO_LOTE, OBJECTID";
+    query.returnGeometry = true;
+    query.distance = this.medidaBuffer;
+    query.units = "meters";
+    query.geometry = {
+      x: screenPoint.longitude,
+      y: screenPoint.latitude,
+    },
+    capa
+      .queryFeatures(query)
+      .then((result: any) => {
+        
+        if (result.features.length > 0) {
+          // console.log('extent', result.features[0].geometry.extent)
+          
+          /*this.view.goTo(result.features[0].geometry.extent.expand(4), {
+            speedFactor: 0.5
+          });*/
 
-  seleccionarPredioByLote(lote:any) {
+          if (this.highlight) {
+            (this.highlight as any).remove();
+          }
+
+          this.highlight = this.capa3dView.highlight(result.features.map((f:any)=>f.attributes.OBJECTID));
+
+        }
+      })
+      .catch((error: any) => {
+        console.error("Error al consultar el servicio:", error);
+      });
+  }
+
+  seleccionarPredioByLote(lote: any) {
     let capa = this.capa3d;
     let simbolo = {};
     if (this.vista2d3d === "3D") {
       capa === this.capa3d;
-      simbolo = {}
+      simbolo = {};
     } else {
       capa === this.capa2d;
-      simbolo = {}
+      simbolo = {};
     }
 
-    console.log('CONSULTA POR LOTE SELECCIONADO POR ATRIBUTO', lote)
-    console.log('LA VISTA', this.view.layerViews);
-    
+    console.log("CONSULTA POR LOTE SELECCIONADO POR ATRIBUTO", lote);
+    console.log("LA VISTA", this.view.layerViews);
+
     const query = capa.createQuery();
-      query.where = "CODIGO_LOTE like '"+lote+"'";
-      query.outFields = "CODIGO_LOTE";
-      query.returnGeometry = true;
-      query.returnCentroid = true;
-      // console.log('QUERY seleccionarPredioByLote',query);
-      capa
-        .queryFeatures(query)
-        .then((result: any) => {
-          // console.log('UBICACION', result)
-          if(result.features.length > 0) {
-            const punto = result.features[0].geometry.centroid;
-            // console.log('punto',punto)
-            // this.view.center = punto;
-
-            this.view.goTo({
-              target: punto,
-              zoom: 21,
-            });
-
-            /*capa.featureEffect = {
-              filter: new this._FeatureFilter({
-                where: "CODIGO_LOTE like '"+lote+"'"
-              }),
-              // excludedEffect: "grayscale(90%) opacity(40%)"
-            };
-            console.log('CAMBIO EN EL ESTILO DE LA CAPA', capa)*/
-
-          }
-        })
-        .catch((error: any) => {
-          console.error("Error al consultar el servicio:", error);
-        });
+    query.where = "CODIGO_LOTE like '" + lote + "'";
+    query.outFields = "CODIGO_LOTE, OBJECTID";
+    query.returnGeometry = true;
+    query.returnCentroid = true;
     
+    capa
+      .queryFeatures(query)
+      .then((result: any) => {
+        if (result.features.length > 0) {
+          console.log('extent', result.features[0].geometry.extent)
+          
+          this.view.goTo(result.features[0].geometry.extent.expand(4), {
+            speedFactor: 0.5
+          });
+
+          if (this.highlight) {
+            (this.highlight as any).remove();
+          }
+
+          this.highlight = this.capa3dView.highlight(result.features.map((f:any)=>f.attributes.OBJECTID));
+
+        }
+      })
+      .catch((error: any) => {
+        console.error("Error al consultar el servicio:", error);
+      });
   }
-  
 
   seleccionarProyecto(screenPoint: any, event: any) {
-    
     this.view.hitTest(screenPoint).then((response: any) => {
-      
       if (response.results.length) {
         let graphic = response.results.filter((result: any) => {
-          
           return result.graphic.layer === this.capaGaleria;
         })[0].graphic;
 
         if (graphic) {
           this.proyectoSeleccionado = graphic.attributes.cod_proyecto;
-          
+
           if (this.proyectoSeleccionado) {
             this.consultarProyectos();
           }
@@ -757,12 +809,12 @@ export class Map3dComponent implements AfterViewInit {
             // Manipular los resultados obtenidos
             const features = result.features;
             // Realizar acciones con los datos devueltos
-            
-              // const datos = features.map((m:any)=>m.attributes);
-              const datos = features[0].attributes;
 
-              swal.fire({
-                html: `
+            // const datos = features.map((m:any)=>m.attributes);
+            const datos = features[0].attributes;
+
+            swal.fire({
+              html: `
                 <p>Código de proyecto: ${datos.cod_proyecto}</p>
                 <p>Código lote: ${datos.cod_lote}</p>
                 <p><strong>Proyecto: ${datos.proyecto}</strong></p>
@@ -796,10 +848,10 @@ export class Map3dComponent implements AfterViewInit {
                 <p>Unidades desistidas: ${datos.unidades_desistidas}</p>
                 <p>Certificado sostenible: ${datos.certificado_sostenible}</p>
                 `,
-                showCancelButton: false,
-                confirmButtonColor: "#acc962",
-                confirmButtonText: "Cerrar",
-              });
+              showCancelButton: false,
+              confirmButtonColor: "#acc962",
+              confirmButtonText: "Cerrar",
+            });
           })
           .catch((error: any) => {
             // Manejar cualquier error ocurrido durante la consulta
@@ -809,30 +861,28 @@ export class Map3dComponent implements AfterViewInit {
     );
   }
 
-  seleccionProyectoGaleria(proyecto:any) {
+  seleccionProyectoGaleria(proyecto: any) {
     // console.log('seleccionProyectoGaleria', proyecto)
     // this.view
-    this.view.goTo(
-      {
-        position: {
-          x: proyecto.longitud,
-          y: proyecto.latitud,
-          z: 3000,
-          spatialReference: {
-            wkid: 4326
-          },
-          heading: 0, // grados de rotación respecto del norte
-          tilt: 90
-        }
-      }
-    );
+    this.view.goTo({
+      position: {
+        x: proyecto.longitud,
+        y: proyecto.latitud,
+        z: 3000,
+        spatialReference: {
+          wkid: 4326,
+        },
+        heading: 0, // grados de rotación respecto del norte
+        tilt: 90,
+      },
+    });
   }
 
   consultaDireccion(dir: any) {
-    console.log('CONSULTA POR DIRECCION', dir)
+    console.log("CONSULTA POR DIRECCION", dir);
     this.valoresResultados = {
       opcion: this.opcion,
-      direccion: dir
+      direccion: dir,
     };
     this.resultados = true;
   }
@@ -841,7 +891,7 @@ export class Map3dComponent implements AfterViewInit {
     // console.log('CONSULTA POR matricula', mat)
     this.valoresResultados = {
       opcion: this.opcion,
-      matricula: mat
+      matricula: mat,
     };
     this.resultados = true;
   }
@@ -850,7 +900,7 @@ export class Map3dComponent implements AfterViewInit {
     // console.log('CONSULTA POR cedula', ced)
     this.valoresResultados = {
       opcion: this.opcion,
-      cedula: ced
+      cedula: ced,
     };
     this.resultados = true;
   }
@@ -859,7 +909,7 @@ export class Map3dComponent implements AfterViewInit {
     // console.log('CONSULTA POR chip', chip)
     this.valoresResultados = {
       opcion: this.opcion,
-      chip: chip
+      chip: chip,
     };
     this.resultados = true;
   }
@@ -889,9 +939,8 @@ export class Map3dComponent implements AfterViewInit {
   }*/
 
   cargarCapasDeReferencia(event: any) {
-    
     loadModules(["esri/layers/FeatureLayer"]).then(([FeatureLayer]) => {
-      environment.capasSinupot.forEach((capa:any) => {
+      environment.capasSinupot.forEach((capa: any) => {
         this.capaSinupot = new FeatureLayer({
           url: capa.url,
           id: capa.nombre,
@@ -907,10 +956,17 @@ export class Map3dComponent implements AfterViewInit {
     loadModules(["esri/layers/FeatureLayer"]).then(([FeatureLayer]) => {
       const nuevaCapa = new FeatureLayer({
         url: event,
-        title: 'capaN-'+this.capasN
+        title: "capaN-" + this.capasN,
       });
       this.capasN++;
       this.map.add(nuevaCapa);
     });
+  }
+
+  private medidaBuffer = 0;
+
+  setBuffer(event:any){
+    console.log('Se recibe', event);
+    this.medidaBuffer = event;
   }
 }
