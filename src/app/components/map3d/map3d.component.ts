@@ -34,6 +34,7 @@ export class Map3dComponent implements AfterViewInit {
   private capaGaleria: any;
   private capaArbolado: any;
   private capaParques: any;
+  private capaSitiosInteres: any;
   private capaPuntosSeleccionados: any;
   private simbolo3d: any;
   private simbolo3dOver: any;
@@ -44,8 +45,12 @@ export class Map3dComponent implements AfterViewInit {
   public valorPuntoClick: any;
   private capaSinupot: any;
   private _FeatureFilter: any;
-  private Query:any;
+  private FeatureLayer: any;
+  private Query: any;
   private highlight = null;
+  private highlightOtros = null;
+  private Point: any;
+  private lotesSeleccionados: any[] = [];
 
   public countSpinner = 0;
 
@@ -83,7 +88,7 @@ export class Map3dComponent implements AfterViewInit {
       "esri/symbols/WebStyleSymbol",
       "esri/widgets/LayerList",
       "esri/rest/support/Query",
-      "esri/widgets/Slider"
+      "esri/widgets/Slider",
     ]).then(
       ([
         esriConfig,
@@ -105,11 +110,13 @@ export class Map3dComponent implements AfterViewInit {
         WebStyleSymbol,
         LayerList,
         Query,
-        Slider
+        Slider,
       ]) => {
         esriConfig.apiKey = environment.esriConfigApiKey;
         this._FeatureFilter = FeatureFilter;
         this.Query = Query;
+        this.Point = Point;
+        this.FeatureLayer = FeatureLayer;
         // let count = 0;
         esriConfig.request.interceptors.push({
           // urls: /^https?:\/\/serviciosgeopr.sdp.gov.co\/.,
@@ -139,6 +146,7 @@ export class Map3dComponent implements AfterViewInit {
           FeatureLayer,
           WebStyleSymbol
         );
+        this.capaSitiosInteres = this.crearSitiosInteres(FeatureLayer,WebStyleSymbol);
         this.capaParques = this.crearCapaParques(FeatureLayer);
         this.capaPuntosSeleccionados = new GraphicsLayer();
         this.capaGaleria = this.crearCapaGaleria(
@@ -188,6 +196,7 @@ export class Map3dComponent implements AfterViewInit {
         this.capa3d.visible = true;
         this.capa3dSelected.visible = false;
         this.capaArbolado.visible = true;
+        this.capaSitiosInteres.visible = true;
         this.capaParques.visible = true;
         this.capa2d.visible = false;
         this.capaGaleria.visible = true;
@@ -199,13 +208,13 @@ export class Map3dComponent implements AfterViewInit {
           max: 500,
           steps: 1,
           visibleElements: {
-            labels: true
+            labels: true,
           },
           precision: 0,
-          labelFormatFunction: (value:any, type:any) => {
+          labelFormatFunction: (value: any, type: any) => {
             return `${value.toString()}m`;
           },
-          values: [0]
+          values: [0],
         });
         // get user entered values for buffer
         bufferNumSlider.on(
@@ -216,9 +225,9 @@ export class Map3dComponent implements AfterViewInit {
     );
   }
 
-  bufferVariablesChanged(event:any) {
+  bufferVariablesChanged(event: any) {
     const bufferSize = event.value;
-    console.log('bufferSize', bufferSize);
+    console.log("bufferSize", bufferSize);
     // runQuery();
   }
 
@@ -388,7 +397,7 @@ export class Map3dComponent implements AfterViewInit {
 
     const povLayer = new FeatureLayer({
       url: environment.capaArbolado.url,
-      title: 'Arbolado',
+      title: "Arbolado",
       renderer: {
         type: "simple",
         symbol: webStyleSymbol,
@@ -429,10 +438,19 @@ export class Map3dComponent implements AfterViewInit {
     return povLayer;
   }
 
-  crearCapaParques(FeatureLayer:any) {
+  crearSitiosInteres(FeatureLayer: any, WebStyleSymbol: any) {
+    const povLayer = new FeatureLayer({
+      url: environment.capaSitiosInteres.url,
+      title: "Sitios de Interés",
+    });
+
+    return povLayer;
+  }
+
+  crearCapaParques(FeatureLayer: any) {
     const povLayer = new FeatureLayer({
       url: environment.capaParques.url,
-      title: 'Parques'
+      title: "Parques",
     });
     return povLayer;
   }
@@ -506,39 +524,11 @@ export class Map3dComponent implements AfterViewInit {
       styleName: "EsriRealisticTransportationStyle",
     });
 
-    /*const objectSymbol = new PointSymbol3D({
-      symbolLayers: [
-        new ObjectSymbol3DLayer({
-          width: 5,
-          height: 40,
-          resource: {
-            primitive: "cone",
-          },
-          material: {
-            color: "#00FF00",
-          },
-        }),
-      ],
-    });*/
-
-    /*const symbolLayerBandera = new IconSymbol3DLayer({
-      resource: {
-        href: "/assets/images/flag.png",
-      },
-      size: 50,
-    });
-
-    const symbolBandera = new PointSymbol3D({
-      symbolLayers: [symbolLayerBandera],
-    });*/
-
     return new FeatureLayer({
       url: environment.urlServicioGaleria,
       id: "capa-galeria",
       renderer: {
         type: "simple",
-        // symbol: symbolBandera,
-        // symbol: objectSymbol,
         symbol: webStyleSymbol,
       },
       popupTemplate: {
@@ -582,6 +572,7 @@ export class Map3dComponent implements AfterViewInit {
         this.capaGaleria,
         this.capaPuntosSeleccionados,
         this.capaArbolado,
+        this.capaSitiosInteres
       ],
     });
   }
@@ -602,31 +593,42 @@ export class Map3dComponent implements AfterViewInit {
       qualityProfile: "high",
       environment: {
         lighting: {
-          directShadowsEnabled: true
-        }
+          directShadowsEnabled: true,
+        },
       },
       highlightOptions: {
         haloColor: [3, 255, 255],
         color: [3, 255, 255],
-        fillOpacity: 0.3
-      }
+        fillOpacity: 0.3,
+      },
     });
   }
 
   clickEnVista(event: any, Graphic: any) {
     const clickedPoint = this.view.toMap(event);
-
+    this.screenPoint = clickedPoint;
     this.view.goTo({
       target: clickedPoint,
-      zoom: 21,
+      zoom: 17,
     });
 
     switch (this.opcion) {
-      case "consulta-seleccion":
-        if (this.medidaBuffer > 0) {
-          this.seleccionarPredioByBuffer(clickedPoint);
-          return;
-        } else {
+      case "menu":
+        break;
+      case "consulta-seleccion-multiple":
+        this.seleccionarPredioByBuffer();
+        break;
+      case "consulta-galeria":
+        this.seleccionarProyecto(
+          {
+            x: event.x,
+            y: event.y,
+          },
+          event
+        );
+        break;
+      default:
+        if (this.opcion !== "") {
           this.seleccionarPredio(
             {
               x: event.x,
@@ -635,15 +637,6 @@ export class Map3dComponent implements AfterViewInit {
             event
           );
         }
-        break;
-      case "consulta-galeria":
-        /*this.seleccionarProyecto(
-          {
-            x: event.x,
-            y: event.y,
-          },
-          event
-        );*/
         break;
     }
   }
@@ -665,12 +658,18 @@ export class Map3dComponent implements AfterViewInit {
           opcion: this.opcion,
           resultados: graphic.attributes,
         };
+        if (this.highlight) {
+          (this.highlight as any).remove();
+        }
+        console.log("EL RESULTADO DEL CLIC ES:", graphic, response.results);
+        this.highlight = this.capa3dView.highlight(graphic.attributes.OBJECTID);
       }
     });
   }
 
-  seleccionarPredioByBuffer(screenPoint:any){
-    console.log('consulta por buffer', this.medidaBuffer, screenPoint);
+  private screenPoint: any;
+  seleccionarPredioByBuffer() {
+    console.log("consulta por buffer", this.medidaBuffer, this.screenPoint);
     let capa = this.capa3d;
     const query = capa.createQuery();
     query.where = "1=1";
@@ -678,17 +677,26 @@ export class Map3dComponent implements AfterViewInit {
     query.returnGeometry = true;
     query.distance = this.medidaBuffer;
     query.units = "meters";
-    query.geometry = {
-      x: screenPoint.longitude,
-      y: screenPoint.latitude,
-    },
+    query.geometry = new this.Point({
+      x: this.screenPoint.longitude,
+      y: this.screenPoint.latitude,
+      //spatialReference: view.spatialReference // Referencia espacial de la vista del mapa
+    });
+
     capa
       .queryFeatures(query)
       .then((result: any) => {
-        
+        console.log("el resultado es", query, result);
         if (result.features.length > 0) {
+          // this.lotesSeleccionados = result.features.map((lt:any) => lt.attributes.CODIGO_LOTE);
+          const ids = result.features.map(
+            (lt: any) => lt.attributes.CODIGO_LOTE
+          );
+          this.lotesSeleccionados = ids.filter(
+            (n: any, i: any) => ids.indexOf(n) === i
+          );
           // console.log('extent', result.features[0].geometry.extent)
-          
+
           /*this.view.goTo(result.features[0].geometry.extent.expand(4), {
             speedFactor: 0.5
           });*/
@@ -697,13 +705,75 @@ export class Map3dComponent implements AfterViewInit {
             (this.highlight as any).remove();
           }
 
-          this.highlight = this.capa3dView.highlight(result.features.map((f:any)=>f.attributes.OBJECTID));
-
+          this.highlight = this.capa3dView.highlight(
+            result.features.map((f: any) => f.attributes.OBJECTID)
+          );
         }
       })
       .catch((error: any) => {
         console.error("Error al consultar el servicio:", error);
       });
+  }
+
+  private capaBuffer: any;
+  private capaBufferView: any;
+  seleccionarByBuffer(capaConsulta: any, x: any, y: any, distance: any) {
+    this.map.remove(this.capaBuffer);
+    this.capaBuffer = new this.FeatureLayer({
+      url: capaConsulta,
+      id: "capaBuffer",
+    });
+    this.map.add(this.capaBuffer);
+    this.view.whenLayerView(this.capaBuffer).then((layerView: any) => {
+      this.capaBufferView = layerView;
+
+      const query = this.capaBuffer.createQuery();
+      query.where = "1=1";
+      query.outFields = "*";
+      query.returnGeometry = true;
+      query.distance = distance;
+      query.units = "meters";
+      query.geometry = new this.Point({
+        x: x,
+        y: y,
+      });
+
+      this.capaBuffer
+        .queryFeatures(query)
+        .then((result: any) => {
+          console.log("el resultado es", query, result);
+          if (result.features.length > 0) {
+            // const ids = result.features.map((lt:any) => lt.attributes.CODIGO_LOTE);
+            // this.lotesSeleccionados = ids.filter((n:any, i:any) => ids.indexOf(n) === i);
+
+            if (this.highlightOtros) {
+              (this.highlightOtros as any).remove();
+            }
+
+            this.highlightOtros = this.capaBufferView.highlight(
+              result.features.map((f: any) => f.attributes.OBJECTID)
+            );
+          }
+        })
+        .catch((error: any) => {
+          console.error("Error al consultar el servicio:", error);
+        });
+    });
+  }
+
+  consultaPorCapa(event: any) {
+    switch (event) {
+      case "predios":
+        console.log("LOS OBJECTIID SON: ", this.lotesSeleccionados);
+
+        this.valoresResultados = {
+          opcion: "consulta-seleccion-multiple",
+          lotes: this.lotesSeleccionados,
+        };
+        this.resultados = true;
+
+        break;
+    }
   }
 
   seleccionarPredioByLote(lote: any) {
@@ -725,23 +795,24 @@ export class Map3dComponent implements AfterViewInit {
     query.outFields = "CODIGO_LOTE, OBJECTID";
     query.returnGeometry = true;
     query.returnCentroid = true;
-    
+
     capa
       .queryFeatures(query)
       .then((result: any) => {
         if (result.features.length > 0) {
-          console.log('extent', result.features[0].geometry.extent)
-          
+          console.log("extent", result.features[0].geometry.extent);
+
           this.view.goTo(result.features[0].geometry.extent.expand(4), {
-            speedFactor: 0.5
+            speedFactor: 0.5,
           });
 
           if (this.highlight) {
             (this.highlight as any).remove();
           }
 
-          this.highlight = this.capa3dView.highlight(result.features.map((f:any)=>f.attributes.OBJECTID));
-
+          this.highlight = this.capa3dView.highlight(
+            result.features.map((f: any) => f.attributes.OBJECTID)
+          );
         }
       })
       .catch((error: any) => {
@@ -965,8 +1036,21 @@ export class Map3dComponent implements AfterViewInit {
 
   private medidaBuffer = 0;
 
-  setBuffer(event:any){
-    console.log('Se recibe', event);
+  setBuffer(event: any) {
+    console.log("Se recibe", event);
     this.medidaBuffer = event;
+    if (this.medidaBuffer > 0 && this.screenPoint) {
+      this.seleccionarPredioByBuffer();
+    }
+  }
+
+  cambioCapaBuffer(evt: any) {
+    loadModules(["esri/layers/FeatureLayer"]).then(([FeatureLayer]) => {
+      const capa = new FeatureLayer({
+        url: evt.url,
+        id: "capa_buffer",
+      });
+      this.map.add(capa);
+    });
   }
 }

@@ -91,6 +91,22 @@
       <app-resultados-estadisticas-predio></app-resultados-estadisticas-predio>
     </div>
   </div>
+  <div class="panel" [ngClass]="{ active: isECPanelExpanded }" *ngIf="currentIndex >= 0">
+    <div class="panel-header" (click)="togglePanel('EC')">
+      Elementos cercanos
+    </div>
+    <div class="panel-content">
+      <p>
+        Seleccionar capa:
+        <select style="background: #000000; color: #ffffff;" class="form__field" [(ngModel)]="currentIndexCapa" (change)="seleccionarCapaBuffer()">
+          <option value="-1">Seleccionar...</option>
+          <option *ngFor="let d of capas; let i = index" [value]="i">
+            {{ d.nombre }}
+          </option>
+        </select>
+      </p>
+    </div>
+  </div>
 
   <!--<app-resultados-estadisticas></app-resultados-estadisticas>-->
   <hr class="separador" />

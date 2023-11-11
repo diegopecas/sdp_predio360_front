@@ -26,6 +26,9 @@ export const environment = {
     /*url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",*/
     id: "CODIGO_LOTE"
   },
+  capaSitiosInteres: {
+    url: 'https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/1'
+  },
   capaConsultaPredio: {
     porLote: {
       url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
@@ -831,6 +834,20 @@ export const environment = {
           imagen: 'https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160704280/59599587-documento-comercial-con-icono-de-estad%C3%ADsticas-gr%C3%A1fico-de-ilustraci%C3%B3n-vectorial.jpg'
         }
       ]
+    }
+  ],
+  capasBuffer: [
+    {
+      nombre: 'Cobertura Servicios Públicos',
+      url: 'https://portalgis.habitatbogota.gov.co/arcgis/rest/services/SDHT_Subdireccion_Servicios_Publicos/Catastro_Usuarios_Redes/MapServer/3'
+    },
+    {
+      nombre: 'Obras y frentes de obra',
+      url: 'https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/0'
+    },
+    {
+      nombre: 'Obras línea',
+      url: 'https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/1'
     }
   ]
 };

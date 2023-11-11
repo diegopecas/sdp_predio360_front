@@ -3,6 +3,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnInit,
   Output,
   SimpleChanges,
 } from "@angular/core";
@@ -15,9 +16,11 @@ import swal from 'sweetalert2';
   templateUrl: "./resultados.component.html",
   styleUrls: ["./resultados.component.css"],
 })
-export class ResultadosComponent implements OnChanges {
+export class ResultadosComponent implements OnChanges, OnInit {
   @Output() accion = new EventEmitter();
   @Output() loteSeleccionado = new EventEmitter();
+  @Output() cambioTipoConsulta = new EventEmitter();
+  @Output() cambioCapaBuffer = new EventEmitter();
   // @Input() valores: any;
   // @Input() valorPuntoClick: any;
   @Input() parametros: any;
@@ -27,13 +30,20 @@ export class ResultadosComponent implements OnChanges {
   public datos = [] as any[];
   private params = {} as any;
   public id: any;
+  public lotes: any[] = [];
   public direccion: any;
   public chip: any;
   public cedula: any;
   public matricula: any;
   public currentIndex = -1;
+  public currentIndexCapa = -1;
   public predioSeleccionado = {} as any;
   public puntoGaleria = {} as any;
+  public capas = [] as any[];
+
+  ngOnInit(){
+    this.capas = environment.capasBuffer;
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.params = changes["parametros"]["currentValue"];
@@ -48,18 +58,27 @@ export class ResultadosComponent implements OnChanges {
         case "consulta-direccion":
           this.direccion = this.params.direccion;
           this.consultarPrediosByDireccion(this.direccion[0]);
+          this.cambioTipoConsulta.emit("consulta-seleccion")
           break;
         case "consulta-chip":
           this.chip = this.params.chip;
           this.consultarPrediosByChip();
+          this.cambioTipoConsulta.emit("consulta-seleccion")
           break;
         case "consulta-matricula":
           this.matricula = this.params.matricula;
           this.consultarPrediosByMatricula();
+          this.cambioTipoConsulta.emit("consulta-seleccion")
           break;
         case "consulta-cedula":
           this.cedula = this.params.cedula;
           this.consultarPrediosByCedula();
+          this.cambioTipoConsulta.emit("consulta-seleccion")
+          break;
+        case "consulta-seleccion-multiple":
+          this.lotes = this.params.lotes;
+          this.consultarPrediosByLotes();
+          this.cambioTipoConsulta.emit("consulta-seleccion")
           break;
       }
     }
@@ -85,6 +104,44 @@ export class ResultadosComponent implements OnChanges {
       const query = featureLayer.createQuery();
       query.where =
         environment.capaConsultaPredio.porLote.atributo+" like '"+this.id+"'";
+      query.outFields = "OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION";
+      query.returnGeometry = false;
+      console.log("consultar predio por lote query", query);
+      featureLayer
+        .queryFeatures(query)
+        .then((result: any) => {
+          const features = result.features;
+          
+          if (features.length > 0) {
+            this.datos = features.map((m: any) => m.attributes);
+            console.log("datos", this.datos);
+          }
+          this.currentIndex = 0;
+        })
+        .catch((error: any) => {
+          console.error("Error al consultar la tabla:", error);
+        });
+    });
+  }
+
+  consultarPrediosByLotes() {
+    loadModules([
+      "esri/config",
+      "esri/layers/FeatureLayer",
+      "esri/geometry/Point",
+    ]).then(([esriConfig, FeatureLayer, Point]) => {
+      esriConfig.apiKey = environment.esriConfigApiKey;
+
+      const featureLayer = new FeatureLayer({
+        url: environment.capaConsultaPredio.porLote.url,
+      });
+
+      const query = featureLayer.createQuery();
+
+      const ids = this.lotes.join("','");
+          
+      query.where = environment.capaConsultaPredio.porLote.atributo+" IN ('" + ids + "')";
+      console.log('FILTRO: ', query.where);
       query.outFields = "OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION";
       query.returnGeometry = false;
       console.log("consultar predio por lote query", query);
@@ -320,6 +377,7 @@ export class ResultadosComponent implements OnChanges {
   isURBPanelExpanded: boolean = false;*/
   public isGIPanelExpanded: boolean = false;
   public isESPanelExpanded: boolean = false;
+  public isECPanelExpanded: boolean = false;
   /* panelIPHeight: number = 0;
   panelIFLHeight: number = 0;
   panelLOCHeight: number = 0;
@@ -365,6 +423,11 @@ export class ResultadosComponent implements OnChanges {
         console.log('CAMBIO PANEL VALOR', this.isESPanelExpanded);
         // this.panelGIHeight = this.isGIPanelExpanded ? 500 : 0;
         break;
+      case "EC":
+        this.isECPanelExpanded = !this.isECPanelExpanded;
+        console.log('CAMBIO PANEL VALOR', this.isECPanelExpanded);
+        // this.panelGIHeight = this.isGIPanelExpanded ? 500 : 0;
+        break;
     }
   }
 
@@ -408,4 +471,7 @@ export class ResultadosComponent implements OnChanges {
     
   }
 
+  seleccionarCapaBuffer() {
+    this.cambioCapaBuffer.emit(this.capas[this.currentIndexCapa]);
+  }
 }

@@ -18,6 +18,9 @@ export const environment = {
   capaArbolado: {
     url: "https://geoportal.jbb.gov.co/agc/rest/services/SIGAU/CensoArbol/MapServer/0",
   },
+  capaParques: {
+    url: 'https://visorsrv.idrd.gov.co/srv/rest/services/Parques_IDRD_Publicos/ServiciosIDRD_Publico/FeatureServer/12'
+  },
   capaConsultaClick : {
     url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/4",
     /*url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",*/
@@ -828,6 +831,16 @@ export const environment = {
           imagen: 'https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160704280/59599587-documento-comercial-con-icono-de-estad%C3%ADsticas-gr%C3%A1fico-de-ilustraci%C3%B3n-vectorial.jpg'
         }
       ]
+    }
+  ],
+  capasBuffer: [
+    {
+      nombre: 'Cobertura Servicios Públicos',
+      url: 'https://portalgis.habitatbogota.gov.co/arcgis/rest/services/SDHT_Subdireccion_Servicios_Publicos/Catastro_Usuarios_Redes/MapServer/3'
+    },
+    {
+      nombre: 'Ojo a la obra',
+      url: 'https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/2/'
     }
   ]
 };

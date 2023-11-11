@@ -9,6 +9,7 @@ import { environment } from "src/environments/environment";
 })
 export class ConsultaSeleccionEspacialComponent implements OnInit {
   @Output() accion = new EventEmitter();
+  @Output() accionConsultar = new EventEmitter();
   @Output() buffer = new EventEmitter();
 
   private bufferNumSlider:any;
@@ -55,5 +56,9 @@ export class ConsultaSeleccionEspacialComponent implements OnInit {
     const bufferSize = event.value;
     console.log("bufferSize", bufferSize);
     this.buffer.emit(bufferSize);
+  }
+
+  consultar() {
+    this.accionConsultar.emit('predios');
   }
 }
