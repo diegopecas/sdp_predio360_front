@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthService } from 'src/app/common/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -11,5 +12,12 @@ export class HomeComponent {
     usuario: '',
     password: ''
   }
+
+  constructor(private authService: AuthService) {}
   
+  validar() {
+    this.authService.autenticar(this.usuario.usuario, this.usuario.password).subscribe(response => {
+      console.log('auth', response);
+    })
+  }
 }

@@ -8,11 +8,10 @@
   <hr class="separador" />
   <div class="form__group">
     <label for="direccion" class="form__label label-verde">Dirección</label>
-    <p class="label-blanco">{{ direccion }}</p>
+    <p class="form__field" (click)="openPopup()">{{ direccion }}</p>
   </div>
   <br/>
-  <div class="form__group">
-    <div class="ancho-80">
+  <!--<div class="form__group">
       <label class="form__label label-verde">Vía principal</label>
       <select
         [(ngModel)]="consDireccion.parte1"
@@ -27,16 +26,15 @@
         <option value="AC">Avenida Calle</option>
         <option value="AK">Avenida Carrera</option>
       </select>
-    </div>
-    <div class="ancho-20">
-      <label class="form__label label-verde">##</label>
+  </div>
+  <div class="form__group">
+      <label class="form__label label-verde">Número</label>
       <input
         [(ngModel)]="consDireccion.parte2"
         type="text"
         (change)="construirDireccion()"
         class="form__field"
       />
-    </div>
   </div>
   <div class="form__group">
     <label class="form__label label-verde">A-Z</label>
@@ -197,7 +195,7 @@
       <option value="ESTE">Este</option>
       <option value="SUR">Sur</option>
     </select>
-  </div>
+  </div>-->
   <div class="form__group text-center">
     <button class="button-aqua" (click)="consultar()">Consultar</button>
   </div>

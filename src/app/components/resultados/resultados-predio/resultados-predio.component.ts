@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { loadModules } from "esri-loader";
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-resultados-predio',
@@ -12,7 +13,10 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
   @Input() predio: any;
   
   public paneles = [] as any;
+  public panelEstadisticas = false;
   public predioEvaluado: any;
+
+  constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     // // console.log(environment.panelesResultados)
@@ -36,13 +40,12 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
     }
   }
   
-
   configurarAtributos() {
     this.paneles.forEach((panel:any) => {
-      environment.serviciosResultados.forEach(sr => {
-        sr.atributos.forEach(sra => {
+      environment.serviciosResultados.forEach((sr:any) => {
+        sr.atributos.forEach((sra:any) => {
           if(panel.id == sra.panel) {
-            panel.atributos.push({clave: sra.alias, valor: 0, name: sra.name});
+            panel.atributos.push({clave: sra.alias, valor: 0, name: sra.name, formato: sra.formato, orden: sra.orden });
           }
         })
       })
@@ -51,6 +54,10 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
 
   togglePanel(panel:any) {
     panel.activo = !panel.activo;
+  }
+  
+  togglePanelEstadisticas() {
+    this.panelEstadisticas = !this.panelEstadisticas;
   }
 
   cargarInformacion() {
@@ -91,7 +98,6 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
               
             })
             .catch((error: any) => {
-              // Manejar cualquier error ocurrido durante la consulta
               console.error("Error al consultar el servicio:", error);
             });
         });
@@ -99,5 +105,16 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
 
     });
   }
+
+  htmlSecure(unsafeHtml:any){
+    return this.sanitizer.bypassSecurityTrustHtml(unsafeHtml);
+  }
+
+  tituloHtml(value:any){
+    return this.htmlSecure(value+': ');
+  }
   
+  sortBy(values:any[], prop: string) {
+    return values.sort((a, b) => a[prop] > b[prop] ? 1 : a[prop] === b[prop] ? 0 : -1);
+  }
 }

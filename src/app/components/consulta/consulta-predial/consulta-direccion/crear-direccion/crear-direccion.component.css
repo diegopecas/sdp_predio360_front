@@ -21,3 +21,11 @@ input {
     display: flex;
     padding: 5px;
 }
+
+th {
+    width: 120px;
+}
+
+td {
+    width: 120px;
+}

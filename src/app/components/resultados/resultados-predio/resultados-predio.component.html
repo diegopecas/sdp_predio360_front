@@ -4,8 +4,49 @@
       {{ panel.nombre }}
     </div>
     <div class="panel-content">
-      <ng-container *ngFor="let titulo of panel.atributos">
-        <p *ngIf="!(titulo.valor === 0)"><strong class="titulo-azul">{{ titulo.clave }}:</strong> {{ titulo.valor === 1 ? 'SÍ' : titulo.valor === 0 ? 'NO' : titulo.valor }}</p>
+      <ng-container *ngFor="let titulo of sortBy(panel.atributos,'orden')">
+        <ng-container *ngIf="titulo.formato; else elseBlock">
+          <container-element [ngSwitch]="titulo.formato.tipo">
+            <some-element *ngSwitchCase="'fecha'">
+              <ng-container *ngIf="titulo.valor == titulo.formato.sinInformacion && titulo.formato.mostrarSinInformacion == 'S'">
+                <p><strong class="titulo-azul" [innerHTML]="tituloHtml(titulo.clave)"></strong> No registra información.</p>
+              </ng-container>
+              <ng-container *ngIf="!(titulo.valor == titulo.formato.sinInformacion)">
+                <p><strong class="titulo-azul" [innerHTML]="tituloHtml(titulo.clave)"></strong>
+                  {{ titulo.valor | date: 'dd/MM/yyyy' }}</p>
+              </ng-container>
+            </some-element>
+            <some-element *ngSwitchCase="'numero'">
+              <ng-container *ngIf="titulo.valor == titulo.formato.sinInformacion && titulo.formato.mostrarSinInformacion == 'S'">
+                <p><strong class="titulo-azul" [innerHTML]="tituloHtml(titulo.clave)"></strong> No registra información.</p>
+              </ng-container>
+              <ng-container *ngIf="!(titulo.valor == titulo.formato.sinInformacion)">
+                <p><strong class="titulo-azul" [innerHTML]="tituloHtml(titulo.clave)"></strong>
+                  {{titulo.formato.pre}}{{ titulo.valor | customDecimalFormat:titulo.formato.decimales }}<span [innerHTML]="htmlSecure(titulo.formato.post)"></span></p>
+              </ng-container>
+            </some-element>
+            <some-element *ngSwitchCase="'boolean'">
+              <ng-container *ngIf="'S' == titulo.formato.mostrarSinInformacion">
+                <p><strong class="titulo-azul" [innerHTML]="tituloHtml(titulo.clave)"></strong>{{titulo.valor == titulo.formato.valorSi ? 'Sí' : 'No'}}</p>
+              </ng-container>
+            </some-element>
+            <some-element *ngSwitchDefault>
+              <p><strong class="titulo-azul">{{ titulo.clave }}:</strong> {{ titulo.valor }}</p>
+            </some-element>
+          </container-element>
+        </ng-container>
+        <ng-template #elseBlock>
+          <p><strong class="titulo-azul">{{ titulo.clave }}:</strong> {{ titulo.valor }}</p>
+        </ng-template>
+        <!--<p *ngIf="!(titulo.valor === 0)"><strong class="titulo-azul">{{ titulo.clave }}:</strong> {{ titulo.valor === 1 ? 'SÍ' : titulo.valor === 0 ? 'NO' : titulo.valor }}</p>-->
       </ng-container>
+    </div>
+  </div>
+  <div class="panel" [ngClass]="{ active: panelEstadisticas }">
+    <div class="panel-header" (click)="togglePanelEstadisticas()">
+      Estadísticas de proximidad
+    </div>
+    <div class="panel-content" style="overflow-y: auto;">
+      <app-resultados-estadisticas-predio *ngIf="predioEvaluado" [predio]="predioEvaluado"></app-resultados-estadisticas-predio>
     </div>
   </div>

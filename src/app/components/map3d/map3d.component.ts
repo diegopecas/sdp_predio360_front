@@ -4,10 +4,8 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
+  OnDestroy,
 } from "@angular/core";
-/*import Map from '@arcgis/core/Map';
-import SceneView from '@arcgis/core/views/SceneView';
-import FeatureLayer from '@arcgis/core/layers/FeatureLayer';*/
 import { loadModules } from "esri-loader";
 import { NgxSpinnerService } from "ngx-spinner";
 import { environment } from "src/environments/environment";
@@ -15,12 +13,22 @@ import swal from "sweetalert2";
 import { SlideInOutAnimation } from "./animations";
 import { RenderedSymbols } from "src/app/common/symbols/rendered-symbols";
 
+import esriConfig from "@arcgis/core/config";
+import { MapService } from "src/app/common/services/map.service";
+
+
 @Component({
   selector: "app-map3d",
   templateUrl: "./map3d.component.html",
   styleUrls: ["./map3d.component.css"],
 })
-export class Map3dComponent implements AfterViewInit {
+export class Map3dComponent implements AfterViewInit, OnDestroy {
+  ngOnDestroy(): void {
+    if (this.mapService.sceneView) {
+      this.mapService.sceneView.destroy();
+    }
+  }
+
   public opcion: string = "menu";
   public resultados: boolean = false;
   public proyectoSeleccionado = 0;
@@ -54,25 +62,44 @@ export class Map3dComponent implements AfterViewInit {
 
   public countSpinner = 0;
 
-  @ViewChild("mapViewNode", { static: true }) private mapViewEl:
-    | ElementRef
-    | undefined;
+  @ViewChild("mapView", { static: false })
+  mapElementRef?: ElementRef;
 
   constructor(
     private spinner: NgxSpinnerService,
-    private renderedSymbols: RenderedSymbols
+    private renderedSymbols: RenderedSymbols,
+    private mapService: MapService
   ) {}
 
   ngAfterViewInit(): void {
     this.initMap();
+    this.mapService.initDefaultMap(this.mapElementRef);
   }
 
   initMap() {
+    if (esriConfig.request.interceptors) {
+      esriConfig.request.interceptors.push({
+        urls: environment.serviciosResultados.map((s) => s.url),
+        before: () => {
+          this.countSpinner++;
+        },
+        after: () => {
+          this.countSpinner--;
+          if (this.countSpinner < 0) {
+            this.countSpinner = 0;
+          }
+        },
+        error: () => {
+          this.countSpinner = 0;
+        },
+      });
+    }
+    /*
     loadModules([
-      "esri/config",
-      "esri/Map",
-      "esri/views/SceneView",
-      "esri/layers/FeatureLayer",
+      // "esri/config",
+      // "esri/Map",
+      // "esri/views/SceneView",
+      // "esri/layers/FeatureLayer",
       "esri/layers/GraphicsLayer",
       "esri/symbols/IconSymbol3DLayer",
       "esri/symbols/PointSymbol3D",
@@ -91,10 +118,10 @@ export class Map3dComponent implements AfterViewInit {
       "esri/widgets/Slider",
     ]).then(
       ([
-        esriConfig,
-        Map,
-        SceneView,
-        FeatureLayer,
+        // esriConfig,
+        // Map,
+        // SceneView,
+        // FeatureLayer,
         GraphicsLayer,
         IconSymbol3DLayer,
         PointSymbol3D,
@@ -118,26 +145,7 @@ export class Map3dComponent implements AfterViewInit {
         this.Point = Point;
         this.FeatureLayer = FeatureLayer;
         // let count = 0;
-        esriConfig.request.interceptors.push({
-          // urls: /^https?:\/\/serviciosgeopr.sdp.gov.co\/.,
-          // urls: "/^https?:\/\/serviciosgeopr.sdp.gov.co\/server\/rest\/services\/predio360\/.",
-          urls: environment.serviciosResultados.map((s) => s.url),
-          before: () => {
-            this.countSpinner++;
-            // console.log("spinner", this.countSpinner);
-          },
-          after: () => {
-            this.countSpinner--;
-            if (this.countSpinner < 0) {
-              this.countSpinner = 0;
-            }
-            // console.log("spinner", this.countSpinner);
-          },
-          error: () => {
-            this.countSpinner = 0;
-            // console.log("spinner", this.countSpinner);
-          },
-        });
+        
 
         this.capa2d = this.crearCapa2d(FeatureLayer);
         this.capa3d = this.crearCapa3dClas(FeatureLayer);
@@ -186,7 +194,6 @@ export class Map3dComponent implements AfterViewInit {
           () => this.view.popup,
           "trigger-action",
           (event: any) => {
-            // Execute the measureThis() function if the measure-this action is clicked
             if (event.action.id === "verStreetView") {
               this.verStreetView();
             }
@@ -222,7 +229,7 @@ export class Map3dComponent implements AfterViewInit {
           this.bufferVariablesChanged
         );
       }
-    );
+    );*/
   }
 
   bufferVariablesChanged(event: any) {
@@ -297,50 +304,6 @@ export class Map3dComponent implements AfterViewInit {
       visible: false,
     });
   }
-
-  /*crearCapa3d(FeatureLayer: any) {
-    this.simbolo3d = {
-      type: "polygon-3d", // autocasts as new PolygonSymbol3D()
-      symbolLayers: [
-        {
-          type: "extrude", // autocasts as new ExtrudeSymbol3DLayer()
-          material: {
-            color: [229, 209, 169, 1],
-          },
-          edges: {
-            type: "solid",
-            color: [50, 50, 50, 0.8],
-            size: 1,
-          },
-          size: (geometry: any, graphic: any) => {
-            const height = 0; // graphic.attributes["NUMERO_PISO"] * 2; // Multiplicar por 2 para dar la altura en metros
-            return height;
-          },
-          // Establecer la base de la extrusión en el suelo
-          anchor: "relative-to-ground",
-        },
-      ],
-    };
-
-    const featureLayer = new FeatureLayer({
-      id: "capa-construccion-3d",
-      url: environment.urlServicioPredios,
-      outFields: ["*"],
-      renderer: {
-        type: "simple",
-        symbol: this.simbolo3d,
-        visualVariables: [
-          {
-            type: "size",
-            valueUnit: "meters",
-            valueExpression: "return Abs(Number($feature.NUMERO_PISOS)) * 2.4;",
-          },
-        ],
-      },
-      visible: true,
-    });
-    return featureLayer;
-  }*/
 
   crearCapa3dClas(FeatureLayer: any) {
     const povLayer = new FeatureLayer({
@@ -572,7 +535,7 @@ export class Map3dComponent implements AfterViewInit {
         this.capaGaleria,
         this.capaPuntosSeleccionados,
         this.capaArbolado,
-        this.capaSitiosInteres
+        this.capaSitiosInteres,
       ],
     });
   }
@@ -1048,7 +1011,19 @@ export class Map3dComponent implements AfterViewInit {
     loadModules(["esri/layers/FeatureLayer"]).then(([FeatureLayer]) => {
       const capa = new FeatureLayer({
         url: evt.url,
-        id: "capa_buffer",
+        id: evt.nombre, //"capa_buffer",
+        outFields: [evt.outfields],
+        popupTemplate: {
+          // autocasts as new PopupTemplate()
+          title: "{OBJECTID}",
+          content: [
+            {
+              type: "fields",
+              fieldInfos: evt.fieldinfos,
+            },
+          ],
+          // actions: [this.streetViewAction]
+        },
       });
       this.map.add(capa);
     });

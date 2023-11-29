@@ -3,16 +3,6 @@
     <img class="logo" src="/assets/images/logo_predio360.png" />
   </div>
   <hr class="separador" />
-  <!--<div class="panel" [ngClass]="{ active: isIPPanelExpanded }">
-    <div class="panel-header" (click)="togglePanel('IP')">
-      Identificación Predio
-    </div>
-    <div class="panel-content" [ngStyle]="{ 'max-height.px': panelIPHeight }">
-      <app-resultados-identificacion-predio
-        [valores]="identificacionPredio"
-      ></app-resultados-identificacion-predio>
-    </div>
-  </div>-->
   <div class="panel" [ngClass]="{ active: true }">
     <div class="panel-header">
       Selección de Predio
@@ -30,67 +20,6 @@
     </div>
   </div>
   <app-resultados-predio *ngIf="currentIndex >= 0" [predio]="predioSeleccionado"></app-resultados-predio>
-  <!--<div class="panel" [ngClass]="{ active: isIFLPanelExpanded }">
-    <div class="panel-header" (click)="togglePanel('IFL')">
-      Información Física Del Lote
-    </div>
-    <div class="panel-content" [ngStyle]="{ 'max-height.px': panelIFLHeight }">
-      <app-resultados-info-fisica-lote
-        [valores]="identificacionPredio"
-      ></app-resultados-info-fisica-lote>
-    </div>
-  </div>
-  <div class="panel" [ngClass]="{ active: isLOCPanelExpanded }">
-    <div class="panel-header" (click)="togglePanel('LOC')">
-      Información De Localización
-    </div>
-    <div class="panel-content" [ngStyle]="{ 'max-height.px': panelLOCHeight }">
-      <app-resultados-localizacion></app-resultados-localizacion>
-    </div>
-  </div>
-  <div class="panel" [ngClass]="{ active: isNORPanelExpanded }">
-    <div class="panel-header" (click)="togglePanel('NOR')">
-      Información Normativa
-    </div>
-    <div class="panel-content" [ngStyle]="{ 'max-height.px': panelNORHeight }">
-      <app-resultados-normativa></app-resultados-normativa>
-    </div>
-  </div>
-  <div class="panel" [ngClass]="{ active: isIEPanelExpanded }">
-    <div class="panel-header" (click)="togglePanel('IE')">
-      Información Económica
-    </div>
-    <div class="panel-content" [ngStyle]="{ 'max-height.px': panelIEHeight }">
-      <app-resultados-info-economica></app-resultados-info-economica>
-    </div>
-  </div>
-  <div class="panel" [ngClass]="{ active: isURBPanelExpanded }">
-    <div class="panel-header" (click)="togglePanel('URB')">
-      Información Urbanística
-    </div>
-    <div class="panel-content" [ngStyle]="{ 'max-height.px': panelURBHeight }">
-      <app-resultados-urbanistica></app-resultados-urbanistica>
-    </div>
-  </div>-->
-  <!--<div class="panel" [ngClass]="{ active: isGIPanelExpanded }" *ngIf="puntoGaleria">-->
-  <div class="panel" [ngClass]="{ active: isGIPanelExpanded }" *ngIf="currentIndex >= 0">
-    <div class="panel-header" (click)="togglePanel('GI')">
-      Proyectos cercanos
-    </div>
-    <div class="panel-content">
-      <app-galeria-inmobiliaria
-        [valorPuntoClick]="puntoGaleria"
-      ></app-galeria-inmobiliaria>
-    </div>
-  </div>
-  <div class="panel" [ngClass]="{ active: isESPanelExpanded }" *ngIf="currentIndex >= 0">
-    <div class="panel-header" (click)="togglePanel('ES')">
-      Estadísticas de proximidad
-    </div>
-    <div class="panel-content">
-      <app-resultados-estadisticas-predio></app-resultados-estadisticas-predio>
-    </div>
-  </div>
   <div class="panel" [ngClass]="{ active: isECPanelExpanded }" *ngIf="currentIndex >= 0">
     <div class="panel-header" (click)="togglePanel('EC')">
       Elementos cercanos
@@ -108,7 +37,6 @@
     </div>
   </div>
 
-  <!--<app-resultados-estadisticas></app-resultados-estadisticas>-->
   <hr class="separador" />
   <div class="logo-container">
     <div class="item-regresar" (click)="regresar()">

@@ -1,6 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { loadModules } from "esri-loader";
 import { environment } from "src/environments/environment";
+import Slider from "@arcgis/core/widgets/Slider";
+import { MapService } from "src/app/common/services/map.service";
 
 @Component({
   selector: "app-consulta-seleccion-espacial",
@@ -12,7 +14,10 @@ export class ConsultaSeleccionEspacialComponent implements OnInit {
   @Output() accionConsultar = new EventEmitter();
   @Output() buffer = new EventEmitter();
 
-  private bufferNumSlider:any;
+  private bufferNumSlider: any;
+  private bufferSize = 0;
+
+  constructor(private mapService: MapService) {}
 
   seleccion(opcion: any) {
     console.log(opcion);
@@ -24,41 +29,35 @@ export class ConsultaSeleccionEspacialComponent implements OnInit {
   }
 
   crearBufferPanel() {
-    loadModules(["esri/config", "esri/widgets/Slider"]).then(
-      ([esriConfig, Slider]) => {
-        esriConfig.apiKey = environment.esriConfigApiKey;
-        const _this = this;
+    this.bufferNumSlider = new Slider({
+      container: "bufferNum",
+      min: 0,
+      max: 500,
+      steps: 1,
+      visibleElements: {
+        labels: true,
+      },
+      precision: 0,
+      labelFormatFunction: (value: any, type: any) => {
+        return `${value.toString()}m`;
+      },
+      values: [0],
+    });
 
-        this.bufferNumSlider = new Slider({
-          container: "bufferNum",
-          min: 0,
-          max: 500,
-          steps: 1,
-          visibleElements: {
-            labels: true,
-          },
-          precision: 0,
-          labelFormatFunction: (value: any, type: any) => {
-            return `${value.toString()}m`;
-          },
-          values: [0],
-        });
-
-        this.bufferNumSlider.on(
-          ["thumb-change", "thumb-drag"],
-          this.bufferVariablesChanged
-        );
-      }
-    );
+    this.bufferNumSlider.on(["thumb-change", "thumb-drag"], (event: any) => {
+      this.bufferSize = event.value;
+      this.mapService.configurarElementosBuffer("predio", this.bufferSize);
+      // this.buffer.emit(this.bufferSize);
+    });
   }
 
-  bufferVariablesChanged = (event: any) => {
+  /*bufferVariablesChanged = (event: any) => {
     const bufferSize = event.value;
     console.log("bufferSize", bufferSize);
     this.buffer.emit(bufferSize);
-  }
+  }*/
 
   consultar() {
-    this.accionConsultar.emit('predios');
+    this.accionConsultar.emit("predios");
   }
 }

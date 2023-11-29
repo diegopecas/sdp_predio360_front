@@ -1,8 +1,8 @@
 <div class="map-container">
     <app-loading-bar *ngIf="countSpinner > 0"></app-loading-bar>
-    <div #mapView id="mapView"></div>
+    <div #mapView id="mapView" class="cursor-normal"></div>
     <ng-container>
-        <app-consulta *ngIf="opcion == 'menu' && !resultados" (accion)="accionMenu($event)"></app-consulta>
+        <app-consulta *ngIf="(opcion == 'menu' || opcion == 'consulta-seleccion') && !resultados" (accion)="accionMenu($event)"></app-consulta>
         <app-consulta-predial *ngIf="opcion == 'consulta-predial' && !resultados" (accion)="accionMenu($event)"></app-consulta-predial>
         <app-consulta-direccion *ngIf="opcion == 'consulta-direccion' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaDireccion($event)"></app-consulta-direccion>
         <app-consulta-cedula *ngIf="opcion == 'consulta-cedula' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaCedula($event)"></app-consulta-cedula>
@@ -15,6 +15,6 @@
         <app-resultados *ngIf="resultados" (accion)="regresarResultados($event)" [parametros]="valoresResultados" (loteSeleccionado)="seleccionarPredioByLote($event)" (cambioTipoConsulta)="accionMenu($event)" (cambioCapaBuffer)="cambioCapaBuffer($event)"></app-resultados>
         <!--<app-resultados-estadisticas *ngIf="resultados"></app-resultados-estadisticas>-->
     </ng-container>
-    <app-toolbar (accion2d3d)="accion2d3d($event)" (capasReferencia)="cargarCapasDeReferencia($event)" (anadirCapaReferencia)="anadirCapaReferencia($event)"></app-toolbar>
-    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.3)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true" style="z-index: 999999999999;"></ngx-spinner>
+    <!--<app-toolbar (accion2d3d)="accion2d3d($event)" (capasReferencia)="cargarCapasDeReferencia($event)" (anadirCapaReferencia)="anadirCapaReferencia($event)"></app-toolbar>-->
+    <!--<ngx-spinner bdColor = "rgba(0, 0, 0, 0.3)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true" style="z-index: 999999999999;"></ngx-spinner>-->
 </div>
