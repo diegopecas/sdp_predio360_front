@@ -15,6 +15,7 @@ import Expand from "@arcgis/core/widgets/Expand";
 import Legend from "@arcgis/core/widgets/Legend";
 import Search from "@arcgis/core/widgets/Search";
 import Point from "@arcgis/core/geometry/Point";
+import * as reactiveUtils from "@arcgis/core/core/reactiveUtils";
 
 import { RenderedSymbols } from "../symbols/rendered-symbols";
 
@@ -72,10 +73,31 @@ export class MapService {
       this.clicEnMapa(event);
     });
 
+    reactiveUtils.on(
+      () => this.sceneView?.popup,
+      "trigger-action",
+      (event: any) => {
+        if (event.action.id === "verStreetView") {
+          this.verStreetView();
+        }
+      }
+    );
+
     this.agregarCapasBase();
     this.agregarListaCapas();
     this.agregarLeyenda();
     this.agregarBusquedas();
+  }
+
+  private streetViewAction = {
+    title: "Google Street View",
+    id: "verStreetView",
+    image: "/assets/images/Street_View_logo.png",
+  };
+
+  verStreetView() {
+    const geom:any = this.sceneView?.popup.selectedFeature.geometry;
+    window.open("http://maps.google.com/?cbll=" + geom?.centroid.latitude + "," + geom?.centroid.longitude + "&cbp=12,90,0,0,5&layer=c", "_blank");
   }
 
   agregarCapasBase() {
@@ -91,6 +113,7 @@ export class MapService {
               id: capa.id,
               title: capa.nombre,
               renderer: simboloArbol,
+              outFields: ["*"],
             });
             this.map?.add(featureLayerArbol);
             // this.layers?.push({ capa: featureLayerArbol, datos: capa });
@@ -112,6 +135,7 @@ export class MapService {
               id: capa.id,
               title: capa.nombre,
               renderer: simboloBloque,
+              outFields: ["*"],
             });
             this.map?.add(featureLayerBloque);
 

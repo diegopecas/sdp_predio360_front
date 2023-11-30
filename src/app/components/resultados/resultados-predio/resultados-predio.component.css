@@ -16,15 +16,15 @@
   .panel-content {
     padding: 10px;
     max-height: 0;
-    overflow: hidden;
+    overflow: auto;
     transition: max-height 0.5s ease;
     color: #ffffff;
     font-weight: 500;
   }
   
-  .panel.active .panel-content {
-    max-height: 1000px; /* Ajusta la altura máxima del contenido */
-  }
+  /*.panel.active .panel-content {
+    max-height: 1000px; / * Ajusta la altura máxima del contenido * /
+  }*/
   
   .titulo-azul {
     color: #0fffff !important;
