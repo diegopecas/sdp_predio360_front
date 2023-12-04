@@ -1,5 +1,5 @@
 # Use an official nginx runtime as a parent image
-FROM nginx:1.21.1
+FROM nginx:1.22
 
 # Set the working directory to /app
 WORKDIR /app
