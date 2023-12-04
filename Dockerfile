@@ -26,7 +26,7 @@ COPY . /app
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy the compiled app to the nginx static content directory
-RUN cp -r dist/* /usr/share/nginx/html/
+RUN cp -r dist/predio360-app/* /usr/share/nginx/html/
 
 # Expose port 80
 EXPOSE 80
