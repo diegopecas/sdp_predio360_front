@@ -5,22 +5,22 @@ FROM nginx:1.21.1
 WORKDIR /app
 
 # Install curl to download Node.js and npm
-RUN apt-get update && apt-get install -y curl
+# RUN apt-get update && apt-get install -y curl
 
 # Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
-RUN apt-get install -y nodejs
+# RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
+# RUN apt-get install -y nodejs
 
 # Install Angular CLI globally
-RUN npm install -g @angular/cli
+# RUN npm install -g @angular/cli
 
 # Copy the current directory contents into the container at /app
 COPY . /app
 
 # Install app dependencies and build for production
-RUN npm install --force
+#RUN npm install --force
 # RUN ng build --prod
-RUN npm run build --prod
+#RUN npm run build --prod
 
 # Remove the default nginx static content
 RUN rm -rf /usr/share/nginx/html/*

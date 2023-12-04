@@ -2562,53 +2562,41 @@ export const environment = {
     },
   ],
   capasBuffer: [
-    /*{
-      nombre: "Cobertura Servicios Públicos",
-      url: "https://portalgis.habitatbogota.gov.co/arcgis/rest/services/SDHT_Subdireccion_Servicios_Publicos/Catastro_Usuarios_Redes/MapServer/3",
-      outfields: "OBJECTID,LOTCODIGO,eaab,enel,uaesp,vanti",
-      fieldinfos: [
-        {
-          fieldName: "OBJECTID", // The field whose values you want to format
-          label: "ID",
-        },
-        {
-          fieldName: "LOTCODIGO", // The field whose values you want to format
-          label: "Código lote",
-        },
-        {
-          fieldName: "eaab", // The field whose values you want to format
-          label: "eaab",
-        },
-        {
-          fieldName: "enel", // The field whose values you want to format
-          label: "enel",
-        },
-        {
-          fieldName: "uaesp", // The field whose values you want to format
-          label: "uaesp",
-        },
-        {
-          fieldName: "vanti", // The field whose values you want to format
-          label: "vanti",
-        },
-      ],
-    },
     {
-      nombre: "Obras y frentes de obra",
+      nombre: "Ojo a la obra (Punto)",
       url: "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/0",
-    },
-    {
-      nombre: "Obras línea",
-      url: "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/1",
-    },
-    {
-      nombre:
-        "parques, equipamientos, estaciones de transporte masivo, obras (punto y linea), proyectos inmobiliarios, predios fiscales (DADEP), empresas y establecimientos comerciales (Esp. Inteligente) ",
-    },*/
-    {
-      nombre: "Ojo a la obra",
-      url: "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/2",
       outfields: ["*"],
+      atributos: {
+        titulo: "{TIPO_PROYECTO}: {NOMBRE_PROYECTO}",
+        contenido: [
+          {
+            fieldName: "AVANCE_OBRA",
+            label: "Avance de obra",
+          },
+          {
+            fieldName: "DIRECCION",
+            label: "Dirección",
+          }
+        ]
+      }
+    },
+    {
+      nombre: "Ojo a la obra (línea)",
+      url: "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/1",
+      outfields: ["*"],
+      atributos: {
+        titulo: "{TIPO_PROYECTO}: {NOMBRE_PROYECTO}",
+        contenido: [
+          {
+            fieldName: "AVANCE_OBRA",
+            label: "Avance de obra",
+          },
+          {
+            fieldName: "DIRECCION",
+            label: "Dirección",
+          }
+        ]
+      }
     },
     {
       nombre: "Establecimientos",
@@ -2617,8 +2605,12 @@ export const environment = {
     },
     {
       nombre: "Estaciones de transporte masivo",
-      url: "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer",
+      url: "https://gis.transmilenio.gov.co/arcgis/rest/services/Troncal/consulta_esquemas_estaciones/FeatureServer/0",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        simbolo: "bloque"
+      }
     },
     {
       nombre: "Parques de Borde",
@@ -2643,11 +2635,6 @@ export const environment = {
     {
       nombre: "Sitios de interés",
       url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/MapServer/1",
-      outfields: ["*"],
-    },
-    {
-      nombre: "Sitios de interés",
-      url: "",
       outfields: ["*"],
     },
   ],

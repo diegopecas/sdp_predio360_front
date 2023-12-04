@@ -31,9 +31,11 @@ export class MapService {
     tipo: "",
     medida: 0,
   };
+  bufferLayer: any;
   elementosSeleccionados = [] as any[];
   puntoClickeado: any;
   highlight = null;
+  tipoSeleccion = "predio";
 
   constructor() {}
 
@@ -89,15 +91,30 @@ export class MapService {
     this.agregarBusquedas();
   }
 
-  private streetViewAction = {
+  private streetViewAction:any = {
     title: "Google Street View",
     id: "verStreetView",
     image: "/assets/images/Street_View_logo.png",
   };
 
   verStreetView() {
-    const geom:any = this.sceneView?.popup.selectedFeature.geometry;
-    window.open("http://maps.google.com/?cbll=" + geom?.centroid.latitude + "," + geom?.centroid.longitude + "&cbp=12,90,0,0,5&layer=c", "_blank");
+    try {
+      const geom: any = this.sceneView?.popup.selectedFeature.geometry;
+      window.open(
+        "http://maps.google.com/?cbll=" +
+          geom?.extent.center.latitude +
+          "," +
+          geom?.extent.center.longitude +
+          "&cbp=12,90,0,0,5&layer=c",
+        "_blank"
+      );
+    } catch(error:any) {
+      alert('Por favor asegúrese de tener habilitadas las ventanas emergentes.');
+    }
+  }
+
+  cambiarTipoSelección(tipo:any) {
+    this.tipoSeleccion = tipo;
   }
 
   agregarCapasBase() {
@@ -556,4 +573,59 @@ export class MapService {
       }
     );
   }
+
+  agregarCapaBuffer(capa: any) {
+    if (this.bufferLayer) {
+      this.map?.remove(this.bufferLayer);
+    }
+
+    const simboloBloque = new RenderedSymbols().construirBloqueConstante(
+      2.4,
+      "rgb(255, 0, 0)"
+    );
+
+    if (capa.formato?.dimensiones == 3) {
+      switch (capa.formato?.simbolo) {
+        case "bloque":
+          this.bufferLayer = new FeatureLayer({
+            url: capa.url,
+            id: "Capa buffer",
+            title: capa.nombre,
+            renderer: simboloBloque,
+            outFields: ["*"],
+            popupTemplate: {
+              title: capa.atributos.titulo,
+              content: [
+                {
+                  type: "fields",
+                  fieldInfos: capa.atributos.contenido
+                },
+              ],
+              actions: [this.streetViewAction],
+            }
+          });
+          this.map?.add(this.bufferLayer);
+          break;
+      }
+    } else {
+      this.bufferLayer = new FeatureLayer({
+        url: capa.url,
+        id: "Capa buffer",
+        title: capa.nombre,
+        outFields: ["*"],
+        popupTemplate: {
+          title: capa.atributos.titulo,
+              content: [
+                {
+                  type: "fields",
+                  fieldInfos: capa.atributos.contenido
+                },
+              ],
+              actions: [this.streetViewAction],
+        }
+      });
+      this.map?.add(this.bufferLayer);
+    }
+  }
+
 }

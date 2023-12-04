@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   esriConfigApiKey:
     "AAPK18837c198fe14f849f5237a94fb8c4d9nyUIHfhPmykTR_afDukiTorJHXPimhB05XjXQ6o6rDQ-GAsclkcQJjNfsUX-ulMj",
   baseConfigs: {
@@ -2617,7 +2617,7 @@ export const environment = {
     },
     {
       nombre: "Estaciones de transporte masivo",
-      url: "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer",
+      url: "https://gis.transmilenio.gov.co/arcgis/rest/services/Troncal/consulta_esquemas_estaciones/FeatureServer/0",
       outfields: ["*"],
     },
     {
@@ -2643,11 +2643,6 @@ export const environment = {
     {
       nombre: "Sitios de interés",
       url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/MapServer/1",
-      outfields: ["*"],
-    },
-    {
-      nombre: "Sitios de interés",
-      url: "",
       outfields: ["*"],
     },
   ],

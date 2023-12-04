@@ -25,15 +25,7 @@
       Elementos cercanos
     </div>
     <div class="panel-content">
-      <p>
-        Seleccionar capa:
-        <select style="background: #000000; color: #ffffff;" class="form__field" [(ngModel)]="currentIndexCapa" (change)="seleccionarCapaBuffer()">
-          <option value="-1">Seleccionar...</option>
-          <option *ngFor="let d of capas; let i = index" [value]="i">
-            {{ d.nombre }}
-          </option>
-        </select>
-      </p>
+      <app-resultados-cercanos-predio *ngIf="currentIndex >= 0" [predio]="predioSeleccionado"></app-resultados-cercanos-predio>
     </div>
   </div>
 

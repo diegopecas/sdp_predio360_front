@@ -29,6 +29,7 @@ import { LoadingBarComponent } from './common/utils/loading-bar/loading-bar.comp
 import { ResultadosEstadisticasPredioComponent } from './components/resultados/resultados-estadisticas-predio/resultados-estadisticas-predio.component';
 import { RenderedSymbols } from './common/symbols/rendered-symbols';
 import { CustomDecimalFormatPipe } from './common/pipes/custom-decimal-format.pipe';
+import { ResultadosCercanosPredioComponent } from './components/resultados/resultados-cercanos-predio/resultados-cercanos-predio.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { CustomDecimalFormatPipe } from './common/pipes/custom-decimal-format.pi
     ResultadosPredioComponent,
     LoadingBarComponent,
     ResultadosEstadisticasPredioComponent,
-    CustomDecimalFormatPipe
+    CustomDecimalFormatPipe,
+    ResultadosCercanosPredioComponent
   ],
   imports: [
     BrowserModule,
