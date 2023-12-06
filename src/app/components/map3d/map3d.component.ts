@@ -16,7 +16,6 @@ import { RenderedSymbols } from "src/app/common/symbols/rendered-symbols";
 import esriConfig from "@arcgis/core/config";
 import { MapService } from "src/app/common/services/map.service";
 
-
 @Component({
   selector: "app-map3d",
   templateUrl: "./map3d.component.html",
@@ -24,8 +23,8 @@ import { MapService } from "src/app/common/services/map.service";
 })
 export class Map3dComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
-    if (this.mapService.sceneView) {
-      this.mapService.sceneView.destroy();
+    if (this.mapService.views.activeView) {
+      this.mapService.views.activeView.destroy();
     }
   }
 
@@ -722,6 +721,15 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
           console.error("Error al consultar el servicio:", error);
         });
     });
+  }
+
+  consultaSeleccion(event: any) {
+    this.valoresResultados = {
+      opcion: "consulta-seleccion-multiple",
+      lotes: this.lotesSeleccionados,
+    };
+    this.resultados = true;
+    this.mapService.cambiarTipoSelección('predio');
   }
 
   consultaPorCapa(event: any) {

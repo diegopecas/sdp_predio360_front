@@ -16,7 +16,7 @@ export const environment = {
     {
       id: "construcciones",
       nombre: "construcciones",
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
       tipo: "3D",
       altura: "NUMERO_PISOS",
       factor: 2.4,
@@ -38,6 +38,7 @@ export const environment = {
       factor: 1,
       simbolo: "arbol",
       color: "rgb(1, 90, 0)",
+      busquedaBufferPredio: false,
     },
     {
       id: "parques",
@@ -48,21 +49,22 @@ export const environment = {
       factor: 0.2,
       simbolo: "bloque",
       color: "rgb(136, 166, 94)",
+      busquedaBufferPredio: false,
     },
   ],
 
   urlServicioPredios:
     "https://services8.arcgis.com/2gedZBw4OrdjULOA/arcgis/rest/services/construccion_predio_360/FeatureServer/0",
   // urlServicioPredios:
-  //  "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",
+  //  "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
   urlServicioGaleria:
-    "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/6",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
   urlTablaPredios:
-    "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
   urlLoteCatastral:
-    "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
   urlConstruccion:
-    "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/4",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/4",
   urlSinupot: "https://sinupot.sdp.gov.co/serverp/rest/services/",
   capaArbolado: {
     url: "https://geoportal.jbb.gov.co/agc/rest/services/SIGAU/CensoArbol/MapServer/0",
@@ -71,32 +73,32 @@ export const environment = {
     url: "https://visorsrv.idrd.gov.co/srv/rest/services/Parques_IDRD_Publicos/ServiciosIDRD_Publico/FeatureServer/12",
   },
   capaConsultaClick: {
-    url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/4",
-    /*url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",*/
+    url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/4",
+    /*url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",*/
     id: "CODIGO_LOTE",
   },
   capaSitiosInteres: {
-    url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/1",
+    url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/1",
   },
   capaConsultaPredio: {
     porLote: {
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
       atributo: "GN_CODIGO_LOTE",
     },
     porDireccion: {
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
       atributo: "GN_DIRECCION",
     },
     porMatricula: {
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
       atributo: "GN_MATRICULA_INMOBILIARIA",
     },
     porChip: {
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
       atributo: "GN_CHIP",
     },
     porCedula: {
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
       atributo: "GN_CEDULA_CATASTRAL",
     },
   },
@@ -143,10 +145,6 @@ export const environment = {
       id: "SB",
       nombre: "Información de hogares Sisbén",
     },
-    {
-      id: "UB",
-      nombre: "Información Urbanística",
-    },
   ],
   panelesIndicadores: [
     {
@@ -158,7 +156,7 @@ export const environment = {
   serviciosResultados: [
     {
       // url: "https://services8.arcgis.com/2gedZBw4OrdjULOA/arcgis/rest/services/construccion_predio_360/FeatureServer/0",
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
       id: "construccion",
       name: "Construcción",
       filter: ["CODIGO_LOTE", "GN_CODIGO_LOTE"],
@@ -298,7 +296,7 @@ export const environment = {
       ],
     },
     {
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/4",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/4",
       id: "lote_catastral",
       name: "Lote Catastral",
       filter: ["GN_CODIGO_LOTE", "GN_CODIGO_LOTE"],
@@ -1527,7 +1525,7 @@ export const environment = {
       ],
     },
     {
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
       id: "predio",
       name: "Predio",
       filter: ["OBJECTID", "OBJECTID"],
@@ -2462,7 +2460,7 @@ export const environment = {
     },
   ],
   capaEstadisticas: {
-    url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/9",
+    url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/9",
     campoConsulta: "CODIGO_LOTE",
     campos: [
       "OBJECTID",
@@ -2561,47 +2559,211 @@ export const environment = {
       imagen: "/assets/images/socioeco.png",
     },
   ],
+  capaDatosUrbanisticos: {
+    url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/7",
+    titulo: "Datos urbanísticos",
+    labelSeleccion: "LIC_EXPEDIENTE",
+    filterPredio: "CODIGO_LOTE",
+    atributos: [
+      /*{
+        name: "OBJECTID",
+        alias: "OID",
+        orden: 0,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },*/
+      {
+        name: "ID_EXPEDIENTE",
+        alias: "ID Expediente",
+        orden: 1,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "CODIGO_LOTE",
+        alias: "Código lote",
+        orden: 0,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_EXPEDIENTE",
+        alias: "Expediente",
+        orden: 0,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_FECHA_RADICACION",
+        alias: "Fecha de radicación",
+        orden: 2,
+        formato: {
+          tipo: "fecha",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_OBJETO_TRAMITE",
+        alias: "Objeto trámite",
+        orden: 3,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "DESCRIPCION_LICENCIA",
+        alias: "Descripción licencia",
+        orden: 4,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_ACTO_ADMINISTRATIVO",
+        alias: "Acto administrativo",
+        orden: 8,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_ACTO_ADM_FECHA_EXPED",
+        alias: "Fecha expediente",
+        orden: 9,
+        formato: {
+          tipo: "fecha",
+          sinInformacion: "0",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_ACTO_ADM_FECHA_EJECU",
+        alias: "Fecha ejecutoria",
+        orden: 10,
+        formato: {
+          tipo: "fecha",
+          sinInformacion: "0",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_ACTO_ADM_TIPO_DECISI",
+        alias: "Tipo de decisión",
+        orden: 11,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "0",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "UPZ_NOMBRE",
+        alias: "UPZ Nombre",
+        orden: 6,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "0",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "UPZ_CODIGO",
+        alias: "UPZ Código",
+        orden: 5,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "0",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "UPZ_DECRETO",
+        alias: "UPZ Decreto",
+        orden: 7,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "0",
+          mostrarSinInformacion: "S",
+        },
+      }
+    ]
+  },
   capasBuffer: [
+    
+    // equipamiento
     {
-      nombre: "Ojo a la obra (Punto)",
-      url: "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/0",
+      nombre: "Sistema de equipamientos",
+      url: "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer/118",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "default",
+      },
       atributos: {
-        titulo: "{TIPO_PROYECTO}: {NOMBRE_PROYECTO}",
+        titulo: "Nombre: {NOMBRE}",
         contenido: [
           {
-            fieldName: "AVANCE_OBRA",
-            label: "Avance de obra",
+            fieldName: "COD",
+            label: "Código",
           },
           {
-            fieldName: "DIRECCION",
-            label: "Dirección",
-          }
-        ]
-      }
-    },
-    {
-      nombre: "Ojo a la obra (línea)",
-      url: "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/1",
-      outfields: ["*"],
-      atributos: {
-        titulo: "{TIPO_PROYECTO}: {NOMBRE_PROYECTO}",
-        contenido: [
-          {
-            fieldName: "AVANCE_OBRA",
-            label: "Avance de obra",
+            fieldName: "COD_CIIU",
+            label: "Código CIIU",
           },
           {
-            fieldName: "DIRECCION",
-            label: "Dirección",
-          }
-        ]
-      }
+            fieldName: "DIVISION",
+            label: "División",
+          },
+        ],
+      },
     },
+    // establecimientos
     {
       nombre: "Establecimientos",
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/MapServer/2",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/2",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "default",
+      },
+      atributos: {
+        titulo: "Sección: {SECCION}",
+        contenido: [
+          {
+            fieldName: "COD",
+            label: "Código",
+          },
+          {
+            fieldName: "COD_CIIU",
+            label: "Código CIIU",
+          },
+          {
+            fieldName: "DIVISION",
+            label: "División",
+          },
+        ],
+      },
     },
     {
       nombre: "Estaciones de transporte masivo",
@@ -2609,33 +2771,410 @@ export const environment = {
       outfields: ["*"],
       formato: {
         dimensiones: 3,
-        simbolo: "bloque"
-      }
+        vista: "3D",
+        simbolo: "bloque",
+      },
+      atributos: {
+        titulo: "Estación: {nombre}",
+        contenido: [
+          {
+            fieldName: "troncal",
+            label: "Troncal",
+          },
+        ],
+      },
     },
     {
       nombre: "Parques de Borde",
       url: "https://serviciosg.sdp.gov.co/server/rest/services/POT555/ESTRUCTURA_INTEGRADORES_DE_PATRIMONIO/FeatureServer/37",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "default",
+      },
+      atributos: {
+        titulo: "Estación: {nombre}",
+        contenido: [
+          {
+            fieldName: "troncal",
+            label: "Troncal",
+          },
+        ],
+      },
     },
     {
       nombre: "Parques de proximidad",
-      url: "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer",
+      url: "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer/171",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "bloque-parque",
+      },
+      atributos: {
+        titulo: "Nombre: {NOMBRE}",
+        contenido: [
+          {
+            fieldName: "CODIGO_ID",
+            label: "Código",
+          },
+          {
+            fieldName: "SHAPE.AREA",
+            label: "Área",
+          },
+        ],
+      },
     },
     {
       nombre: "Parques red estructurante",
-      url: "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer",
+      url: "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer/185",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "bloque-parque",
+      },
+      atributos: {
+        titulo: "Nombre: {NOMBRE}",
+        contenido: [
+          {
+            fieldName: "CODIGO_ID",
+            label: "Código",
+          },
+          {
+            fieldName: "SHAPE.AREA",
+            label: "Área",
+          },
+        ],
+      },
     },
     {
       nombre: "Predios fiscales DADEP",
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/MapServer/5",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/5",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "default",
+      },
+      atributos: {
+        titulo: "Tipo de bien: {TIPO_INMUE}",
+        contenido: [
+          {
+            fieldName: "RUPI",
+            label: "RUPI",
+          },
+          {
+            fieldName: "ORIGEN",
+            label: "Origen",
+          },
+          {
+            fieldName: "SHAPE.AREA",
+            label: "Área",
+          },
+        ],
+      },
     },
     {
       nombre: "Sitios de interés",
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/MapServer/1",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/1",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "default",
+      },
+      atributos: {
+        titulo: "Nombre: {NGENOMBRE}",
+        contenido: [
+          {
+            fieldName: "NGECLASIFI",
+            label: "Clasificación",
+          },
+          {
+            fieldName: "NGENALTERN",
+            label: "Nombre alternativo",
+          },
+        ],
+      },
+    },
+    {
+      nombre: "Ojo a la obra (Punto)",
+      url: "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/0",
+      outfields: ["*"],
+      formato: {
+        dimensiones: 2,
+        vista: "2D",
+        simbolo: "default",
+      },
+      atributos: {
+        titulo: "{TIPO_PROYECTO}: {NOMBRE_PROYECTO}",
+        contenido: [
+          {
+            fieldName: "AVANCE_OBRA",
+            label: "Avance de obra",
+          },
+          {
+            fieldName: "DIRECCION",
+            label: "Dirección",
+          },
+        ],
+      },
+    },
+    {
+      nombre: "Ojo a la obra (línea)",
+      url: "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/1",
+      outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "default",
+      },
+      atributos: {
+        titulo: "{TIPO_PROYECTO}: {NOMBRE_PROYECTO}",
+        contenido: [
+          {
+            fieldName: "AVANCE_OBRA",
+            label: "Avance de obra",
+          },
+          {
+            fieldName: "DIRECCION",
+            label: "Dirección",
+          },
+        ],
+      },
     },
   ],
+  capaGaleria: {
+    url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
+    atributos: [
+      /* ACABADOS_ENTREGA
+: 
+" "
+ACTIVO
+: 
+"No"
+BARRIO
+: 
+"Santa Bárbara"
+CERTIFICADOS_SOSTENIBLE
+: 
+"No"
+CODIGO_PROYECTO
+: 
+30443
+CONSTRUCTOR
+: 
+"Const. Coramar"
+DESCRIP_ULT_ET_LANZADA
+: 
+"Unica"
+DIRECCION
+: 
+"Cr. 18 # 114A-31"
+DISPONIBLES
+: 
+0
+ESTADO
+: 
+"Term./"
+ESTRATO
+: 
+6
+FECHA_DESISTIMIENTO
+: 
+null
+FECHA_ENTREGA
+: 
+"Inmediata"
+FECHA_INICIO
+: 
+1117584000000
+INCREMENTO_VALOR_PISOS
+: 
+0
+LATITUD
+: 
+4.697808
+LONGITUD
+: 
+-74.047626
+NOM_PROYECTO
+: 
+"Minorca"
+OBJECTID
+: 
+78
+OFERTA_TOTAL
+: 
+36
+OTRO_USO
+: 
+"No"
+PISOS_PARQUEADER
+: 
+0
+PROM_ALCOBAS
+: 
+1.7
+PROM_BAÑOS
+: 
+2.4*/
+      {
+        name: "PROM_VALOR",
+        alias: "Promedio valor",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "$ ",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "PROM_VALOR_M2",
+        alias: "Promedio valor m<sup>2</sup>",
+        orden: 29,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "$ ",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "SEMISOTANOS",
+        alias: "Semisótanos",
+        orden: 30,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "SOTANOS",
+        alias: "Sótanos",
+        orden: 30,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "SUB_ZONA",
+        alias: "SubZona",
+        orden: 31,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "TIPO_INMUEBLE",
+        alias: "Tipo de inmueble",
+        orden: 32,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "TIPO_VIVIENDA",
+        alias: "Tipo de vivienda",
+        orden: 33,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "TOTAL_DESISTIDOS",
+        alias: "Total desistidos",
+        orden: 34,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "TOTAL_UNIDADES",
+        alias: "Total de unidades",
+        orden: 35,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "UNIDADES_LANZAR",
+        alias: "Unidades por lanzar",
+        orden: 36,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "VENDEDOR",
+        alias: "Vendedor",
+        orden: 35,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "VENDIDOS",
+        alias: "Vendidos",
+        orden: 36,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "ZONA",
+        alias: "Zona",
+        orden: 37,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+    ],
+  },
 };

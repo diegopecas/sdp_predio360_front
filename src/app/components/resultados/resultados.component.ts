@@ -102,7 +102,8 @@ export class ResultadosComponent implements OnChanges, OnInit {
 
   consultarPrediosByLotes() {
     this.currentIndex = -1;
-    const predios = this.mapService.consultarPrediosByLotes(this.lotes);
+    // const predios = this.mapService.consultarPrediosByLotes(this.lotes);
+    const predios = this.mapService.consultarPrediosByLotes(this.mapService.elementosSeleccionados);
     predios
       .then((response: any) => {
         this.datos = response;

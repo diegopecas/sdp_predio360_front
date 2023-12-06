@@ -24,7 +24,7 @@ import { RenderedSymbols } from "../symbols/rendered-symbols";
 })
 export class MapService {
   map?: Map;
-  sceneView?: SceneView;
+  // sceneView?: SceneView;
   layers?: any[] = [];
   buffer = {
     consulta: false,
@@ -35,22 +35,31 @@ export class MapService {
   elementosSeleccionados = [] as any[];
   puntoClickeado: any;
   highlight = null;
-  tipoSeleccion = "predio";
+  tipoSeleccion = "predios"; // 1 = 'predio', N = 'predios', Identify = 'Identify'
+
+  views: any = {
+    sceneView: null,
+    mapView: null,
+    activeView: null,
+    actual: "3D",
+    container: null,
+  };
 
   constructor() {}
 
   public initDefaultMap(mapElementRef?: ElementRef): void {
     // config.assetsPath = 'assets/';
     config.apiKey = environment.esriConfigApiKey;
+    this.views.container = mapElementRef?.nativeElement;
 
     this.map = new Map({
       basemap: environment.baseConfigs.basemapId,
       ground: "world-elevation",
     });
 
-    this.sceneView = new SceneView({
+    /*this.views.sceneView = new SceneView({
       map: this.map,
-      container: mapElementRef?.nativeElement,
+      // container: mapElementRef?.nativeElement,
       camera: {
         position: {
           latitude: environment.baseConfigs.center.latitud,
@@ -67,16 +76,39 @@ export class MapService {
       },
     });
 
-    this.sceneView.on("click", (event: any) => {
-      // this.valorPuntoClick = event;
-      // this.clickEnVista(event, Graphic);
+    this.views.mapView = new MapView({
+      map: this.map,
+      // container: mapElementRef?.nativeElement,
+      center: [
+        environment.baseConfigs.center.longitud,
+        environment.baseConfigs.center.latitud,
+      ],
+      zoom: 17,
+      highlightOptions: {
+        haloColor: new Color("rgb(3, 255, 255)"),
+        color: new Color("rgb(3, 255, 255)"),
+        fillOpacity: 0.3,
+      },
+    });*/
+
+    // Vista inicial en 3D
+    // this.views.activeView = this.views.sceneView;
+    this.switchView("0");
+
+    /*this.views.sceneView.on("click", (event: any) => {
+      console.log("clic sobre el mapa", event);
+      this.puntoClickeado = event.mapPoint;
+      this.clicEnMapa(event);
+    });
+
+    this.views.mapView.on("click", (event: any) => {
       console.log("clic sobre el mapa", event);
       this.puntoClickeado = event.mapPoint;
       this.clicEnMapa(event);
     });
 
     reactiveUtils.on(
-      () => this.sceneView?.popup,
+      () => this.views.sceneView?.popup,
       "trigger-action",
       (event: any) => {
         if (event.action.id === "verStreetView") {
@@ -85,13 +117,23 @@ export class MapService {
       }
     );
 
-    this.agregarCapasBase();
+    reactiveUtils.on(
+      () => this.views.mapView?.popup,
+      "trigger-action",
+      (event: any) => {
+        if (event.action.id === "verStreetView") {
+          this.verStreetView();
+        }
+      }
+    );*/
+
+    // this.agregarCapasBase();
     this.agregarListaCapas();
     this.agregarLeyenda();
     this.agregarBusquedas();
   }
 
-  private streetViewAction:any = {
+  private streetViewAction: any = {
     title: "Google Street View",
     id: "verStreetView",
     image: "/assets/images/Street_View_logo.png",
@@ -99,7 +141,7 @@ export class MapService {
 
   verStreetView() {
     try {
-      const geom: any = this.sceneView?.popup.selectedFeature.geometry;
+      const geom: any = this.views.activeView?.popup.selectedFeature.geometry;
       window.open(
         "http://maps.google.com/?cbll=" +
           geom?.extent.center.latitude +
@@ -108,18 +150,20 @@ export class MapService {
           "&cbp=12,90,0,0,5&layer=c",
         "_blank"
       );
-    } catch(error:any) {
-      alert('Por favor asegúrese de tener habilitadas las ventanas emergentes.');
+    } catch (error: any) {
+      alert(
+        "Por favor asegúrese de tener habilitadas las ventanas emergentes."
+      );
     }
   }
 
-  cambiarTipoSelección(tipo:any) {
+  cambiarTipoSelección(tipo: any) {
     this.tipoSeleccion = tipo;
   }
 
   agregarCapasBase() {
     environment.capasBase.forEach((capa) => {
-      if (capa.tipo == "3D") {
+      if (capa.tipo == "3D" && this.views.actual == "3D") {
         switch (capa.simbolo) {
           case "arbol":
             const simboloArbol = new RenderedSymbols().construirArbol(
@@ -156,7 +200,7 @@ export class MapService {
             });
             this.map?.add(featureLayerBloque);
 
-            this.sceneView
+            this.views.activeView
               ?.whenLayerView(featureLayerBloque)
               .then((layerView: any) => {
                 // this.capa3dView = layerView;
@@ -181,42 +225,44 @@ export class MapService {
           url: capa.url,
         });
         this.map?.add(featureLayer);
-        this.sceneView?.whenLayerView(featureLayer).then((layerView: any) => {
-          this.layers?.push({
-            capa: featureLayer,
-            datos: capa,
-            view: layerView,
+        this.views.activeView
+          ?.whenLayerView(featureLayer)
+          .then((layerView: any) => {
+            this.layers?.push({
+              capa: featureLayer,
+              datos: capa,
+              view: layerView,
+            });
           });
-        });
       }
     });
   }
 
   agregarListaCapas() {
     const layerList = new LayerList({
-      view: this.sceneView,
+      view: this.views.activeView,
     });
 
     const bgExpand = new Expand({
-      view: this.sceneView,
+      view: this.views.activeView,
       content: layerList,
     });
 
-    this.sceneView?.ui.add(bgExpand, "bottom-right");
+    this.views.activeView?.ui.add(bgExpand, "bottom-right");
   }
 
   agregarLeyenda() {
     const legend = new Legend({
-      view: this.sceneView,
+      view: this.views.activeView,
       style: "card",
     });
 
     const bgExpand = new Expand({
-      view: this.sceneView,
+      view: this.views.activeView,
       content: legend,
     });
 
-    this.sceneView?.ui.add(bgExpand, "bottom-right");
+    this.views.activeView?.ui.add(bgExpand, "bottom-right");
   }
 
   agregarBusquedas() {
@@ -246,10 +292,6 @@ export class MapService {
       position: "top-right",
     });*/
   }
-
-  /*public async zoomToLayerExtent(layer: FeatureLayer): Promise<void> {
-    this.mapView?.goTo(await layer.queryExtent());
-  }*/
 
   consultarEstadisticas(filter: any): any {
     const capa = new FeatureLayer({
@@ -507,13 +549,17 @@ export class MapService {
       });
   }
 
-  seleccionarPredioByBuffer(capaBusqueda: any, point: any) {
+  seleccionarPredioByBuffer(
+    capaBusqueda: any,
+    point: any,
+    sinDistancia: any = false
+  ) {
     let capa = capaBusqueda.capa;
     const query = capa.createQuery();
     query.where = "1=1";
     query.outFields = ["CODIGO_LOTE, OBJECTID"];
     query.returnGeometry = true;
-    query.distance = this.buffer.medida;
+    query.distance = sinDistancia ? 0 : this.buffer.medida;
     query.units = "meters";
     query.geometry = new Point({
       x: point.mapPoint.longitude,
@@ -549,9 +595,33 @@ export class MapService {
   }
 
   clicEnMapa(point: any) {
+    switch (this.tipoSeleccion) {
+      case "predio":
+        this.centrar(point.mapPoint);
+        const capa1 = this.layers?.filter(
+          (f: any) => f.datos.busquedaBufferPredio
+        )[0];
+        this.seleccionarPredioByBuffer(capa1, point, true);
+        break;
+      case "predios":
+        this.centrar(point.mapPoint);
+        const capaN = this.layers?.filter(
+          (f: any) => f.datos.busquedaBufferPredio
+        )[0];
+        this.seleccionarPredioByBuffer(capaN, point);
+        break;
+      default:
+        break;
+    }
+  }
+
+  _clicEnMapa(point: any) {
     if (this.buffer.consulta) {
       switch (this.buffer.tipo) {
         case "predio":
+          this.centrar(point.mapPoint);
+          break;
+        case "predios":
           this.centrar(point.mapPoint);
           const capa = this.layers?.filter(
             (f: any) => f.datos.busquedaBufferPredio
@@ -566,7 +636,7 @@ export class MapService {
   }
 
   centrar(centroide: any) {
-    this.sceneView?.goTo(
+    this.views.activeView?.goTo(
       { target: centroide, zoom: 19 },
       {
         speedFactor: 0.5,
@@ -575,13 +645,33 @@ export class MapService {
   }
 
   agregarCapaBuffer(capa: any) {
+    /*if(capa.vista != this.views.actual) {
+      this.switchView();
+    }*/
+    /*if (capa.formato.dimensiones == 2) {
+      this.switchView("2D");
+    } else {
+      this.switchView("3D");
+    }*/
+    if (capa.formato.vista != this.views.actual) {
+      this.switchView(capa.formato.vista, capa);
+    } else {
+      this.agregarCapaBufferAfterView(capa);
+    }
+  }
+
+  agregarCapaBufferAfterView(capa: any) {
     if (this.bufferLayer) {
       this.map?.remove(this.bufferLayer);
     }
 
-    const simboloBloque = new RenderedSymbols().construirBloqueConstante(
+    const simboloBloque = capa.formato.simbolo == "bloque-parque" ? 
+    new RenderedSymbols().construirBloqueConstante(
+      0.4,
+      "rgb(0, 255, 0)"
+    ) : new RenderedSymbols().construirBloqueConstante(
       2.4,
-      "rgb(255, 0, 0)"
+      "rgb(50, 50, 50)"
     );
 
     if (capa.formato?.dimensiones == 3) {
@@ -598,11 +688,30 @@ export class MapService {
               content: [
                 {
                   type: "fields",
-                  fieldInfos: capa.atributos.contenido
+                  fieldInfos: capa.atributos.contenido,
                 },
               ],
               actions: [this.streetViewAction],
-            }
+            },
+          });
+          this.map?.add(this.bufferLayer);
+          break;
+        default:
+          this.bufferLayer = new FeatureLayer({
+            url: capa.url,
+            id: "Capa buffer",
+            title: capa.nombre,
+            outFields: ["*"],
+            popupTemplate: {
+              title: capa.atributos.titulo,
+              content: [
+                {
+                  type: "fields",
+                  fieldInfos: capa.atributos.contenido,
+                },
+              ],
+              actions: [this.streetViewAction],
+            },
           });
           this.map?.add(this.bufferLayer);
           break;
@@ -615,17 +724,184 @@ export class MapService {
         outFields: ["*"],
         popupTemplate: {
           title: capa.atributos.titulo,
-              content: [
-                {
-                  type: "fields",
-                  fieldInfos: capa.atributos.contenido
-                },
-              ],
-              actions: [this.streetViewAction],
-        }
+          content: [
+            {
+              type: "fields",
+              fieldInfos: capa.atributos.contenido,
+            },
+          ],
+          actions: [this.streetViewAction],
+        },
       });
       this.map?.add(this.bufferLayer);
     }
   }
+
+  switchView(dims: any = "3D", capaAux: any = null) {
+    /*if (this.views.activeView) {
+      this.views.activeView.container = null;
+    }*/
+    if (dims !== this.views.actual) {
+      if (dims == "2D") {
+        this.views.actual = "2D";
+        this.map?.removeAll();
+        // this.views.activeView.container = this.views.container;
+        this.configuraVista2D(capaAux);
+        // this.views.activeView = this.views.mapView;
+        // this.agregarCapasBase();
+      } else {
+        this.views.value = "3D";
+        this.map?.removeAll();
+        // this.views.activeView.container = this.views.container;
+        this.configuraVista3D(capaAux);
+        // this.views.activeView = this.views.sceneView;
+        // this.agregarCapasBase();
+      }
+    }
+  }
+
+  configuraVista2D(capaAux: any = null) {
+    this.views.activeView = new MapView({
+      map: this.map,
+      container: this.views.container, // mapElementRef?.nativeElement,
+      center: [
+        environment.baseConfigs.center.longitud,
+        environment.baseConfigs.center.latitud,
+      ],
+      zoom: 17,
+      highlightOptions: {
+        haloColor: new Color("rgb(3, 255, 255)"),
+        color: new Color("rgb(3, 255, 255)"),
+        fillOpacity: 0.3,
+      },
+    });
+
+    this.views.activeView.on("click", (event: any) => {
+      console.log("clic sobre el mapa", event);
+      this.puntoClickeado = event.mapPoint;
+      this.clicEnMapa(event);
+    });
+
+    reactiveUtils.on(
+      () => this.views.activeView?.popup,
+      "trigger-action",
+      (event: any) => {
+        if (event.action.id === "verStreetView") {
+          this.verStreetView();
+        }
+      }
+    );
+
+    this.agregarCapasBase();
+    if (capaAux) {
+      this.agregarCapaBufferAfterView(capaAux);
+    }
+  }
+
+  configuraVista3D(capaAux: any = null) {
+    this.views.activeView = new SceneView({
+      map: this.map,
+      container: this.views.container, // mapElementRef?.nativeElement,
+      camera: {
+        position: {
+          latitude: environment.baseConfigs.center.latitud,
+          longitude: environment.baseConfigs.center.longitud,
+          z: environment.baseConfigs.center.altitud, // Altura en metros
+        },
+        heading: 0, // grados de rotación respecto del norte
+        tilt: 45, // grados de rotación respecto de la superficie
+      },
+      highlightOptions: {
+        haloColor: new Color("rgb(3, 255, 255)"),
+        color: new Color("rgb(3, 255, 255)"),
+        fillOpacity: 0.3,
+      },
+    });
+
+    this.views.activeView.on("click", (event: any) => {
+      console.log("clic sobre el mapa", event);
+      this.puntoClickeado = event.mapPoint;
+      this.clicEnMapa(event);
+    });
+
+    reactiveUtils.on(
+      () => this.views.activeView?.popup,
+      "trigger-action",
+      (event: any) => {
+        if (event.action.id === "verStreetView") {
+          this.verStreetView();
+        }
+      }
+    );
+
+    this.agregarCapasBase();
+    if (capaAux) {
+      this.agregarCapaBufferAfterView(capaAux);
+    }
+  }
+
+  consultarProyectos():any {
+    let datosGaleria = [] as any[];
+    // Crear un FeatureLayer con la URL del servicio de tabla
+    const featureLayer = new FeatureLayer({
+      url: environment.capaGaleria.url,
+    });
+
+    // Consultar la tabla y obtener los resultados
+    const query = featureLayer.createQuery();
+    query.where = "1=1"; // Establecer una condición opcional para filtrar los resultados
+    query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
+
+    return featureLayer
+      .queryFeatures(query)
+      .then((result: any) => {
+        // Manipular los resultados obtenidos
+        const features = result.features;
+        // Realizar acciones con los datos devueltos
+
+        if (features.length > 0) {
+          datosGaleria = features.map((m: any) => m.attributes);
+        }
+        return datosGaleria;
+      })
+      .catch((error: any) => {
+        // Manejar cualquier error ocurrido durante la consulta
+        console.error("Error al consultar la tabla:", error);
+        return [];
+      });
+  }
+
+  consultarLicencias(predio:any):any {
+    let datosLicencias = [] as any[];
+    // Crear un FeatureLayer con la URL del servicio de tabla
+    const featureLayer = new FeatureLayer({
+      url: environment.capaDatosUrbanisticos.url,
+    });
+
+    // Consultar la tabla y obtener los resultados
+    const query = featureLayer.createQuery();
+    query.where = environment.capaDatosUrbanisticos.filterPredio+" like '"+predio+"'"; // Establecer una condición opcional para filtrar los resultados
+    query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
+
+    return featureLayer
+      .queryFeatures(query)
+      .then((result: any) => {
+        console.log("resultado de licencias", result)
+        // Manipular los resultados obtenidos
+        const features = result.features;
+        // Realizar acciones con los datos devueltos
+
+        if (features.length > 0) {
+          datosLicencias = features.map((m: any) => m.attributes);
+        }
+        return datosLicencias;
+      })
+      .catch((error: any) => {
+        // Manejar cualquier error ocurrido durante la consulta
+        console.error("Error al consultar la tabla:", error);
+        return [];
+      });
+  }
+
 
 }

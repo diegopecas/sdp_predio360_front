@@ -30,6 +30,7 @@ import { ResultadosEstadisticasPredioComponent } from './components/resultados/r
 import { RenderedSymbols } from './common/symbols/rendered-symbols';
 import { CustomDecimalFormatPipe } from './common/pipes/custom-decimal-format.pipe';
 import { ResultadosCercanosPredioComponent } from './components/resultados/resultados-cercanos-predio/resultados-cercanos-predio.component';
+import { ResultadosUrbanisticoComponent } from './components/resultados/resultados-urbanistico/resultados-urbanistico.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { ResultadosCercanosPredioComponent } from './components/resultados/resul
     LoadingBarComponent,
     ResultadosEstadisticasPredioComponent,
     CustomDecimalFormatPipe,
-    ResultadosCercanosPredioComponent
+    ResultadosCercanosPredioComponent,
+    ResultadosUrbanisticoComponent
   ],
   imports: [
     BrowserModule,

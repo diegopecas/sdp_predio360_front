@@ -22,6 +22,14 @@
   <app-resultados-predio *ngIf="currentIndex >= 0" [predio]="predioSeleccionado"></app-resultados-predio>
   <div class="panel" [ngClass]="{ active: isECPanelExpanded }" *ngIf="currentIndex >= 0">
     <div class="panel-header" (click)="togglePanel('EC')">
+      Información Urbanística
+    </div>
+    <div class="panel-content">
+      <app-resultados-urbanistico *ngIf="currentIndex >= 0" [predio]="predioSeleccionado"></app-resultados-urbanistico>
+    </div>
+  </div>
+  <div class="panel" [ngClass]="{ active: isECPanelExpanded }" *ngIf="currentIndex >= 0">
+    <div class="panel-header" (click)="togglePanel('EC')">
       Elementos cercanos
     </div>
     <div class="panel-content">

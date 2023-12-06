@@ -1,6 +1,9 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { loadModules } from "esri-loader";
+import { MapService } from 'src/app/common/services/map.service';
 import swal from 'sweetalert2';
+import { environment } from 'src/environments/environment';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-consulta-galeria',
@@ -12,15 +15,27 @@ export class ConsultaGaleriaComponent implements OnInit {
   @Output() seleccionProyecto = new EventEmitter();
 
   public datos:any;
+  public titulos = [] as any[];
 
   public currentIndex = 0;
+
+  constructor(private mapService:MapService,
+    private sanitizer: DomSanitizer) {
+
+  }
 
   seleccion(opcion: any) {
     this.accion.emit(opcion);
   }
 
   ngOnInit(): void {
-      this.consultarProyectos();
+    this.titulos = environment.capaGaleria.atributos;
+      this.mapService.consultarProyectos().then((response:any)=>{
+        console.log("response", response);
+        this.datos = response;
+      }).catch((error:any)=>{
+        console.log("error", error);
+      });
   }
 
   seleccionar() {
@@ -28,7 +43,7 @@ export class ConsultaGaleriaComponent implements OnInit {
     this.seleccionProyecto.emit({latitud: this.datos[this.currentIndex].latitud, longitud: this.datos[this.currentIndex].longitud});
   }
 
-  consultarProyectos(){
+  /*consultarProyectos(){
     loadModules(["esri/config", "esri/layers/FeatureLayer"]).then(
       ([esriConfig, FeatureLayer]) => {
         esriConfig.apiKey =
@@ -61,7 +76,7 @@ export class ConsultaGaleriaComponent implements OnInit {
           });
       }
     );
-  }
+  }*/
 
   /*verDetalle() {
     swal.fire({
@@ -109,6 +124,18 @@ export class ConsultaGaleriaComponent implements OnInit {
 
   ver(){
     this.verMasGaleria = !this.verMasGaleria;
+  }
+
+  htmlSecure(unsafeHtml:any){
+    return this.sanitizer.bypassSecurityTrustHtml(unsafeHtml);
+  }
+
+  tituloHtml(value:any){
+    return this.htmlSecure(value+': ');
+  }
+  
+  sortBy(values:any[], prop: string) {
+    return values.sort((a, b) => a[prop] > b[prop] ? 1 : a[prop] === b[prop] ? 0 : -1);
   }
 
 }
