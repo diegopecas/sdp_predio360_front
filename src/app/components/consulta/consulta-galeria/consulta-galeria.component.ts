@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { loadModules } from "esri-loader";
+// import { loadModules } from "esri-loader";
 import { MapService } from 'src/app/common/services/map.service';
 import swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';

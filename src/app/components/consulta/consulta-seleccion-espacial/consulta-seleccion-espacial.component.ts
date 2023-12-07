@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
-import { loadModules } from "esri-loader";
+// import { loadModules } from "esri-loader";
 import { environment } from "src/environments/environment";
 import Slider from "@arcgis/core/widgets/Slider";
 import { MapService } from "src/app/common/services/map.service";

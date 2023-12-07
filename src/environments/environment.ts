@@ -120,30 +120,42 @@ export const environment = {
     {
       id: "DG",
       nombre: "Datos generales del predio",
+      visible: true
     },
     {
       id: "LC",
       nombre: "Información De Localización",
+      visible: true
     },
     {
       id: "US",
       nombre: "Información De Uso Actual",
+      visible: true
     },
     {
       id: "IF",
       nombre: "Información Física Del Lote",
+      visible: true
     },
     {
       id: "NR",
       nombre: "Información Normativa",
+      visible: true
     },
     {
       id: "EC",
       nombre: "Información Económica",
+      visible: true
     },
     {
       id: "SB",
       nombre: "Información de hogares Sisbén",
+      visible: true
+    },
+    {
+      id: "UB",
+      nombre: "Información urbanística Pot 190",
+      visible: false
     },
   ],
   panelesIndicadores: [
@@ -876,7 +888,7 @@ export const environment = {
         {
           name: "UB_PT_CODIGO_DESARROLLO",
           alias: "Código del Desarrollo del Plano Topográfico",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "texto",
@@ -2147,7 +2159,7 @@ export const environment = {
         {
           name: "UB_LIC_AA_FECHA_EJECUTORIA",
           alias: "Fecha Ejecutoria del Acto Administrativo",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "fecha",
@@ -2158,7 +2170,7 @@ export const environment = {
         {
           name: "UB_LIC_AA_FECHA_EXPEDICION",
           alias: "Fecha de Expedición del Acto Administrativo",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "fecha",
@@ -2169,7 +2181,7 @@ export const environment = {
         {
           name: "UB_LIC_AA_TIPO_DECISION",
           alias: "Tipo de Decisión del Acto Administrativo",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "texto",
@@ -2180,7 +2192,7 @@ export const environment = {
         {
           name: "UB_LIC_ACTO_ADMNISTRATIVO",
           alias: "Acto Administrativo de la Licencia",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "texto",
@@ -2191,7 +2203,7 @@ export const environment = {
         {
           name: "UB_LIC_DESC_LICENCIA",
           alias: "Descipción de la Licencia",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "texto",
@@ -2202,7 +2214,7 @@ export const environment = {
         {
           name: "UB_LIC_FECHA_RADICACION",
           alias: "Fecha de Radicación de la Licencia",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "fecha",
@@ -2213,7 +2225,7 @@ export const environment = {
         {
           name: "UB_LIC_ID_EXPEDIENTE",
           alias: "Id. Expediente de la Licencia",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "texto",
@@ -2235,7 +2247,7 @@ export const environment = {
         {
           name: "UB_LIC_OBJ_TRAMITE",
           alias: "Objeto de la Licencia",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "texto",
@@ -2257,8 +2269,8 @@ export const environment = {
         {
           name: "UB_SECTOR_NORMATIVO",
           alias: "Decreto de la UPZ",
-          panel: "",
-          orden: 0,
+          panel: "UB",
+          orden: 4,
           formato: {
             tipo: "texto",
             sinInformacion: "",
@@ -2268,8 +2280,8 @@ export const environment = {
         {
           name: "UB_SUBSECTOR_EDIFICABILIDAD",
           alias: "Decreto de la UPZ",
-          panel: "",
-          orden: 0,
+          panel: "UB",
+          orden: 5,
           formato: {
             tipo: "texto",
             sinInformacion: "",
@@ -2279,8 +2291,8 @@ export const environment = {
         {
           name: "UB_UPZ_CODIGO",
           alias: "Código de la UPZ",
-          panel: "",
-          orden: 0,
+          panel: "UB",
+          orden: 1,
           formato: {
             tipo: "texto",
             sinInformacion: "",
@@ -2290,8 +2302,8 @@ export const environment = {
         {
           name: "UB_UPZ_DECRETO",
           alias: "Decreto de la UPZ",
-          panel: "",
-          orden: 0,
+          panel: "UB",
+          orden: 3,
           formato: {
             tipo: "texto",
             sinInformacion: "",
@@ -2301,8 +2313,8 @@ export const environment = {
         {
           name: "UB_UPZ_NOMBRE",
           alias: "Nombre de la UPZ",
-          panel: "",
-          orden: 0,
+          panel: "UB",
+          orden: 2,
           formato: {
             tipo: "texto",
             sinInformacion: "",
@@ -2564,6 +2576,7 @@ export const environment = {
     titulo: "Datos urbanísticos",
     labelSeleccion: "LIC_EXPEDIENTE",
     filterPredio: "CODIGO_LOTE",
+    filterPot: "LIC_FECHA_RADICACION",
     atributos: [
       /*{
         name: "OBJECTID",
@@ -2581,7 +2594,7 @@ export const environment = {
         orden: 1,
         formato: {
           tipo: "texto",
-          sinInformacion: "",
+          sinInformacion: null,
           mostrarSinInformacion: "S",
         },
       },
@@ -2591,7 +2604,7 @@ export const environment = {
         orden: 0,
         formato: {
           tipo: "texto",
-          sinInformacion: "",
+          sinInformacion: null,
           mostrarSinInformacion: "S",
         },
       },
@@ -2601,7 +2614,7 @@ export const environment = {
         orden: 0,
         formato: {
           tipo: "texto",
-          sinInformacion: "",
+          sinInformacion: null,
           mostrarSinInformacion: "S",
         },
       },
@@ -2611,7 +2624,7 @@ export const environment = {
         orden: 2,
         formato: {
           tipo: "fecha",
-          sinInformacion: "",
+          sinInformacion: null,
           mostrarSinInformacion: "S",
         },
       },
@@ -2621,7 +2634,7 @@ export const environment = {
         orden: 3,
         formato: {
           tipo: "texto",
-          sinInformacion: "",
+          sinInformacion: null,
           mostrarSinInformacion: "S",
         },
       },
@@ -2631,7 +2644,7 @@ export const environment = {
         orden: 4,
         formato: {
           tipo: "texto",
-          sinInformacion: "",
+          sinInformacion: null,
           mostrarSinInformacion: "S",
         },
       },
@@ -2641,7 +2654,7 @@ export const environment = {
         orden: 8,
         formato: {
           tipo: "texto",
-          sinInformacion: "",
+          sinInformacion: null,
           mostrarSinInformacion: "S",
         },
       },
@@ -2651,7 +2664,7 @@ export const environment = {
         orden: 9,
         formato: {
           tipo: "fecha",
-          sinInformacion: "0",
+          sinInformacion: null,
           mostrarSinInformacion: "S",
         },
       },
@@ -2661,7 +2674,7 @@ export const environment = {
         orden: 10,
         formato: {
           tipo: "fecha",
-          sinInformacion: "0",
+          sinInformacion: null,
           mostrarSinInformacion: "S",
         },
       },
@@ -2671,7 +2684,7 @@ export const environment = {
         orden: 11,
         formato: {
           tipo: "texto",
-          sinInformacion: "0",
+          sinInformacion: null,
           mostrarSinInformacion: "S",
         },
       },
@@ -2681,7 +2694,7 @@ export const environment = {
         orden: 6,
         formato: {
           tipo: "texto",
-          sinInformacion: "0",
+          sinInformacion: null,
           mostrarSinInformacion: "S",
         },
       },
@@ -2691,7 +2704,7 @@ export const environment = {
         orden: 5,
         formato: {
           tipo: "texto",
-          sinInformacion: "0",
+          sinInformacion: null,
           mostrarSinInformacion: "S",
         },
       },
@@ -2701,7 +2714,7 @@ export const environment = {
         orden: 7,
         formato: {
           tipo: "texto",
-          sinInformacion: "0",
+          sinInformacion: null,
           mostrarSinInformacion: "S",
         },
       }

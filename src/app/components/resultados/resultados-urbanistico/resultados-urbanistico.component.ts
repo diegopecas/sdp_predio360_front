@@ -13,14 +13,18 @@ export class ResultadosUrbanisticoComponent implements OnInit, OnChanges {
   @Input() predio: any;
   
   public licencias: any[] = [];
+  public licenciasAll: any[] = [];
   public metaLicencias: any;
   public currentIndex=-1;
   private predioEvaluado: any;
+  public pot = 0;
 
   ngOnChanges(changes: SimpleChanges): void {
     this.predioEvaluado = changes["predio"]["currentValue"];
     if(this.predioEvaluado) {
       this.currentIndex=-1;
+      this.pot = 0;
+      this.licencias = [];
       this.consultarLicencias();
     }
   }
@@ -34,15 +38,36 @@ export class ResultadosUrbanisticoComponent implements OnInit, OnChanges {
   }
 
   private consultarLicencias(){
-    console.log("consultar licencias del predio", this.predioEvaluado.GN_CODIGO_LOTE);
     this.mapService.consultarLicencias(this.predioEvaluado.GN_CODIGO_LOTE)
     .then((response:any) => {
-      this.licencias = response;
-      console.log("Lista de licencias", this.licencias);
+      this.licenciasAll = response;
     })
     .catch((error:any) => {
       console.log('ESTADISTICAS SRV ERROR', error);
     });  
+  }
+
+  cambioPot(pot:any){
+    this.pot = pot;
+    switch(this.pot) {
+      case 190:
+        this.licencias = this.licenciasAll.filter(lic => lic[environment.capaDatosUrbanisticos.filterPot] < this.convertirFechaNumero("29/12/2021"));
+        console.log("filtrar licencias 190", this.licenciasAll, new Date("29/12/2021").getTime(), this.licencias)
+        // menor a 29/12/2021
+        break;
+      case 555:
+        this.licencias = this.licenciasAll.filter(lic => lic[environment.capaDatosUrbanisticos.filterPot] >= this.convertirFechaNumero("29/12/2021"));
+        console.log("filtrar licencias 555", this.licenciasAll, new Date("29/12/2021").getTime(), this.licencias)
+        // desde 29/12/2021
+        break;  
+    }
+  }
+
+  convertirFechaNumero(fechaString:String) {
+    // Parsear la cadena como fecha (formato: dd/mm/yyyy)
+    const partesFecha = fechaString.split('/');
+    const fecha = new Date(parseInt(partesFecha[2]), parseInt(partesFecha[1]) - 1, parseInt(partesFecha[0]));
+    return fecha.getTime();
   }
 
   htmlSecure(unsafeHtml:any){

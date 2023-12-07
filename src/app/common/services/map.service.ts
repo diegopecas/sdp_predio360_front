@@ -665,14 +665,13 @@ export class MapService {
       this.map?.remove(this.bufferLayer);
     }
 
-    const simboloBloque = capa.formato.simbolo == "bloque-parque" ? 
-    new RenderedSymbols().construirBloqueConstante(
-      0.4,
-      "rgb(0, 255, 0)"
-    ) : new RenderedSymbols().construirBloqueConstante(
-      2.4,
-      "rgb(50, 50, 50)"
-    );
+    const simboloBloque =
+      capa.formato.simbolo == "bloque-parque"
+        ? new RenderedSymbols().construirBloqueConstante(0.4, "rgb(0, 255, 0)")
+        : new RenderedSymbols().construirBloqueConstante(
+            2.4,
+            "rgb(50, 50, 50)"
+          );
 
     if (capa.formato?.dimensiones == 3) {
       switch (capa.formato?.simbolo) {
@@ -840,7 +839,7 @@ export class MapService {
     }
   }
 
-  consultarProyectos():any {
+  consultarProyectos(): any {
     let datosGaleria = [] as any[];
     // Crear un FeatureLayer con la URL del servicio de tabla
     const featureLayer = new FeatureLayer({
@@ -871,7 +870,7 @@ export class MapService {
       });
   }
 
-  consultarLicencias(predio:any):any {
+  consultarLicencias(predio: any): any {
     let datosLicencias = [] as any[];
     // Crear un FeatureLayer con la URL del servicio de tabla
     const featureLayer = new FeatureLayer({
@@ -880,13 +879,14 @@ export class MapService {
 
     // Consultar la tabla y obtener los resultados
     const query = featureLayer.createQuery();
-    query.where = environment.capaDatosUrbanisticos.filterPredio+" like '"+predio+"'"; // Establecer una condición opcional para filtrar los resultados
+    query.where =
+      environment.capaDatosUrbanisticos.filterPredio + " like '" + predio + "'"; // Establecer una condición opcional para filtrar los resultados
     query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
 
     return featureLayer
       .queryFeatures(query)
       .then((result: any) => {
-        console.log("resultado de licencias", result)
+        console.log("resultado de licencias", result);
         // Manipular los resultados obtenidos
         const features = result.features;
         // Realizar acciones con los datos devueltos
@@ -903,5 +903,65 @@ export class MapService {
       });
   }
 
+  cargarInformacion(predioEvaluado: any, capa: any): any {
+    const featureLayer = new FeatureLayer({
+      url: capa.url,
+    });
 
+    const query = featureLayer.createQuery();
+    query.where =
+      capa.filter[0] + " like '" + predioEvaluado[capa.filter[1]] + "'";
+    query.outFields = ["*"];
+    query.returnGeometry = false;
+
+    return featureLayer
+      .queryFeatures(query)
+      .then((result: any) => {
+        return result.features;
+      })
+      .catch((error: any) => {
+        console.log("error con capa", capa);
+        return null;
+      });
+  }
+
+  x_cargarInformacion(predioEvaluado: any): any {
+    console.log("ingresa a servicio cargar información", predioEvaluado);
+    return environment.serviciosResultados.map((sr) => {
+      const featureLayer = new FeatureLayer({
+        url: sr.url,
+      });
+
+      const query = featureLayer.createQuery();
+      query.where =
+        sr.filter[0] + " like '" + predioEvaluado[sr.filter[1]] + "'";
+      query.outFields = ["*"];
+      query.returnGeometry = false;
+
+      return featureLayer
+        .queryFeatures(query)
+        .then((result: any) => {
+          const features = result.features;
+          if (features.length > 0) {
+            //const attr = features[0].attributes;
+            return features[0].attributes;
+            //return attr;
+            /*paneles.forEach((p:any) => {
+                  p.atributos.forEach((a:any) => {
+                    const valor = attr[a.name];
+                    if(valor){
+                      a.valor = valor;
+                    }
+                  })
+                })*/
+          } else {
+            return [];
+          }
+        })
+        .catch((error: any) => {
+          console.error("Error al consultar el servicio:", error);
+          return [];
+        });
+    });
+  }
 }

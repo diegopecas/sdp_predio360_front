@@ -1,7 +1,8 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { loadModules } from "esri-loader";
+// import { loadModules } from "esri-loader";
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { MapService } from 'src/app/common/services/map.service';
 
 @Component({
   selector: 'app-resultados-predio',
@@ -16,7 +17,8 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
   public panelEstadisticas = false;
   public predioEvaluado: any;
 
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor(private sanitizer: DomSanitizer,
+    private mapService:MapService) {}
 
   ngOnInit(): void {
     // // console.log(environment.panelesResultados)
@@ -25,7 +27,8 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
           id: pr.id,
           nombre: pr.nombre,
           activo: false,
-          atributos: []
+          atributos: [],
+          visible: pr.visible
       }
     });
     this.configurarAtributos();
@@ -34,7 +37,7 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this.predioEvaluado = changes["predio"]["currentValue"];
     if(this.predioEvaluado) {
-      // // console.log('cambio de predio',this.predioEvaluado);
+      console.log('cambio de predio',this.predioEvaluado);
       // this.configurarAtributos();
       this.cargarInformacion();
     }
@@ -61,7 +64,40 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
   }
 
   cargarInformacion() {
-    environment.serviciosResultados.forEach(sr => {
+    if(this.predioEvaluado) {
+      environment.serviciosResultados.forEach((capa:any)=>{
+        this.mapService.cargarInformacion(this.predioEvaluado, capa).then((response:any)=>{
+          if (response.length > 0) {
+            const attr = response[0].attributes;
+
+            this.paneles.forEach((p:any) => {
+              p.atributos.forEach((a:any) => {
+                const valor = attr[a.name];
+                if(valor){
+                  a.valor = valor;
+                }
+              })
+            })
+          }
+        }).catch((error:any)=>{
+          console.log("error al cargar", error);
+        })
+      })
+      /*this.mapService.cargarInformacion(this.predioEvaluado).then((response:any)=>{
+        console.log("respuesta de cargar información", response, this.paneles);
+        this.paneles.forEach((p:any) => {
+          p.atributos.forEach((a:any) => {
+            const valor = response[a.name];
+            if(valor){
+              a.valor = valor;
+            }
+          })
+        })
+      }).catch((error:any)=>{
+        console.log("Error al cargar información", error);
+      });*/
+    }
+    /*environment.serviciosResultados.forEach(sr => {
 
         loadModules([
           "esri/config",
@@ -103,7 +139,7 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
         });
       
 
-    });
+    });*/
   }
 
   htmlSecure(unsafeHtml:any){

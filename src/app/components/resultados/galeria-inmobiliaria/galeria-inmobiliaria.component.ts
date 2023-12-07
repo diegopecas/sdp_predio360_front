@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
-import { loadModules } from "esri-loader";
+// import { loadModules } from "esri-loader";
 import { environment } from "src/environments/environment";
 
 @Component({
@@ -38,7 +38,7 @@ export class GaleriaInmobiliariaComponent implements OnChanges {
   }
 
   consultarProyectosCercanos(punto: any) {
-    if(punto.latitude) {
+    /*if(punto.latitude) {
       loadModules(["esri/config", "esri/layers/FeatureLayer", 'esri/geometry/Point']).then(
         ([esriConfig, FeatureLayer, Point]) => {
           esriConfig.apiKey = environment.esriConfigApiKey;
@@ -88,6 +88,6 @@ export class GaleriaInmobiliariaComponent implements OnChanges {
             });
         }
       );
-    }
+    }*/
   }
 }

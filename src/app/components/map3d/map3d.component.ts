@@ -6,7 +6,7 @@ import {
   AfterViewInit,
   OnDestroy,
 } from "@angular/core";
-import { loadModules } from "esri-loader";
+// import { loadModules } from "esri-loader";
 import { NgxSpinnerService } from "ngx-spinner";
 import { environment } from "src/environments/environment";
 import swal from "sweetalert2";
@@ -437,7 +437,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
     // window.open("https://www.google.com/maps/@4.8657416,-74.0382613","_blank");
   }
 
-  agregarPuntoSeleccionado(x: any, y: any, z: any) {
+  /*agregarPuntoSeleccionado(x: any, y: any, z: any) {
     loadModules([
       "esri/symbols/PointSymbol3D",
       "esri/Graphic",
@@ -472,7 +472,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
       this.capaPuntosSeleccionados.removeAll();
       this.capaPuntosSeleccionados.add(graphicPoint);
     });
-  }
+  }*/
 
   crearCapaGaleria(
     IconSymbol3DLayer: any,
@@ -581,13 +581,13 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
         this.seleccionarPredioByBuffer();
         break;
       case "consulta-galeria":
-        this.seleccionarProyecto(
+        /*this.seleccionarProyecto(
           {
             x: event.x,
             y: event.y,
           },
           event
-        );
+        );*/
         break;
       default:
         if (this.opcion !== "") {
@@ -747,7 +747,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  seleccionarPredioByLote(lote: any) {
+  /*seleccionarPredioByLote(lote: any) {
     let capa = this.capa3d;
     let simbolo = {};
     if (this.vista2d3d === "3D") {
@@ -789,9 +789,9 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
       .catch((error: any) => {
         console.error("Error al consultar el servicio:", error);
       });
-  }
+  }*/
 
-  seleccionarProyecto(screenPoint: any, event: any) {
+  /*seleccionarProyecto(screenPoint: any, event: any) {
     this.view.hitTest(screenPoint).then((response: any) => {
       if (response.results.length) {
         let graphic = response.results.filter((result: any) => {
@@ -807,7 +807,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
         }
       }
     });
-  }
+  }*/
 
   accionMenu(valor: any) {
     this.opcion = valor;
@@ -830,7 +830,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  consultarProyectos() {
+  /*consultarProyectos() {
     loadModules(["esri/config", "esri/layers/FeatureLayer"]).then(
       ([esriConfig, FeatureLayer]) => {
         esriConfig.apiKey = environment.esriConfigApiKey;
@@ -901,7 +901,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
           });
       }
     );
-  }
+  }*/
 
   seleccionProyectoGaleria(proyecto: any) {
     // console.log('seleccionProyectoGaleria', proyecto)
@@ -956,7 +956,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
     this.resultados = true;
   }
 
-  controlCapaSinupot() {
+  /*controlCapaSinupot() {
     loadModules(["esri/layers/FeatureLayer"]).then(([FeatureLayer]) => {
       if (!this.capaSinupot) {
         this.capaSinupot = new FeatureLayer({
@@ -966,7 +966,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
         this.map.add(this.capaSinupot);
       }
     });
-  }
+  }*/
 
   /*cargarCapaArbolado() {
     loadModules(["esri/layers/FeatureLayer"]).then(([FeatureLayer]) => {
@@ -980,7 +980,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
     });
   }*/
 
-  cargarCapasDeReferencia(event: any) {
+  /*cargarCapasDeReferencia(event: any) {
     loadModules(["esri/layers/FeatureLayer"]).then(([FeatureLayer]) => {
       environment.capasSinupot.forEach((capa: any) => {
         this.capaSinupot = new FeatureLayer({
@@ -990,11 +990,11 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
         this.map.add(this.capaSinupot);
       });
     });
-  }
+  }*/
 
   private capasN = 0;
 
-  anadirCapaReferencia(event: any) {
+  /*anadirCapaReferencia(event: any) {
     loadModules(["esri/layers/FeatureLayer"]).then(([FeatureLayer]) => {
       const nuevaCapa = new FeatureLayer({
         url: event,
@@ -1003,7 +1003,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
       this.capasN++;
       this.map.add(nuevaCapa);
     });
-  }
+  }*/
 
   private medidaBuffer = 0;
 
@@ -1015,7 +1015,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  cambioCapaBuffer(evt: any) {
+  /*cambioCapaBuffer(evt: any) {
     loadModules(["esri/layers/FeatureLayer"]).then(([FeatureLayer]) => {
       const capa = new FeatureLayer({
         url: evt.url,
@@ -1035,5 +1035,5 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
       });
       this.map.add(capa);
     });
-  }
+  }*/
 }

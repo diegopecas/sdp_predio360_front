@@ -43,6 +43,8 @@ export class ResultadosComponent implements OnChanges, OnInit {
   public isGIPanelExpanded: boolean = false;
   public isESPanelExpanded: boolean = false;
   public isECPanelExpanded: boolean = false;
+  public isUBPanelExpanded: boolean = false;
+  public isEPPanelExpanded: boolean = false;
   public panelGIHeight: number = 0;
 
   ngOnInit() {
@@ -228,6 +230,12 @@ export class ResultadosComponent implements OnChanges, OnInit {
         break;
       case "EC":
         this.isECPanelExpanded = !this.isECPanelExpanded;
+        break;
+      case "UB":
+        this.isUBPanelExpanded = !this.isUBPanelExpanded;
+        break;
+      case "EP":
+        this.isEPPanelExpanded = !this.isEPPanelExpanded;
         break;
     }
   }

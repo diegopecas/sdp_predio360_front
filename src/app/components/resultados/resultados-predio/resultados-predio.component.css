@@ -29,3 +29,11 @@
   .titulo-azul {
     color: #0fffff !important;
   }
+
+  .abierto {
+    visibility: visible;
+  }
+
+  .cerrado {
+    visibility: hidden;
+  }
