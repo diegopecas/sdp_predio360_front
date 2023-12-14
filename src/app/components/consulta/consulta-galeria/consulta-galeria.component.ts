@@ -40,7 +40,9 @@ export class ConsultaGaleriaComponent implements OnInit {
 
   seleccionar() {
     console.log('PROYECTO SELECCIONADO', this.datos[this.currentIndex])
-    this.seleccionProyecto.emit({latitud: this.datos[this.currentIndex].latitud, longitud: this.datos[this.currentIndex].longitud});
+    // this.seleccionProyecto.emit({latitud: this.datos[this.currentIndex].latitud, longitud: this.datos[this.currentIndex].longitud});
+    // this.mapService.seleccionProyectoGaleria({latitud: this.datos[this.currentIndex].latitud, longitud: this.datos[this.currentIndex].longitud});
+    this.mapService.seleccionElemento(this.datos[this.currentIndex].OBJECTID,"galeria");
   }
 
   /*consultarProyectos(){

@@ -43,7 +43,7 @@ export class CrearDireccionComponent {
                       +(this.consDireccion.parte8 !== '' ? this.consDireccion.parte8 : '')
                       +(this.consDireccion.parte9 !== '' ? ' ' + this.consDireccion.parte9 : '')
                       +(this.consDireccion.parte10 !== '' ? ' ' + this.consDireccion.parte10 : '');
-      this.esquina = this.consDireccion.parte1 + '%' + this.consDireccion.parte2 + '%' + this.consDireccion.parte7 + '%';
+      this.esquina = this.consDireccion.parte1 + ' ' + this.consDireccion.parte2 + '%' + this.consDireccion.parte7 + '%';
       this.accion.emit([this.direccion, this.consDireccion, this.esquina]);
   }
 }

@@ -29,6 +29,8 @@ export class ConsultaSeleccionEspacialComponent implements OnInit {
   }
 
   crearBufferPanel() {
+    // this.mapService.buffer.tipo = "predios";
+    this.mapService.tipoSeleccion = "predios";
     this.bufferNumSlider = new Slider({
       container: "bufferNum",
       min: 0,

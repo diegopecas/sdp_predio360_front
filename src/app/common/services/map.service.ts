@@ -15,14 +15,35 @@ import Expand from "@arcgis/core/widgets/Expand";
 import Legend from "@arcgis/core/widgets/Legend";
 import Search from "@arcgis/core/widgets/Search";
 import Point from "@arcgis/core/geometry/Point";
+import BasemapGallery from "@arcgis/core/widgets/BasemapGallery";
+import ScaleBar from "@arcgis/core/widgets/ScaleBar";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils";
-
+import ButtonMenu from "@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenu";
+import ButtonMenuItem from "@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenuItem";
 import { RenderedSymbols } from "../symbols/rendered-symbols";
+import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
+import swal from "sweetalert2";
 
 @Injectable({
   providedIn: "root",
 })
 export class MapService {
+  private _predioClick: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+
+  // Exponer un observable para observar cambios
+  predioClickObservable = this._predioClick.asObservable();
+
+  get predioClick(): string {
+    console.log("get predioClick", this._predioClick.value);
+    return this._predioClick.value;
+  }
+
+  set predioClick(value: string) {
+    // Actualizar la variable y notificar a los observadores
+    console.log("set predioClick", value);
+    this._predioClick.next(value);
+  }
+
   map?: Map;
   // sceneView?: SceneView;
   layers?: any[] = [];
@@ -35,7 +56,7 @@ export class MapService {
   elementosSeleccionados = [] as any[];
   puntoClickeado: any;
   highlight = null;
-  tipoSeleccion = "predios"; // 1 = 'predio', N = 'predios', Identify = 'Identify'
+  tipoSeleccion = ""; // 1 = 'predio', N = 'predios', Identify = 'Identify', solo centrar = ''
 
   views: any = {
     sceneView: null,
@@ -133,6 +154,19 @@ export class MapService {
     this.agregarBusquedas();
   }
 
+  agregarWidgets() {
+    const basemapGallery = new BasemapGallery({
+      view: this.views.activeView,
+    });
+
+    const bgExpand = new Expand({
+      view: this.views.activeView,
+      content: basemapGallery,
+    });
+
+    this.views.activeView?.ui.add(bgExpand, "bottom-right");
+  }
+
   private streetViewAction: any = {
     title: "Google Street View",
     id: "verStreetView",
@@ -162,7 +196,7 @@ export class MapService {
   }
 
   agregarCapasBase() {
-    environment.capasBase.forEach((capa) => {
+    environment.capasBase.forEach((capa:any) => {
       if (capa.tipo == "3D" && this.views.actual == "3D") {
         switch (capa.simbolo) {
           case "arbol":
@@ -177,7 +211,49 @@ export class MapService {
               outFields: ["*"],
             });
             this.map?.add(featureLayerArbol);
-            // this.layers?.push({ capa: featureLayerArbol, datos: capa });
+            this.views.activeView
+              ?.whenLayerView(featureLayerArbol)
+              .then((layerView: any) => {
+                this.layers?.push({
+                  capa: featureLayerArbol,
+                  datos: capa,
+                  view: layerView,
+                });
+              });
+            break;
+          case "grua":
+            const simboloGrua = new RenderedSymbols().construirGrua(
+              capa.factor
+            );
+            console.log("agregar capa base grua", capa);
+            const featureLayerGrua = new FeatureLayer({
+              url: capa.url,
+              id: capa.id,
+              title: capa.nombre,
+              renderer: simboloGrua,
+              outFields: ["*"],
+              popupTemplate: {
+                title: capa.popupTemplate?.title,
+                content: [
+                  {
+                    type: "fields",
+                    fieldInfos: capa.popupTemplate?.contenido,
+                  },
+                ],
+                actions: [this.streetViewAction],
+              },
+              definitionExpression: "activo not in ('No')"
+            });
+            this.map?.add(featureLayerGrua);
+            this.views.activeView
+              ?.whenLayerView(featureLayerGrua)
+              .then((layerView: any) => {
+                this.layers?.push({
+                  capa: featureLayerGrua,
+                  datos: capa,
+                  view: layerView,
+                });
+              });
             break;
           case "bloque":
             const simboloBloque =
@@ -236,6 +312,29 @@ export class MapService {
           });
       }
     });
+  }
+
+  agregarCapaRest(nombre:any, servicio:any) {
+    try {
+      const nuevaCapa = new FeatureLayer({
+        url: servicio,
+        id: nombre,
+        title: nombre,
+      });
+      this.map?.add(nuevaCapa);
+      swal.fire("capa agregada correctamente.");
+    }catch(error:any) {
+      swal.fire("Ocurrió un error al agregar la capa.");
+    }
+    
+      /*const { value: url } = await swal.fire({
+        input: "url",
+        inputLabel: "URL address",
+        inputPlaceholder: "Enter the URL"
+      });
+      if (url) {
+        swal.fire(`Entered URL: ${url}`);
+      }*/
   }
 
   agregarListaCapas() {
@@ -518,6 +617,7 @@ export class MapService {
     console.log("Se configura buffer", this.buffer);
   }
 
+  puntoBuffer:any = null;
   seleccionarPredioByLote(lote: any) {
     const capaBusqueda = this.layers?.filter(
       (f: any) => f.datos.busquedaBufferPredio
@@ -534,7 +634,7 @@ export class MapService {
       .then((result: any) => {
         if (result.features.length > 0) {
           this.centrar(result.features[0].geometry.centroid);
-
+          this.puntoBuffer = result.features[0].geometry.centroid;
           if (this.highlight) {
             (this.highlight as any).remove();
           }
@@ -583,7 +683,7 @@ export class MapService {
           if (this.highlight) {
             (this.highlight as any).remove();
           }
-
+          console.log("alumbrar", result.features);
           this.highlight = capaBusqueda.view.highlight(
             result.features.map((f: any) => f.attributes.OBJECTID)
           );
@@ -595,6 +695,8 @@ export class MapService {
   }
 
   clicEnMapa(point: any) {
+    this.puntoClickeado = point;
+    this.predioClick = point;
     switch (this.tipoSeleccion) {
       case "predio":
         this.centrar(point.mapPoint);
@@ -604,6 +706,7 @@ export class MapService {
         this.seleccionarPredioByBuffer(capa1, point, true);
         break;
       case "predios":
+        console.log("seleccionar predios")
         this.centrar(point.mapPoint);
         const capaN = this.layers?.filter(
           (f: any) => f.datos.busquedaBufferPredio
@@ -615,7 +718,7 @@ export class MapService {
     }
   }
 
-  _clicEnMapa(point: any) {
+  /*_clicEnMapa(point: any) {
     if (this.buffer.consulta) {
       switch (this.buffer.tipo) {
         case "predio":
@@ -633,7 +736,7 @@ export class MapService {
           break;
       }
     }
-  }
+  }*/
 
   centrar(centroide: any) {
     this.views.activeView?.goTo(
@@ -665,13 +768,39 @@ export class MapService {
       this.map?.remove(this.bufferLayer);
     }
 
-    const simboloBloque =
-      capa.formato.simbolo == "bloque-parque"
+    /*const simboloGrua = new RenderedSymbols().construirGrua(
+      capa.factor
+    );
+    const featureLayerGrua = new FeatureLayer({
+      url: capa.url,
+      id: capa.id,
+      title: capa.nombre,
+      renderer: simboloGrua,
+      outFields: ["*"],
+    });*/
+
+    let simboloBloque = null;
+    switch(capa.formato.simbolo) {
+      case "bloque-parque":
+        simboloBloque = new RenderedSymbols().construirBloqueConstante(0.4, "rgb(0, 255, 0)")
+        break;
+      case "grua":
+        simboloBloque = new RenderedSymbols().construirGrua(0);
+        console.log("seleccionada la grúa símbolo");
+        break;
+      default:
+        simboloBloque = new RenderedSymbols().construirBloqueConstante(
+          2.4,
+          "rgb(50, 50, 50)"
+        );
+        break;    
+    }
+      /*capa.formato.simbolo == "bloque-parque"
         ? new RenderedSymbols().construirBloqueConstante(0.4, "rgb(0, 255, 0)")
         : new RenderedSymbols().construirBloqueConstante(
             2.4,
             "rgb(50, 50, 50)"
-          );
+          );*/
 
     if (capa.formato?.dimensiones == 3) {
       switch (capa.formato?.simbolo) {
@@ -694,6 +823,47 @@ export class MapService {
             },
           });
           this.map?.add(this.bufferLayer);
+          break;
+        case "bloque-parque":
+          this.bufferLayer = new FeatureLayer({
+            url: capa.url,
+            id: "Capa buffer",
+            title: capa.nombre,
+            renderer: simboloBloque,
+            outFields: ["*"],
+            popupTemplate: {
+              title: capa.atributos.titulo,
+              content: [
+                {
+                  type: "fields",
+                  fieldInfos: capa.atributos.contenido,
+                },
+              ],
+              actions: [this.streetViewAction],
+            },
+          });
+          this.map?.add(this.bufferLayer);
+          break;
+        case "grua":
+          this.bufferLayer = new FeatureLayer({
+            url: capa.url,
+            id: "Capa buffer",
+            title: capa.nombre,
+            renderer: simboloBloque,
+            outFields: ["*"],
+            popupTemplate: {
+              title: capa.atributos.titulo,
+              content: [
+                {
+                  type: "fields",
+                  fieldInfos: capa.atributos.contenido,
+                },
+              ],
+              actions: [this.streetViewAction],
+            },
+          });
+          this.map?.add(this.bufferLayer);
+          console.log("Se agregan grúas");
           break;
         default:
           this.bufferLayer = new FeatureLayer({
@@ -792,6 +962,8 @@ export class MapService {
     );
 
     this.agregarCapasBase();
+    this.agregarWidgets();
+
     if (capaAux) {
       this.agregarCapaBufferAfterView(capaAux);
     }
@@ -834,6 +1006,8 @@ export class MapService {
     );
 
     this.agregarCapasBase();
+    this.agregarWidgets();
+
     if (capaAux) {
       this.agregarCapaBufferAfterView(capaAux);
     }
@@ -843,12 +1017,12 @@ export class MapService {
     let datosGaleria = [] as any[];
     // Crear un FeatureLayer con la URL del servicio de tabla
     const featureLayer = new FeatureLayer({
-      url: environment.capaGaleria.url,
+      url: environment.capaGaleria.url
     });
 
     // Consultar la tabla y obtener los resultados
     const query = featureLayer.createQuery();
-    query.where = "1=1"; // Establecer una condición opcional para filtrar los resultados
+    query.where = "activo not in ('No')"; // Establecer una condición opcional para filtrar los resultados
     query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
 
     return featureLayer
@@ -963,5 +1137,62 @@ export class MapService {
           return [];
         });
     });
+  }
+
+  seleccionProyectoGaleria(proyecto: any) {
+    // console.log('seleccionProyectoGaleria', proyecto)
+    // this.view
+    this.views.activeView?.goTo({
+      position: {
+        x: proyecto.longitud,
+        y: proyecto.latitud,
+      },
+    });
+
+    /*this.views.activeView.goTo({
+      position: {
+        x: proyecto.longitud,
+        y: proyecto.latitud,
+        z: 3000,
+        spatialReference: {
+          wkid: 4326,
+        },
+        heading: 0, // grados de rotación respecto del norte
+        tilt: 90,
+      },
+    });*/
+  }
+
+  seleccionElemento(oid: any, capaId: any) {
+    console.log("Seleccionar elemento", oid, capaId, this.layers);
+    const capaBusqueda = this.layers?.filter(
+      (f: any) => f.datos.id == capaId
+    )[0];
+
+    const query = capaBusqueda.capa.createQuery();
+    query.where = "OBJECTID = " + oid;
+    query.outFields = ["*"];
+    query.returnGeometry = true;
+    // query.returnCentroid = true;
+
+    capaBusqueda.capa
+      .queryFeatures(query)
+      .then((result: any) => {
+        console.log("resultado seleccion elementos", result);
+        if (result.features.length > 0) {
+          this.centrar(result.features[0].geometry);
+
+          if (this.highlight) {
+            (this.highlight as any).remove();
+          }
+
+          this.highlight = capaBusqueda.view.highlight(
+            result.features.map((f: any) => f.attributes.OBJECTID)
+          );
+        }
+      })
+      .catch((error: any) => {
+        console.error("Error al consultar el servicio:", error);
+      });
   }
 }

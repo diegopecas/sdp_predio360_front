@@ -31,6 +31,7 @@ import { RenderedSymbols } from './common/symbols/rendered-symbols';
 import { CustomDecimalFormatPipe } from './common/pipes/custom-decimal-format.pipe';
 import { ResultadosCercanosPredioComponent } from './components/resultados/resultados-cercanos-predio/resultados-cercanos-predio.component';
 import { ResultadosUrbanisticoComponent } from './components/resultados/resultados-urbanistico/resultados-urbanistico.component';
+import { AgregarCapasComponent } from './components/consulta/agregar-capas/agregar-capas.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { ResultadosUrbanisticoComponent } from './components/resultados/resultad
     ResultadosEstadisticasPredioComponent,
     CustomDecimalFormatPipe,
     ResultadosCercanosPredioComponent,
-    ResultadosUrbanisticoComponent
+    ResultadosUrbanisticoComponent,
+    AgregarCapasComponent
   ],
   imports: [
     BrowserModule,

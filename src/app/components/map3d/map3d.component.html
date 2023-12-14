@@ -8,6 +8,7 @@
         <app-consulta-cedula *ngIf="opcion == 'consulta-cedula' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaCedula($event)"></app-consulta-cedula>
         <app-consulta-chip *ngIf="opcion == 'consulta-chip' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaChip($event)"></app-consulta-chip>
         <app-consulta-matricula *ngIf="opcion == 'consulta-matricula' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaMatricula($event)"></app-consulta-matricula>
+        <app-agregar-capas *ngIf="opcion == 'agregar-capas'" (accion)="accionMenu($event)"></app-agregar-capas>
         <!--app-consulta-seleccion-espacial *ngIf="opcion == 'consulta-seleccion-multiple' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaPorCapa($event)" (buffer)="setBuffer($event)"></app-consulta-seleccion-espacial-->
         <app-consulta-seleccion-espacial *ngIf="opcion == 'consulta-seleccion-multiple' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaSeleccion($event)" ></app-consulta-seleccion-espacial>
         <!--<app-consulta-upl *ngIf="opcion == 'consulta-upl' && !resultados" (accion)="accionMenu($event)"></app-consulta-upl>-->

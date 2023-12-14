@@ -78,7 +78,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
   initMap() {
     if (esriConfig.request.interceptors) {
       esriConfig.request.interceptors.push({
-        urls: environment.serviciosResultados.map((s) => s.url),
+        urls: environment.serviciosInterception, // environment.serviciosResultados.map((s) => s.url),
         before: () => {
           this.countSpinner++;
         },

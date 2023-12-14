@@ -19,14 +19,13 @@
         <ng-container *ngFor="let titulo of titulos">
           <container-element [ngSwitch]="titulo.formato.tipo">
             <some-element *ngSwitchCase="'fecha'">
-              <p><strong class="titulo-azul">{{ titulo.alias }}:</strong> {{ datos[currentIndex][titulo.name] }}</p>
-              <!--<ng-container *ngIf="titulo.valor == titulo.formato.sinInformacion && titulo.formato.mostrarSinInformacion == 'S'">
+              <ng-container *ngIf="titulo.valor == titulo.formato.sinInformacion && titulo.formato.mostrarSinInformacion == 'S'">
                 <p><strong class="titulo-azul" [innerHTML]="tituloHtml(titulo.clave)"></strong> No registra información.</p>
               </ng-container>
               <ng-container *ngIf="!(titulo.valor == titulo.formato.sinInformacion)">
                 <p><strong class="titulo-azul" [innerHTML]="tituloHtml(titulo.clave)"></strong>
                   {{ titulo.valor | date: 'dd/MM/yyyy' }}</p>
-              </ng-container>-->
+              </ng-container>
             </some-element>
             <some-element *ngSwitchCase="'numero'">
               <!--<p><strong class="titulo-azul">{{ titulo.alias }}:</strong> {{ datos[currentIndex][titulo.name] }}</p>-->

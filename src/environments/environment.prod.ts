@@ -1,5 +1,9 @@
 export const environment = {
-  production: true,
+  production: false,
+  auth: {
+    usuario: "admin",
+    clave: "123456"
+  },
   esriConfigApiKey:
     "AAPK18837c198fe14f849f5237a94fb8c4d9nyUIHfhPmykTR_afDukiTorJHXPimhB05XjXQ6o6rDQ-GAsclkcQJjNfsUX-ulMj",
   baseConfigs: {
@@ -16,7 +20,7 @@ export const environment = {
     {
       id: "construcciones",
       nombre: "construcciones",
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
       tipo: "3D",
       altura: "NUMERO_PISOS",
       factor: 2.4,
@@ -38,6 +42,7 @@ export const environment = {
       factor: 1,
       simbolo: "arbol",
       color: "rgb(1, 90, 0)",
+      busquedaBufferPredio: false,
     },
     {
       id: "parques",
@@ -48,21 +53,33 @@ export const environment = {
       factor: 0.2,
       simbolo: "bloque",
       color: "rgb(136, 166, 94)",
+      busquedaBufferPredio: false,
+    },
+    {
+      id: "galeria",
+      nombre: "galería inmobiliaria",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
+      tipo: "3D",
+      altura: "",
+      factor: 20,
+      simbolo: "grua",
+      color: "rgb(136, 166, 94)",
+      busquedaBufferPredio: false,
     },
   ],
 
   urlServicioPredios:
     "https://services8.arcgis.com/2gedZBw4OrdjULOA/arcgis/rest/services/construccion_predio_360/FeatureServer/0",
   // urlServicioPredios:
-  //  "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",
+  //  "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
   urlServicioGaleria:
-    "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/6",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
   urlTablaPredios:
-    "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
   urlLoteCatastral:
-    "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
   urlConstruccion:
-    "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/4",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/4",
   urlSinupot: "https://sinupot.sdp.gov.co/serverp/rest/services/",
   capaArbolado: {
     url: "https://geoportal.jbb.gov.co/agc/rest/services/SIGAU/CensoArbol/MapServer/0",
@@ -71,32 +88,32 @@ export const environment = {
     url: "https://visorsrv.idrd.gov.co/srv/rest/services/Parques_IDRD_Publicos/ServiciosIDRD_Publico/FeatureServer/12",
   },
   capaConsultaClick: {
-    url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/4",
-    /*url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",*/
+    url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/4",
+    /*url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",*/
     id: "CODIGO_LOTE",
   },
   capaSitiosInteres: {
-    url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/1",
+    url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/1",
   },
   capaConsultaPredio: {
     porLote: {
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
       atributo: "GN_CODIGO_LOTE",
     },
     porDireccion: {
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
       atributo: "GN_DIRECCION",
     },
     porMatricula: {
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
       atributo: "GN_MATRICULA_INMOBILIARIA",
     },
     porChip: {
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
       atributo: "GN_CHIP",
     },
     porCedula: {
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
       atributo: "GN_CEDULA_CATASTRAL",
     },
   },
@@ -118,35 +135,43 @@ export const environment = {
     {
       id: "DG",
       nombre: "Datos generales del predio",
+      visible: true,
     },
     {
       id: "LC",
       nombre: "Información De Localización",
+      visible: true,
     },
     {
       id: "US",
       nombre: "Información De Uso Actual",
+      visible: true,
     },
     {
       id: "IF",
       nombre: "Información Física Del Lote",
+      visible: true,
     },
     {
       id: "NR",
       nombre: "Información Normativa",
+      visible: true,
     },
     {
       id: "EC",
       nombre: "Información Económica",
+      visible: true,
     },
     {
       id: "SB",
       nombre: "Información de hogares Sisbén",
+      visible: true,
     },
-    {
+    /*{
       id: "UB",
-      nombre: "Información Urbanística",
-    },
+      nombre: "Información urbanística UPZ",
+      visible: true
+    },*/
   ],
   panelesIndicadores: [
     {
@@ -155,10 +180,23 @@ export const environment = {
       id: "I-ES",
     },
   ],
+  serviciosInterception: [
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/4",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
+    "https://serviciosg.sdp.gov.co/server/rest/services/POT555/Sistema_del_cuidado_y_servicios_sociales/MapServer/8",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/2",
+    "https://gis.transmilenio.gov.co/arcgis/rest/services/Troncal/consulta_esquemas_estaciones/FeatureServer/0",
+    "https://serviciosg.sdp.gov.co/server/rest/services/POT555/ESTRUCTURA_INTEGRADORES_DE_PATRIMONIO/FeatureServer/37",
+    "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer/171",
+    "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer/185",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/1"
+  ],
   serviciosResultados: [
     {
       // url: "https://services8.arcgis.com/2gedZBw4OrdjULOA/arcgis/rest/services/construccion_predio_360/FeatureServer/0",
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/0",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
       id: "construccion",
       name: "Construcción",
       filter: ["CODIGO_LOTE", "GN_CODIGO_LOTE"],
@@ -229,7 +267,7 @@ export const environment = {
             mostrarSinInformacion: "S",
           },
         },
-        {
+        /*{
           name: "NUMERO_PISOS",
           alias: "Número Pisos",
           panel: "IF",
@@ -261,7 +299,7 @@ export const environment = {
             sinInformacion: "",
             mostrarSinInformacion: "S",
           },
-        },
+        },*/
         {
           name: "ESCALA_CAPTURA",
           alias: "Escala Captura",
@@ -298,7 +336,7 @@ export const environment = {
       ],
     },
     {
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/4",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/4",
       id: "lote_catastral",
       name: "Lote Catastral",
       filter: ["GN_CODIGO_LOTE", "GN_CODIGO_LOTE"],
@@ -482,7 +520,7 @@ export const environment = {
             mostrarSinInformacion: "S",
           },
         },
-        {
+        /*{
           name: "NR_ES_RANGO_EDIFI_DESAROLLO",
           alias: "Está en Rango Edificabilidad en Desarrollo",
           panel: "NR",
@@ -492,7 +530,7 @@ export const environment = {
             sinInformacion: "",
             mostrarSinInformacion: "S",
           },
-        },
+        },*/
         {
           name: "NR_ES_SEC_INCOMPA_USO_RESI",
           alias: "Incompatibilidad con el uso residencial",
@@ -519,7 +557,7 @@ export const environment = {
             mostrarSinInformacion: "S",
           },
         },
-        {
+        /*{
           name: "NR_RANGO_EDIFI_DESAROLLO",
           alias: "Rango de edificabilidad en Tratamiento de Desarrollo Urbano",
           panel: "NR",
@@ -529,7 +567,7 @@ export const environment = {
             sinInformacion: "",
             mostrarSinInformacion: "S",
           },
-        },
+        },*/
         {
           name: "NR_ES_SECTOR_USO_RESIDENCIAL",
           alias: "Está en Sector Uso Residencial",
@@ -686,7 +724,7 @@ export const environment = {
             mostrarSinInformacion: "S",
           },
         },
-        {
+        /*{
           name: "NR_PLAN_ESPE_MAN_PROTEC_NOMBRE",
           alias: "Nombre Plan Especial de Manejo y Protección Ambiental",
           panel: "NR",
@@ -699,7 +737,7 @@ export const environment = {
         },
         {
           name: "NR_PLAN_ESPE_MAN_PROTE_ACT_ADM",
-          alias: "Acto Administrativo Plan Espacial de Manejo y protección ",
+          alias: "Acto Administrativo Plan Especial de Manejo y protección ",
           panel: "NR",
           orden: 31,
           formato: {
@@ -707,10 +745,10 @@ export const environment = {
             sinInformacion: "",
             mostrarSinInformacion: "S",
           },
-        },
-        {
+        },*/
+        /*{
           name: "NR_CENTRO_HIS_PEMP_ACT_ADMIN",
-          alias: "Nombre del Plan de Espacial Manejo y Protección Patrimonial",
+          alias: "Nombre del Plan Especial de Manejo y Protección Patrimonial",
           panel: "NR",
           orden: 27,
           formato: {
@@ -718,7 +756,7 @@ export const environment = {
             sinInformacion: "",
             mostrarSinInformacion: "S",
           },
-        },
+        },*/
         {
           name: "NR_AREA_DESARR_NARANJA",
           alias: "Área de Desarrollo Naranja",
@@ -878,7 +916,7 @@ export const environment = {
         {
           name: "UB_PT_CODIGO_DESARROLLO",
           alias: "Código del Desarrollo del Plano Topográfico",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "texto",
@@ -1482,7 +1520,7 @@ export const environment = {
         },
         {
           name: "SE_HOGARES_SISBEN_POB_MODERADA",
-          alias: "Total hogares Sisbén con población moderada",
+          alias: "Total hogares Sisbén con pobreza moderada",
           panel: "SB",
           orden: 0,
           formato: {
@@ -1527,7 +1565,7 @@ export const environment = {
       ],
     },
     {
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
       id: "predio",
       name: "Predio",
       filter: ["OBJECTID", "OBJECTID"],
@@ -1546,7 +1584,7 @@ export const environment = {
         {
           name: "GN_CODIGO_LOTE",
           alias: "Código del lote",
-          panel: "LC",
+          panel: "DG",
           orden: 4,
           formato: {
             tipo: "texto",
@@ -2149,7 +2187,7 @@ export const environment = {
         {
           name: "UB_LIC_AA_FECHA_EJECUTORIA",
           alias: "Fecha Ejecutoria del Acto Administrativo",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "fecha",
@@ -2160,7 +2198,7 @@ export const environment = {
         {
           name: "UB_LIC_AA_FECHA_EXPEDICION",
           alias: "Fecha de Expedición del Acto Administrativo",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "fecha",
@@ -2171,7 +2209,7 @@ export const environment = {
         {
           name: "UB_LIC_AA_TIPO_DECISION",
           alias: "Tipo de Decisión del Acto Administrativo",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "texto",
@@ -2182,7 +2220,7 @@ export const environment = {
         {
           name: "UB_LIC_ACTO_ADMNISTRATIVO",
           alias: "Acto Administrativo de la Licencia",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "texto",
@@ -2193,7 +2231,7 @@ export const environment = {
         {
           name: "UB_LIC_DESC_LICENCIA",
           alias: "Descipción de la Licencia",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "texto",
@@ -2204,7 +2242,7 @@ export const environment = {
         {
           name: "UB_LIC_FECHA_RADICACION",
           alias: "Fecha de Radicación de la Licencia",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "fecha",
@@ -2215,7 +2253,7 @@ export const environment = {
         {
           name: "UB_LIC_ID_EXPEDIENTE",
           alias: "Id. Expediente de la Licencia",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "texto",
@@ -2237,7 +2275,7 @@ export const environment = {
         {
           name: "UB_LIC_OBJ_TRAMITE",
           alias: "Objeto de la Licencia",
-          panel: "UB",
+          panel: "",
           orden: 0,
           formato: {
             tipo: "texto",
@@ -2258,9 +2296,9 @@ export const environment = {
         },
         {
           name: "UB_SECTOR_NORMATIVO",
-          alias: "Decreto de la UPZ",
-          panel: "",
-          orden: 0,
+          alias: "Sector normativo", // "Decreto de la UPZ",
+          panel: "UB",
+          orden: 4,
           formato: {
             tipo: "texto",
             sinInformacion: "",
@@ -2269,9 +2307,9 @@ export const environment = {
         },
         {
           name: "UB_SUBSECTOR_EDIFICABILIDAD",
-          alias: "Decreto de la UPZ",
-          panel: "",
-          orden: 0,
+          alias: "Subsector edificabilidad", //"Decreto de la UPZ",
+          panel: "UB",
+          orden: 5,
           formato: {
             tipo: "texto",
             sinInformacion: "",
@@ -2281,8 +2319,8 @@ export const environment = {
         {
           name: "UB_UPZ_CODIGO",
           alias: "Código de la UPZ",
-          panel: "",
-          orden: 0,
+          panel: "UB",
+          orden: 1,
           formato: {
             tipo: "texto",
             sinInformacion: "",
@@ -2292,8 +2330,8 @@ export const environment = {
         {
           name: "UB_UPZ_DECRETO",
           alias: "Decreto de la UPZ",
-          panel: "",
-          orden: 0,
+          panel: "UB",
+          orden: 3,
           formato: {
             tipo: "texto",
             sinInformacion: "",
@@ -2303,8 +2341,8 @@ export const environment = {
         {
           name: "UB_UPZ_NOMBRE",
           alias: "Nombre de la UPZ",
-          panel: "",
-          orden: 0,
+          panel: "UB",
+          orden: 2,
           formato: {
             tipo: "texto",
             sinInformacion: "",
@@ -2462,7 +2500,7 @@ export const environment = {
     },
   ],
   capaEstadisticas: {
-    url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/FeatureServer/9",
+    url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/9",
     campoConsulta: "CODIGO_LOTE",
     campos: [
       "OBJECTID",
@@ -2561,89 +2599,919 @@ export const environment = {
       imagen: "/assets/images/socioeco.png",
     },
   ],
+  capaDatosUrbanisticos: {
+    url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/7",
+    titulo: "Datos urbanísticos",
+    labelSeleccion: "LIC_EXPEDIENTE",
+    filterPredio: "CODIGO_LOTE",
+    filterPot: "LIC_FECHA_RADICACION",
+    atributos: [
+      /*{
+        name: "OBJECTID",
+        alias: "OID",
+        orden: 0,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },*/
+      /*{
+        name: "ID_EXPEDIENTE",
+        alias: "ID Expediente",
+        orden: 1,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },*/
+      /*{
+        name: "CODIGO_LOTE",
+        alias: "Código lote",
+        orden: 0,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },*/
+      {
+        name: "LIC_EXPEDIENTE",
+        alias: "Expediente",
+        orden: 0,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_FECHA_RADICACION",
+        alias: "Fecha de radicación",
+        orden: 1,
+        formato: {
+          tipo: "fecha",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_ACTO_ADM_FECHA_EXPED",
+        alias: "Fecha expediente",
+        orden: 1,
+        formato: {
+          tipo: "fecha",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_TIPO_TRAMITE",
+        alias: "Tipo de trámite",
+        orden: 2,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_OBJETO_TRAMITE",
+        alias: "Objeto trámite",
+        orden: 3,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_MODALIDAD_TRAMITE",
+        alias: "Modalidad",
+        orden: 4,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "DESCRIPCION_LICENCIA",
+        alias: "Descripción licencia",
+        orden: 5,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_ACTO_ADMINISTRATIVO",
+        alias: "Acto administrativo",
+        orden: 7,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_ACTO_ADM_FECHA_EJECU",
+        alias: "Fecha ejecutoria",
+        orden: 8,
+        formato: {
+          tipo: "fecha",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_ACTO_ADM_TIPO_DECISI",
+        alias: "Tipo de decisión",
+        orden: 6,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      /*{
+        name: "UPZ_NOMBRE",
+        alias: "UPZ Nombre",
+        orden: 6,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "UPZ_CODIGO",
+        alias: "UPZ Código",
+        orden: 5,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "UPZ_DECRETO",
+        alias: "UPZ Decreto",
+        orden: 7,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },*/
+    ],
+  },
   capasBuffer: [
-    /*{
-      nombre: "Cobertura Servicios Públicos",
-      url: "https://portalgis.habitatbogota.gov.co/arcgis/rest/services/SDHT_Subdireccion_Servicios_Publicos/Catastro_Usuarios_Redes/MapServer/3",
-      outfields: "OBJECTID,LOTCODIGO,eaab,enel,uaesp,vanti",
-      fieldinfos: [
-        {
-          fieldName: "OBJECTID", // The field whose values you want to format
-          label: "ID",
-        },
-        {
-          fieldName: "LOTCODIGO", // The field whose values you want to format
-          label: "Código lote",
-        },
-        {
-          fieldName: "eaab", // The field whose values you want to format
-          label: "eaab",
-        },
-        {
-          fieldName: "enel", // The field whose values you want to format
-          label: "enel",
-        },
-        {
-          fieldName: "uaesp", // The field whose values you want to format
-          label: "uaesp",
-        },
-        {
-          fieldName: "vanti", // The field whose values you want to format
-          label: "vanti",
-        },
-      ],
-    },
+    // proyectos inmobiliarios
     {
-      nombre: "Obras y frentes de obra",
-      url: "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/0",
-    },
-    {
-      nombre: "Obras línea",
-      url: "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/1",
-    },
-    {
-      nombre:
-        "parques, equipamientos, estaciones de transporte masivo, obras (punto y linea), proyectos inmobiliarios, predios fiscales (DADEP), empresas y establecimientos comerciales (Esp. Inteligente) ",
-    },*/
-    {
-      nombre: "Ojo a la obra",
-      url: "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/2",
+      nombre: "Proyectos inmobiliarios",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "grua",
+      },
+      atributos: {
+        titulo: "Nombre: {NOM_PROYECTO}",
+        contenido: [
+          {
+            fieldName: "CODIGO_PROYECTO",
+            label: "Código proyecto",
+          },
+          {
+            fieldName: "CONSTRUCTOR",
+            label: "Constructor",
+          },
+          {
+            fieldName: "DESCRIP_ULT_ET_LANZADA",
+            label: "Descripción última etapa lanzada",
+          },
+          {
+            fieldName: "DIRECCION",
+            label: "Dirección",
+          },
+          {
+            fieldName: "DISPONIBLES",
+            label: "Disponibles",
+          },
+          {
+            fieldName: "ESTRATO",
+            label: "Estrato",
+          },
+          {
+            fieldName: "TIPO_INMUEBLE",
+            label: "Tipo inmueble",
+          },
+          {
+            fieldName: "TIPO_VIVIENDA",
+            label: "Tipo vivienda",
+          },
+        ]
+      }
     },
+    // equipamiento
+    {
+      nombre: "Sistema de equipamientos",
+      // url: "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer/118",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/POT555/Sistema_del_cuidado_y_servicios_sociales/MapServer/8",
+      outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "default",
+      },
+      atributos: {
+        titulo: "Nombre: {ADMBDG.Equipamiento_SCSS.NOMBRE}",
+        contenido: [
+          {
+            fieldName: "ADMBDG.Equipamiento_SCSS.SERVICIO_SOCIAL",
+            label: "Tipo de servicio social",
+          },
+          {
+            fieldName: "ADMBDG.Equipamiento_SCSS.SERVICIO_POT_555",
+            label: "Servicio POT 555",
+          },
+          {
+            fieldName: "ADMBDG.Equipamiento_SCSS.SECTOR_POT_555",
+            label: "Sector POT 555",
+          },
+          {
+            fieldName: "ADMBDG.Equipamiento_SCSS.TIPO_POT_555",
+            label: "Tipo POT 555",
+          },
+          {
+            fieldName: "ADMBDG.Plataforma_SCSS.NUMERO_EQUIPAMIENTOS",
+            label: "Número de equipamientos",
+          },
+        ],
+      },
+    },
+    // establecimientos
     {
       nombre: "Establecimientos",
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/MapServer/2",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/2",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "default",
+      },
+      atributos: {
+        titulo: "Sección: {SECCION}",
+        contenido: [
+          {
+            fieldName: "COD",
+            label: "Código",
+          },
+          {
+            fieldName: "COD_CIIU",
+            label: "Código CIIU",
+          },
+          {
+            fieldName: "DIVISION",
+            label: "División",
+          },
+        ],
+      },
     },
+    // transmilenio
     {
       nombre: "Estaciones de transporte masivo",
       url: "https://gis.transmilenio.gov.co/arcgis/rest/services/Troncal/consulta_esquemas_estaciones/FeatureServer/0",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "bloque",
+      },
+      atributos: {
+        titulo: "Estación: {nombre}",
+        contenido: [
+          {
+            fieldName: "troncal",
+            label: "Troncal",
+          },
+        ],
+      },
     },
     {
       nombre: "Parques de Borde",
       url: "https://serviciosg.sdp.gov.co/server/rest/services/POT555/ESTRUCTURA_INTEGRADORES_DE_PATRIMONIO/FeatureServer/37",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "default",
+      },
+      atributos: {
+        titulo: "Estación: {nombre}",
+        contenido: [
+          {
+            fieldName: "troncal",
+            label: "Troncal",
+          },
+        ],
+      },
     },
     {
       nombre: "Parques de proximidad",
-      url: "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer",
+      url: "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer/171",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "bloque-parque",
+      },
+      atributos: {
+        titulo: "Nombre: {NOMBRE}",
+        contenido: [
+          {
+            fieldName: "CODIGO_ID",
+            label: "Código",
+          },
+          {
+            fieldName: "SHAPE.AREA",
+            label: "Área",
+          },
+        ],
+      },
     },
     {
       nombre: "Parques red estructurante",
-      url: "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer",
+      url: "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer/185",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "bloque-parque",
+      },
+      atributos: {
+        titulo: "Nombre: {NOMBRE}",
+        contenido: [
+          {
+            fieldName: "CODIGO_ID",
+            label: "Código",
+          },
+          {
+            fieldName: "SHAPE.AREA",
+            label: "Área",
+          },
+        ],
+      },
     },
     {
       nombre: "Predios fiscales DADEP",
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/MapServer/5",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/5",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "default",
+      },
+      atributos: {
+        titulo: "Tipo de bien: {TIPO_INMUE}",
+        contenido: [
+          {
+            fieldName: "RUPI",
+            label: "RUPI",
+          },
+          {
+            fieldName: "ORIGEN",
+            label: "Origen",
+          },
+          {
+            fieldName: "SHAPE.AREA",
+            label: "Área",
+          },
+        ],
+      },
     },
     {
       nombre: "Sitios de interés",
-      url: "https://serviciosgeopr.sdp.gov.co/server/rest/services/predio360/Predio_360/MapServer/1",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/1",
       outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "default",
+      },
+      atributos: {
+        titulo: "Nombre: {NGENOMBRE}",
+        contenido: [
+          {
+            fieldName: "NGECLASIFI",
+            label: "Clasificación",
+          },
+          {
+            fieldName: "NGENALTERN",
+            label: "Nombre alternativo",
+          },
+        ],
+      },
+    },
+    {
+      nombre: "Ojo a la obra (Punto)",
+      url: "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/0",
+      outfields: ["*"],
+      formato: {
+        dimensiones: 2,
+        vista: "2D",
+        simbolo: "default",
+      },
+      atributos: {
+        titulo: "{TIPO_PROYECTO}: {NOMBRE_PROYECTO}",
+        contenido: [
+          {
+            fieldName: "AVANCE_OBRA",
+            label: "Avance de obra",
+          },
+          {
+            fieldName: "DIRECCION",
+            label: "Dirección",
+          },
+        ],
+      },
+    },
+    {
+      nombre: "Ojo a la obra (línea)",
+      url: "https://serviciosgis.catastrobogota.gov.co/arcgis/rest/services/gestionpublica/obraspublicas2021/MapServer/1",
+      outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "default",
+      },
+      atributos: {
+        titulo: "{TIPO_PROYECTO}: {NOMBRE_PROYECTO}",
+        contenido: [
+          {
+            fieldName: "AVANCE_OBRA",
+            label: "Avance de obra",
+          },
+          {
+            fieldName: "DIRECCION",
+            label: "Dirección",
+          },
+        ],
+      },
     },
   ],
+  capaGaleria: {
+    url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
+    popupTemplate: {
+      title: "Nombre: {NOM_PROYECTO}",
+      contenido: [
+        {
+          fieldName: "CODIGO_PROYECTO",
+          label: "Código proyecto",
+        },
+        {
+          fieldName: "CONSTRUCTOR",
+          label: "Constructor",
+        },
+        {
+          fieldName: "DESCRIP_ULT_ET_LANZADA",
+          label: "Descripción última etapa lanzada",
+        },
+        {
+          fieldName: "DIRECCION",
+          label: "Dirección",
+        },
+        {
+          fieldName: "DISPONIBLES",
+          label: "Disponibles",
+        },
+        {
+          fieldName: "ESTRATO",
+          label: "Estrato",
+        },
+        {
+          fieldName: "TIPO_INMUEBLE",
+          label: "Tipo inmueble",
+        },
+        {
+          fieldName: "TIPO_VIVIENDA",
+          label: "Tipo vivienda",
+        },
+      ]
+    },
+    atributos: [
+      {
+        name: "NOM_PROYECTO",
+        alias: "Nombre proyecto",
+        orden: 0,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "CODIGO_PROYECTO",
+        alias: "Código proyecto",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "ACTIVO",
+        alias: "Activo",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "BARRIO",
+        alias: "Barrio",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "ACABADOS_ENTREGA",
+        alias: "Acabados entrega",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "CERTIFICADOS_SOSTENIBLE",
+        alias: "Certificados sostenible",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "CONSTRUCTOR",
+        alias: "Constructor",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "DESCRIP_ULT_ET_LANZADA",
+        alias: "Descripción última etapa lanzada",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "DIRECCION",
+        alias: "Dirección",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "DISPONIBLES",
+        alias: "Disponibles",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "ESTADO",
+        alias: "Estado",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "ESTRATO",
+        alias: "Estrato",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      /*{
+        name: "FECHA_DESISTIMIENTO",
+        alias: "Fecha de desistimiento",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },*/
+      {
+        name: "FECHA_ENTREGA",
+        alias: "Fecha de entrega",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      /*{
+        name: "FECHA_INICIO",
+        alias: "Fecha de inicio",
+        orden: 28,
+        formato: {
+          tipo: "fecha",
+          sinInformacion: 0,
+          mostrarSinInformacion: "S",
+        },
+      },*/
+      {
+        name: "INCREMENTO_VALOR_PISOS",
+        alias: "Incremento valor pisos",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LONGITUD",
+        alias: "Longitud",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 6,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LATITUD",
+        alias: "Latitud",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 6,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "OFERTA_TOTAL",
+        alias: "Oferta total",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "OTRO_USO",
+        alias: "Otro uso",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "PISOS_PARQUEADER",
+        alias: "Pisos parqueadero",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "PROM_ALCOBAS",
+        alias: "Promedio alcobas",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "PROM_BAÑOS",
+        alias: "Promedio baños",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "PROM_VALOR",
+        alias: "Promedio valor",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "$ ",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "PROM_VALOR_M2",
+        alias: "Promedio valor m<sup>2</sup>",
+        orden: 29,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "$ ",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "SEMISOTANOS",
+        alias: "Semisótanos",
+        orden: 30,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "SOTANOS",
+        alias: "Sótanos",
+        orden: 30,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "SUB_ZONA",
+        alias: "SubZona",
+        orden: 31,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "TIPO_INMUEBLE",
+        alias: "Tipo de inmueble",
+        orden: 32,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "TIPO_VIVIENDA",
+        alias: "Tipo de vivienda",
+        orden: 33,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "TOTAL_DESISTIDOS",
+        alias: "Total desistidos",
+        orden: 34,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "TOTAL_UNIDADES",
+        alias: "Total de unidades",
+        orden: 35,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "UNIDADES_LANZAR",
+        alias: "Unidades por lanzar",
+        orden: 36,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "VENDEDOR",
+        alias: "Vendedor",
+        orden: 35,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "VENDIDOS",
+        alias: "Vendidos",
+        orden: 36,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "ZONA",
+        alias: "Zona",
+        orden: 37,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+    ],
+  },
 };

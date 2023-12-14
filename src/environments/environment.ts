@@ -1,5 +1,9 @@
 export const environment = {
   production: false,
+  auth: {
+    usuario: "admin",
+    clave: "123456"
+  },
   esriConfigApiKey:
     "AAPK18837c198fe14f849f5237a94fb8c4d9nyUIHfhPmykTR_afDukiTorJHXPimhB05XjXQ6o6rDQ-GAsclkcQJjNfsUX-ulMj",
   baseConfigs: {
@@ -48,6 +52,17 @@ export const environment = {
       altura: "",
       factor: 0.2,
       simbolo: "bloque",
+      color: "rgb(136, 166, 94)",
+      busquedaBufferPredio: false,
+    },
+    {
+      id: "galeria",
+      nombre: "galería inmobiliaria",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
+      tipo: "3D",
+      altura: "",
+      factor: 20,
+      simbolo: "grua",
       color: "rgb(136, 166, 94)",
       busquedaBufferPredio: false,
     },
@@ -120,43 +135,43 @@ export const environment = {
     {
       id: "DG",
       nombre: "Datos generales del predio",
-      visible: true
+      visible: true,
     },
     {
       id: "LC",
       nombre: "Información De Localización",
-      visible: true
+      visible: true,
     },
     {
       id: "US",
       nombre: "Información De Uso Actual",
-      visible: true
+      visible: true,
     },
     {
       id: "IF",
       nombre: "Información Física Del Lote",
-      visible: true
+      visible: true,
     },
     {
       id: "NR",
       nombre: "Información Normativa",
-      visible: true
+      visible: true,
     },
     {
       id: "EC",
       nombre: "Información Económica",
-      visible: true
+      visible: true,
     },
     {
       id: "SB",
       nombre: "Información de hogares Sisbén",
-      visible: true
+      visible: true,
     },
-    {
+    /*{
       id: "UB",
-      nombre: "Información urbanística Pot 190",
-      visible: false
-    },
+      nombre: "Información urbanística UPZ",
+      visible: true
+    },*/
   ],
   panelesIndicadores: [
     {
@@ -164,6 +179,19 @@ export const environment = {
       icono: "",
       id: "I-ES",
     },
+  ],
+  serviciosInterception: [
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/4",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
+    "https://serviciosg.sdp.gov.co/server/rest/services/POT555/Sistema_del_cuidado_y_servicios_sociales/MapServer/8",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/2",
+    "https://gis.transmilenio.gov.co/arcgis/rest/services/Troncal/consulta_esquemas_estaciones/FeatureServer/0",
+    "https://serviciosg.sdp.gov.co/server/rest/services/POT555/ESTRUCTURA_INTEGRADORES_DE_PATRIMONIO/FeatureServer/37",
+    "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer/171",
+    "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer/185",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/1"
   ],
   serviciosResultados: [
     {
@@ -239,7 +267,7 @@ export const environment = {
             mostrarSinInformacion: "S",
           },
         },
-        {
+        /*{
           name: "NUMERO_PISOS",
           alias: "Número Pisos",
           panel: "IF",
@@ -271,7 +299,7 @@ export const environment = {
             sinInformacion: "",
             mostrarSinInformacion: "S",
           },
-        },
+        },*/
         {
           name: "ESCALA_CAPTURA",
           alias: "Escala Captura",
@@ -492,7 +520,7 @@ export const environment = {
             mostrarSinInformacion: "S",
           },
         },
-        {
+        /*{
           name: "NR_ES_RANGO_EDIFI_DESAROLLO",
           alias: "Está en Rango Edificabilidad en Desarrollo",
           panel: "NR",
@@ -502,7 +530,7 @@ export const environment = {
             sinInformacion: "",
             mostrarSinInformacion: "S",
           },
-        },
+        },*/
         {
           name: "NR_ES_SEC_INCOMPA_USO_RESI",
           alias: "Incompatibilidad con el uso residencial",
@@ -529,7 +557,7 @@ export const environment = {
             mostrarSinInformacion: "S",
           },
         },
-        {
+        /*{
           name: "NR_RANGO_EDIFI_DESAROLLO",
           alias: "Rango de edificabilidad en Tratamiento de Desarrollo Urbano",
           panel: "NR",
@@ -539,7 +567,7 @@ export const environment = {
             sinInformacion: "",
             mostrarSinInformacion: "S",
           },
-        },
+        },*/
         {
           name: "NR_ES_SECTOR_USO_RESIDENCIAL",
           alias: "Está en Sector Uso Residencial",
@@ -696,7 +724,7 @@ export const environment = {
             mostrarSinInformacion: "S",
           },
         },
-        {
+        /*{
           name: "NR_PLAN_ESPE_MAN_PROTEC_NOMBRE",
           alias: "Nombre Plan Especial de Manejo y Protección Ambiental",
           panel: "NR",
@@ -709,7 +737,7 @@ export const environment = {
         },
         {
           name: "NR_PLAN_ESPE_MAN_PROTE_ACT_ADM",
-          alias: "Acto Administrativo Plan Espacial de Manejo y protección ",
+          alias: "Acto Administrativo Plan Especial de Manejo y protección ",
           panel: "NR",
           orden: 31,
           formato: {
@@ -717,10 +745,10 @@ export const environment = {
             sinInformacion: "",
             mostrarSinInformacion: "S",
           },
-        },
-        {
+        },*/
+        /*{
           name: "NR_CENTRO_HIS_PEMP_ACT_ADMIN",
-          alias: "Nombre del Plan de Espacial Manejo y Protección Patrimonial",
+          alias: "Nombre del Plan Especial de Manejo y Protección Patrimonial",
           panel: "NR",
           orden: 27,
           formato: {
@@ -728,7 +756,7 @@ export const environment = {
             sinInformacion: "",
             mostrarSinInformacion: "S",
           },
-        },
+        },*/
         {
           name: "NR_AREA_DESARR_NARANJA",
           alias: "Área de Desarrollo Naranja",
@@ -1492,7 +1520,7 @@ export const environment = {
         },
         {
           name: "SE_HOGARES_SISBEN_POB_MODERADA",
-          alias: "Total hogares Sisbén con población moderada",
+          alias: "Total hogares Sisbén con pobreza moderada",
           panel: "SB",
           orden: 0,
           formato: {
@@ -1556,7 +1584,7 @@ export const environment = {
         {
           name: "GN_CODIGO_LOTE",
           alias: "Código del lote",
-          panel: "LC",
+          panel: "DG",
           orden: 4,
           formato: {
             tipo: "texto",
@@ -2268,7 +2296,7 @@ export const environment = {
         },
         {
           name: "UB_SECTOR_NORMATIVO",
-          alias: "Decreto de la UPZ",
+          alias: "Sector normativo", // "Decreto de la UPZ",
           panel: "UB",
           orden: 4,
           formato: {
@@ -2279,7 +2307,7 @@ export const environment = {
         },
         {
           name: "UB_SUBSECTOR_EDIFICABILIDAD",
-          alias: "Decreto de la UPZ",
+          alias: "Subsector edificabilidad", //"Decreto de la UPZ",
           panel: "UB",
           orden: 5,
           formato: {
@@ -2588,7 +2616,7 @@ export const environment = {
           mostrarSinInformacion: "S",
         },
       },*/
-      {
+      /*{
         name: "ID_EXPEDIENTE",
         alias: "ID Expediente",
         orden: 1,
@@ -2597,8 +2625,8 @@ export const environment = {
           sinInformacion: null,
           mostrarSinInformacion: "S",
         },
-      },
-      {
+      },*/
+      /*{
         name: "CODIGO_LOTE",
         alias: "Código lote",
         orden: 0,
@@ -2607,7 +2635,7 @@ export const environment = {
           sinInformacion: null,
           mostrarSinInformacion: "S",
         },
-      },
+      },*/
       {
         name: "LIC_EXPEDIENTE",
         alias: "Expediente",
@@ -2621,9 +2649,29 @@ export const environment = {
       {
         name: "LIC_FECHA_RADICACION",
         alias: "Fecha de radicación",
-        orden: 2,
+        orden: 1,
         formato: {
           tipo: "fecha",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_ACTO_ADM_FECHA_EXPED",
+        alias: "Fecha expediente",
+        orden: 1,
+        formato: {
+          tipo: "fecha",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LIC_TIPO_TRAMITE",
+        alias: "Tipo de trámite",
+        orden: 2,
+        formato: {
+          tipo: "texto",
           sinInformacion: null,
           mostrarSinInformacion: "S",
         },
@@ -2639,9 +2687,19 @@ export const environment = {
         },
       },
       {
+        name: "LIC_MODALIDAD_TRAMITE",
+        alias: "Modalidad",
+        orden: 4,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
         name: "DESCRIPCION_LICENCIA",
         alias: "Descripción licencia",
-        orden: 4,
+        orden: 5,
         formato: {
           tipo: "texto",
           sinInformacion: null,
@@ -2651,7 +2709,7 @@ export const environment = {
       {
         name: "LIC_ACTO_ADMINISTRATIVO",
         alias: "Acto administrativo",
-        orden: 8,
+        orden: 7,
         formato: {
           tipo: "texto",
           sinInformacion: null,
@@ -2659,19 +2717,9 @@ export const environment = {
         },
       },
       {
-        name: "LIC_ACTO_ADM_FECHA_EXPED",
-        alias: "Fecha expediente",
-        orden: 9,
-        formato: {
-          tipo: "fecha",
-          sinInformacion: null,
-          mostrarSinInformacion: "S",
-        },
-      },
-      {
         name: "LIC_ACTO_ADM_FECHA_EJECU",
         alias: "Fecha ejecutoria",
-        orden: 10,
+        orden: 8,
         formato: {
           tipo: "fecha",
           sinInformacion: null,
@@ -2681,14 +2729,14 @@ export const environment = {
       {
         name: "LIC_ACTO_ADM_TIPO_DECISI",
         alias: "Tipo de decisión",
-        orden: 11,
+        orden: 6,
         formato: {
           tipo: "texto",
           sinInformacion: null,
           mostrarSinInformacion: "S",
         },
       },
-      {
+      /*{
         name: "UPZ_NOMBRE",
         alias: "UPZ Nombre",
         orden: 6,
@@ -2717,15 +2765,63 @@ export const environment = {
           sinInformacion: null,
           mostrarSinInformacion: "S",
         },
-      }
-    ]
+      },*/
+    ],
   },
   capasBuffer: [
-    
+    // proyectos inmobiliarios
+    {
+      nombre: "Proyectos inmobiliarios",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
+      outfields: ["*"],
+      formato: {
+        dimensiones: 3,
+        vista: "3D",
+        simbolo: "grua",
+      },
+      atributos: {
+        titulo: "Nombre: {NOM_PROYECTO}",
+        contenido: [
+          {
+            fieldName: "CODIGO_PROYECTO",
+            label: "Código proyecto",
+          },
+          {
+            fieldName: "CONSTRUCTOR",
+            label: "Constructor",
+          },
+          {
+            fieldName: "DESCRIP_ULT_ET_LANZADA",
+            label: "Descripción última etapa lanzada",
+          },
+          {
+            fieldName: "DIRECCION",
+            label: "Dirección",
+          },
+          {
+            fieldName: "DISPONIBLES",
+            label: "Disponibles",
+          },
+          {
+            fieldName: "ESTRATO",
+            label: "Estrato",
+          },
+          {
+            fieldName: "TIPO_INMUEBLE",
+            label: "Tipo inmueble",
+          },
+          {
+            fieldName: "TIPO_VIVIENDA",
+            label: "Tipo vivienda",
+          },
+        ]
+      }
+    },
     // equipamiento
     {
       nombre: "Sistema de equipamientos",
-      url: "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer/118",
+      // url: "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer/118",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/POT555/Sistema_del_cuidado_y_servicios_sociales/MapServer/8",
       outfields: ["*"],
       formato: {
         dimensiones: 3,
@@ -2733,19 +2829,27 @@ export const environment = {
         simbolo: "default",
       },
       atributos: {
-        titulo: "Nombre: {NOMBRE}",
+        titulo: "Nombre: {ADMBDG.Equipamiento_SCSS.NOMBRE}",
         contenido: [
           {
-            fieldName: "COD",
-            label: "Código",
+            fieldName: "ADMBDG.Equipamiento_SCSS.SERVICIO_SOCIAL",
+            label: "Tipo de servicio social",
           },
           {
-            fieldName: "COD_CIIU",
-            label: "Código CIIU",
+            fieldName: "ADMBDG.Equipamiento_SCSS.SERVICIO_POT_555",
+            label: "Servicio POT 555",
           },
           {
-            fieldName: "DIVISION",
-            label: "División",
+            fieldName: "ADMBDG.Equipamiento_SCSS.SECTOR_POT_555",
+            label: "Sector POT 555",
+          },
+          {
+            fieldName: "ADMBDG.Equipamiento_SCSS.TIPO_POT_555",
+            label: "Tipo POT 555",
+          },
+          {
+            fieldName: "ADMBDG.Plataforma_SCSS.NUMERO_EQUIPAMIENTOS",
+            label: "Número de equipamientos",
           },
         ],
       },
@@ -2778,6 +2882,7 @@ export const environment = {
         ],
       },
     },
+    // transmilenio
     {
       nombre: "Estaciones de transporte masivo",
       url: "https://gis.transmilenio.gov.co/arcgis/rest/services/Troncal/consulta_esquemas_estaciones/FeatureServer/0",
@@ -2961,79 +3066,298 @@ export const environment = {
   ],
   capaGaleria: {
     url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
+    popupTemplate: {
+      title: "Nombre: {NOM_PROYECTO}",
+      contenido: [
+        {
+          fieldName: "CODIGO_PROYECTO",
+          label: "Código proyecto",
+        },
+        {
+          fieldName: "CONSTRUCTOR",
+          label: "Constructor",
+        },
+        {
+          fieldName: "DESCRIP_ULT_ET_LANZADA",
+          label: "Descripción última etapa lanzada",
+        },
+        {
+          fieldName: "DIRECCION",
+          label: "Dirección",
+        },
+        {
+          fieldName: "DISPONIBLES",
+          label: "Disponibles",
+        },
+        {
+          fieldName: "ESTRATO",
+          label: "Estrato",
+        },
+        {
+          fieldName: "TIPO_INMUEBLE",
+          label: "Tipo inmueble",
+        },
+        {
+          fieldName: "TIPO_VIVIENDA",
+          label: "Tipo vivienda",
+        },
+      ]
+    },
     atributos: [
-      /* ACABADOS_ENTREGA
-: 
-" "
-ACTIVO
-: 
-"No"
-BARRIO
-: 
-"Santa Bárbara"
-CERTIFICADOS_SOSTENIBLE
-: 
-"No"
-CODIGO_PROYECTO
-: 
-30443
-CONSTRUCTOR
-: 
-"Const. Coramar"
-DESCRIP_ULT_ET_LANZADA
-: 
-"Unica"
-DIRECCION
-: 
-"Cr. 18 # 114A-31"
-DISPONIBLES
-: 
-0
-ESTADO
-: 
-"Term./"
-ESTRATO
-: 
-6
-FECHA_DESISTIMIENTO
-: 
-null
-FECHA_ENTREGA
-: 
-"Inmediata"
-FECHA_INICIO
-: 
-1117584000000
-INCREMENTO_VALOR_PISOS
-: 
-0
-LATITUD
-: 
-4.697808
-LONGITUD
-: 
--74.047626
-NOM_PROYECTO
-: 
-"Minorca"
-OBJECTID
-: 
-78
-OFERTA_TOTAL
-: 
-36
-OTRO_USO
-: 
-"No"
-PISOS_PARQUEADER
-: 
-0
-PROM_ALCOBAS
-: 
-1.7
-PROM_BAÑOS
-: 
-2.4*/
+      {
+        name: "NOM_PROYECTO",
+        alias: "Nombre proyecto",
+        orden: 0,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "CODIGO_PROYECTO",
+        alias: "Código proyecto",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "ACTIVO",
+        alias: "Activo",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "BARRIO",
+        alias: "Barrio",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "ACABADOS_ENTREGA",
+        alias: "Acabados entrega",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "CERTIFICADOS_SOSTENIBLE",
+        alias: "Certificados sostenible",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "CONSTRUCTOR",
+        alias: "Constructor",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "DESCRIP_ULT_ET_LANZADA",
+        alias: "Descripción última etapa lanzada",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "DIRECCION",
+        alias: "Dirección",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "DISPONIBLES",
+        alias: "Disponibles",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "ESTADO",
+        alias: "Estado",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "ESTRATO",
+        alias: "Estrato",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      /*{
+        name: "FECHA_DESISTIMIENTO",
+        alias: "Fecha de desistimiento",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },*/
+      {
+        name: "FECHA_ENTREGA",
+        alias: "Fecha de entrega",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: null,
+          mostrarSinInformacion: "S",
+        },
+      },
+      /*{
+        name: "FECHA_INICIO",
+        alias: "Fecha de inicio",
+        orden: 28,
+        formato: {
+          tipo: "fecha",
+          sinInformacion: 0,
+          mostrarSinInformacion: "S",
+        },
+      },*/
+      {
+        name: "INCREMENTO_VALOR_PISOS",
+        alias: "Incremento valor pisos",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LONGITUD",
+        alias: "Longitud",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 6,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "LATITUD",
+        alias: "Latitud",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 6,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "OFERTA_TOTAL",
+        alias: "Oferta total",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "OTRO_USO",
+        alias: "Otro uso",
+        orden: 28,
+        formato: {
+          tipo: "texto",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "PISOS_PARQUEADER",
+        alias: "Pisos parqueadero",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "PROM_ALCOBAS",
+        alias: "Promedio alcobas",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
+      {
+        name: "PROM_BAÑOS",
+        alias: "Promedio baños",
+        orden: 28,
+        formato: {
+          tipo: "numero",
+          decimales: 0,
+          pre: "",
+          post: "",
+          sinInformacion: "",
+          mostrarSinInformacion: "S",
+        },
+      },
       {
         name: "PROM_VALOR",
         alias: "Promedio valor",

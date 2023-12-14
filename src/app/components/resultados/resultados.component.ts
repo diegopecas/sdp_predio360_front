@@ -49,11 +49,19 @@ export class ResultadosComponent implements OnChanges, OnInit {
 
   ngOnInit() {
     this.capas = environment.capasBuffer;
+    this.mapService.predioClickObservable.subscribe((nuevoClick) => {
+      // Aquí puedes ejecutar la sentencia que desees
+      console.log('La variable del servicio ha cambiado:', nuevoClick);
+      if(this.mapService.tipoSeleccion == "predios") {
+        this.consultarPrediosByLotes();
+      }
+    });
   }
 
   constructor(private mapService: MapService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
+    
     this.params = changes["parametros"]["currentValue"];
     if (this.params) {
       console.log("PARAMS", this.params);
@@ -85,11 +93,13 @@ export class ResultadosComponent implements OnChanges, OnInit {
           break;
         case "consulta-seleccion-multiple":
           this.lotes = this.mapService.elementosSeleccionados;
-          console.log("resultados por muchos", this.mapService.elementosSeleccionados, this.lotes);
+          // console.log("resultados por muchos", this.mapService.elementosSeleccionados, this.lotes);
           this.consultarPrediosByLotes();
           // this.cambioTipoConsulta.emit("consulta-seleccion");
           break;
       }
+      this.mapService.buffer.medida = 0;
+      this.mapService.tipoSeleccion = "predios";
     }
   }
 
@@ -109,6 +119,7 @@ export class ResultadosComponent implements OnChanges, OnInit {
     predios
       .then((response: any) => {
         this.datos = response;
+        this.mapService.buffer.medida = 0;
       })
       .catch((error: any) => {
         console.log(error);
@@ -116,6 +127,7 @@ export class ResultadosComponent implements OnChanges, OnInit {
   }
 
   consultarPrediosByDireccion(direccionConsulta: any) {
+    console.log("CONSULTANDO POR", direccionConsulta)
     this.currentIndex = -1;
     const predios =
       this.mapService.consultarPrediosByDireccion(direccionConsulta);
@@ -133,12 +145,12 @@ export class ResultadosComponent implements OnChanges, OnInit {
                 "No se encontraron resultados, ¿desea hacer una búsqueda aproximada?",
               input: "radio",
               inputOptions: {
-                Esquina: this.direccion[1].replaceAll("%", " "),
+                Esquina: this.direccion[1],//.replaceAll("%", " "),
                 Aproximada: this.direccion[0]
                   .replaceAll("%", " ")
                   .replace("KR", "AK")
                   .replace("CL", "AC"),
-                Comomdin: "Comodín: " + this.direccion[0].replaceAll(" ", "%"),
+                Comodin: "Comodín: " + this.direccion[0].replaceAll(" ", "%"),
               },
               showDenyButton: true,
               showCancelButton: false,
@@ -150,14 +162,17 @@ export class ResultadosComponent implements OnChanges, OnInit {
               if (result.isConfirmed) {
                 switch (result.value) {
                   case "Esquina":
+                    console.log("consulta esquina")
                     this.consultarPrediosByDireccion(this.direccion[1]);
                     break;
                   case "Aproximada":
+                    console.log("consulta aproximada")
                     this.consultarPrediosByDireccion(
                       this.direccion[0].replace("KR", "AK").replace("CL", "AC")
                     );
                     break;
                   case "Comodin":
+                    console.log("consulta por comodín")
                     this.consultarPrediosByDireccion(
                       this.direccion[0].replaceAll(" ", "%")
                     );

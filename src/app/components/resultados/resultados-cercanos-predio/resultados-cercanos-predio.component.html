@@ -12,3 +12,5 @@
     </option>
   </select>
 </p>
+<button (click)="iniciarSeleccion()" *ngIf="!seleccion" class="button-aqua">Iniciar selección</button>
+<button (click)="detenerSeleccion()" *ngIf="seleccion" class="button-aqua">Detener selección</button>

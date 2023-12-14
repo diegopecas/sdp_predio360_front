@@ -20,7 +20,7 @@
         id="password"
         placeholder=""
         required
-        [(ngModel)]="usuario.password"
+        [(ngModel)]="usuario.clave"
       />
       <label for="password" class="form__label">Contraseña</label>
     </div>
@@ -31,7 +31,7 @@
       >
         Validar
       </button>
-      <button
+      <button *ngIf="session"
         class="start-button"
         [routerLink]="['/3d']"
         routerLinkActive="router-link-active"

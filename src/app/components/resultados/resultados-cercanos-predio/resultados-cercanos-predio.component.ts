@@ -34,4 +34,14 @@ export class ResultadosCercanosPredioComponent implements OnInit, OnChanges {
     // this.cambioCapaBuffer.emit(this.capas[this.currentIndexCapa]);
   }
 
+  public seleccion = false;
+
+  iniciarSeleccion(){
+    this.mapService.tipoSeleccion = "Identify";
+    this.seleccion = true;
+  }
+  detenerSeleccion(){
+    this.mapService.tipoSeleccion = "predios";
+    this.seleccion = false;
+  }
 }

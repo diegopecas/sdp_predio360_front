@@ -1,0 +1,47 @@
+<div class="consulta-predial">
+  <div class="logo-container">
+    <img class="logo" src="/assets/images/logo_predio360.png" />
+  </div>
+  <div class="titulo-seccion">
+    <p>Agregar capa externa</p>
+  </div>
+  <hr class="separador" />
+  <div class="form__group">
+    <input
+      type="input"
+      class="form__field"
+      placeholder=""
+      name="nombre"
+      id="nombre"
+      required
+      [(ngModel)]="servicio.nombre"
+    />
+    <label for="servicio" class="form__label">Nombre capa</label>
+  </div>
+  <div class="form__group">
+    <input
+      type="input"
+      class="form__field"
+      placeholder=""
+      name="servicio"
+      id="servicio"
+      required
+      [(ngModel)]="servicio.url"
+    />
+    <label for="servicio" class="form__label">URL servicio REST</label>
+  </div>
+  <div class="form__group">
+      <button class="button-aqua" (click)="agregar()">Agregar</button>
+  </div>
+  <hr class="separador" />
+  <div class="logo-container">
+    <div class="item-regresar" (click)="seleccion('menu')">
+      <p>Regresar</p>
+      <p class="icono-item-atras"></p>
+    </div>
+  </div>
+  <div class="logo-container">
+    <img class="logo-sdp" src="/assets/images/logo_sdp_blanco.png" />
+  </div>
+  <div class="barra-pie"></div>
+</div>

@@ -66,10 +66,12 @@ export class ResultadosEstadisticasPredioComponent implements OnInit, OnChanges 
   private consultarEstadisticas(){
     this.mapService.consultarEstadisticas(this.predioEvaluado.GN_CODIGO_LOTE)
     .then((response:any) => {
-      const respuesta = response.features.map((r:any) => r.attributes)
-      this.estadisticas.forEach(e => {
-        e.valores = respuesta.filter((f:any) => f.TIPO_SERVICIO == e.categoria);
-      });
+      if(response.features){
+        const respuesta = response.features.map((r:any) => r.attributes)
+        this.estadisticas.forEach(e => {
+          e.valores = respuesta.filter((f:any) => f.TIPO_SERVICIO == e.categoria);
+        });
+      }
     })
     .catch((error:any) => {
       console.log('ESTADISTICAS SRV ERROR', error);

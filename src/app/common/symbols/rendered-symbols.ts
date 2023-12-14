@@ -105,6 +105,27 @@ export class RenderedSymbols {
     return renderer;
   }
 
+  public construirGrua(factor:any): Renderer {
+    const webStyleSymbol = new WebStyleSymbol({
+      name: "Tower_Crane",
+      styleName: "EsriRealisticTransportationStyle",
+    });
+
+    const renderer:any = {
+      type: "simple",
+      symbol: webStyleSymbol,
+      /*visualVariables: [
+        {
+          type: "size",
+          valueUnit: "meters",
+          valueExpression: "return "+factor+";",
+        },
+      ],*/
+    };
+
+    return renderer;
+  }
+
   public construirBloque(atributoAltura:any, factor:any, color:any): Renderer {
     const renderer:any = {
       type: "simple",

@@ -40,7 +40,8 @@ export class ResultadosUrbanisticoComponent implements OnInit, OnChanges {
   private consultarLicencias(){
     this.mapService.consultarLicencias(this.predioEvaluado.GN_CODIGO_LOTE)
     .then((response:any) => {
-      this.licenciasAll = response;
+      // this.licenciasAll = response;
+      this.licencias = response;
     })
     .catch((error:any) => {
       console.log('ESTADISTICAS SRV ERROR', error);
