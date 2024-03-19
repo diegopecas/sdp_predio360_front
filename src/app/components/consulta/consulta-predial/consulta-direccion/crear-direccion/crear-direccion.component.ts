@@ -19,6 +19,35 @@ export class CrearDireccionComponent {
   public direccion = "";
   private esquina = "";
 
+  public tipoVia = [
+    {
+      clave: 'CL',
+      valor: 'Calle'
+    },
+    {
+      clave: 'KR',
+      valor: 'Carrera'
+    },
+    {
+      clave: 'DG',
+      valor: 'Diagonal'
+    },
+    {
+      clave: 'TV',
+      valor: 'Transversal'
+    },
+    {
+      clave: 'AC',
+      valor: 'Avenida Calle'
+    },
+    {
+      clave: 'AK',
+      valor: 'Avenida Carrera'
+    }
+  ];
+
+  public letras = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+
   public consDireccion = {
     parte1: '', // CL, KR
     parte2: '', // número

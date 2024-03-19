@@ -1,6 +1,6 @@
 <div class="container-home">
   <div class="container-login">
-    <div class="form__group">
+    <!--<div class="form__group">
       <input
         type="usuario"
         class="form__field"
@@ -23,9 +23,12 @@
         [(ngModel)]="usuario.clave"
       />
       <label for="password" class="form__label">Contraseña</label>
+    </div>-->
+    <div class="form__group">
+      <p>Estimados usuarios: esta aplicación fue desarrollada para facilitar actividades al interior de la SDP, los datos aquí visualizados solo deben ser utilizados para tales actividades y no deben ser divulgados de manera pública o con otras personas externas a la SDP que no se encuentran autorizadas. La seguridad de la información es tarea de todos.</p>
     </div>
     <div class="form__group start-button-container">
-      <button
+      <!--<button
         class="start-button"
         (click)="validar()"
       >
@@ -36,6 +39,12 @@
         [routerLink]="['/3d']"
         routerLinkActive="router-link-active"
       >
+        Iniciar Consulta
+      </button>-->
+      <button
+        class="start-button"
+        [routerLink]="['/3d']"
+        routerLinkActive="router-link-active">
         Iniciar Consulta
       </button>
     </div>

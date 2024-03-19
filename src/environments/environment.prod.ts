@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   auth: {
     usuario: "admin",
     clave: "123456"

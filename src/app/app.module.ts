@@ -32,6 +32,7 @@ import { CustomDecimalFormatPipe } from './common/pipes/custom-decimal-format.pi
 import { ResultadosCercanosPredioComponent } from './components/resultados/resultados-cercanos-predio/resultados-cercanos-predio.component';
 import { ResultadosUrbanisticoComponent } from './components/resultados/resultados-urbanistico/resultados-urbanistico.component';
 import { AgregarCapasComponent } from './components/consulta/agregar-capas/agregar-capas.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { AgregarCapasComponent } from './components/consulta/agregar-capas/agreg
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: MyHttpInterceptor, multi: true },
+    {provide: LocationStrategy, useClass: HashLocationStrategy},
     RenderedSymbols
   ],
   bootstrap: [AppComponent],

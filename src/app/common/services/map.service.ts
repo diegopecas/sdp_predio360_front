@@ -321,8 +321,26 @@ export class MapService {
         id: nombre,
         title: nombre,
       });
+      console.log("CAPA NUEVA", nuevaCapa);
+      /*nuevaCapa.load((r:any),(e:any)=>{
+        this.map?.add(nuevaCapa);
+        
+      });*/
+
       this.map?.add(nuevaCapa);
-      swal.fire("capa agregada correctamente.");
+
+      // Escuchar el evento de error al crear la LayerView
+      nuevaCapa.on('layerview-create-error', (errorEvent) => {
+        console.error('Error al crear la LayerView:', errorEvent.error);
+        swal.fire("Error al agregar capa.");
+      });
+
+      // También puedes escuchar el evento 'layerview-create' para realizar acciones después de que se crea la LayerView con éxito
+      nuevaCapa.on('layerview-create', (layerviewEvent) => {
+        console.log('LayerView creada con éxito:', layerviewEvent.layerView);
+        swal.fire("capa agregada correctamente.");
+      });
+
     }catch(error:any) {
       swal.fire("Ocurrió un error al agregar la capa.");
     }
@@ -1022,7 +1040,7 @@ export class MapService {
 
     // Consultar la tabla y obtener los resultados
     const query = featureLayer.createQuery();
-    query.where = "activo not in ('No')"; // Establecer una condición opcional para filtrar los resultados
+    query.where = "activo like 'Si'"; // Establecer una condición opcional para filtrar los resultados
     query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
 
     return featureLayer
