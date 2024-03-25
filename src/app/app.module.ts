@@ -33,6 +33,7 @@ import { ResultadosCercanosPredioComponent } from './components/resultados/resul
 import { ResultadosUrbanisticoComponent } from './components/resultados/resultados-urbanistico/resultados-urbanistico.component';
 import { AgregarCapasComponent } from './components/consulta/agregar-capas/agregar-capas.component';
 import { FichaProyectoComponent } from './components/ficha-proyecto/ficha-proyecto.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { FichaProyectoComponent } from './components/ficha-proyecto/ficha-proyec
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: MyHttpInterceptor, multi: true },
+    {provide: LocationStrategy, useClass: HashLocationStrategy},
     RenderedSymbols
   ],
   bootstrap: [AppComponent],
