@@ -2774,6 +2774,7 @@ export const environment = {
       nombre: "Proyectos inmobiliarios",
       url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
       outfields: ["*"],
+      condicion: "activo like 'Si'",
       formato: {
         dimensiones: 3,
         vista: "3D",

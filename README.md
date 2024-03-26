@@ -25,3 +25,42 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+# Pasos para el despliegue
+
+1. crear el archivo nginx.conf
+/u01/app/docker/predio360/sdp_predio360_front-main/nginx.conf
+
+server {
+    listen 80 ssl;
+    server_name localhost;
+ssl_certificate /etc/ssl/certs/predio360.cer;
+ssl_certificate_key /etc/ssl/private/predio360.key;
+
+    location / {
+        root /usr/share/nginx/html;
+        index index.html;
+        try_files $uri $uri/ /index.html;
+    }
+
+}
+
+2. copiar el certificado en la ruta de la app 
+/u01/app/docker/predio360/sdp_predio360_front-main/predio360.cer
+/u01/app/docker/predio360/sdp_predio360_front-main/predio360.key
+
+3.crear la imagen
+docker ps -a  | grep predio360
+docker stop 8252c344e8cc
+docker rm  8252c344e8cc
+
+
+cd /u01/app/docker/predio360/sdp_predio360_front-main
+docker build -t predio360front .
+docker run  -p 2443:80 -d predio360front
+docker run  -p 2443:80  predio360front
+
+ingresar al docker de la imagen
+docker exec -it distracted_moore /bin/bash
+
+distracted_moore
