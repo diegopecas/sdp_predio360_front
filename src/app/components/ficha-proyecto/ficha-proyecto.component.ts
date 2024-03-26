@@ -35,7 +35,7 @@ export class FichaProyectoComponent implements OnInit   {
       const xmax = this.proyecto.LONGITUD +1;
       const ymin = this.proyecto.LATITUD -1;
       const ymax = this.proyecto.LATITUD +1;
-      this.mapUrl+=`https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/export?bbox=${xmin},${ymin},${xmax},${ymax}&bboxSR=4326&layers=&layerDefs=&size=150%2C220&imageSR=4326&historicMoment=&format=png&transparent=false&dpi=&time=&timeRelation=esriTimeRelationOverlaps&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=10000&rotation=&datumTransformations=&layerParameterValues=&mapRangeValues=&layerRangeValues=&clipping=&spatialFilter=&f=image`;
+      this.mapUrl+=`https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/export?bbox=${xmin},${ymin},${xmax},${ymax}&bboxSR=4326&layers=&layerDefs=&size=150%2C220&imageSR=4326&historicMoment=&format=png&transparent=false&dpi=&time=&timeRelation=esriTimeRelationOverlaps&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=8000&rotation=&datumTransformations=&layerParameterValues=&mapRangeValues=&layerRangeValues=&clipping=&spatialFilter=&f=image`;
       this.export();
 
     }).catch((error:any)=>{
@@ -88,7 +88,8 @@ export class FichaProyectoComponent implements OnInit   {
                   [{text: 'LOCALIZACIÓN DEL PROYECTO', style: 'subheader'}],
                   [{image: 'projectMap', width: 150, height: 220, margin: [ 10, 10, 10, 10 ] }],
                   [{text: 'LINK DEL PROYECTO:', style: 'subheader'}],
-                  [{text: 'http://sdp.gov.co/'}],
+                  [{ text: 'https://www.manzanatres.com/', link: 'https://www.manzanatres.com/' }
+                ],
                 ]
               },
             },
