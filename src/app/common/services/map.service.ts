@@ -1062,6 +1062,37 @@ export class MapService {
       });
   }
 
+  consultarProyecto(idProyecto:any): any {
+    let proyecto = [] as any[];
+    // Crear un FeatureLayer con la URL del servicio de tabla
+    const featureLayer = new FeatureLayer({
+      url: environment.capaGaleria.url
+    });
+
+    // Consultar la tabla y obtener los resultados
+    const query = featureLayer.createQuery();
+    query.where = "CODIGO_PROYECTO = "+idProyecto; // Establecer una condición opcional para filtrar los resultados
+    query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
+
+    return featureLayer
+      .queryFeatures(query)
+      .then((result: any) => {
+        // Manipular los resultados obtenidos
+        const features = result.features;
+        // Realizar acciones con los datos devueltos
+
+        if (features.length > 0) {
+          proyecto = features.map((m: any) => m.attributes)[0];
+        }
+        return proyecto;
+      })
+      .catch((error: any) => {
+        // Manejar cualquier error ocurrido durante la consulta
+        console.error("Error al consultar la tabla:", error);
+        return [];
+      });
+  }
+
   consultarLicencias(predio: any): any {
     let datosLicencias = [] as any[];
     // Crear un FeatureLayer con la URL del servicio de tabla

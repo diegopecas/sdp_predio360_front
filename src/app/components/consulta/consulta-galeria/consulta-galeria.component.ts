@@ -3,6 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MapService } from 'src/app/common/services/map.service';
 import swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -20,6 +21,7 @@ export class ConsultaGaleriaComponent implements OnInit {
   public currentIndex = -1;
 
   constructor(private mapService:MapService,
+    private router: Router,
     private sanitizer: DomSanitizer) {
 
   }
@@ -140,6 +142,10 @@ export class ConsultaGaleriaComponent implements OnInit {
   
   sortBy(values:any[], prop: string) {
     return values.sort((a, b) => a[prop] > b[prop] ? 1 : a[prop] === b[prop] ? 0 : -1);
+  }
+
+  generarFicha(p: any):void{
+    this.router.navigate(['ficha', p.CODIGO_PROYECTO]);
   }
 
 }
