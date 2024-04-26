@@ -829,6 +829,7 @@ export class MapService {
             title: capa.nombre,
             renderer: simboloBloque,
             outFields: ["*"],
+            definitionExpression: capa.condicion ? capa.condicion : '1=1',
             popupTemplate: {
               title: capa.atributos.titulo,
               content: [
@@ -849,6 +850,7 @@ export class MapService {
             title: capa.nombre,
             renderer: simboloBloque,
             outFields: ["*"],
+            definitionExpression: capa.condicion ? capa.condicion : '1=1',
             popupTemplate: {
               title: capa.atributos.titulo,
               content: [
@@ -869,6 +871,7 @@ export class MapService {
             title: capa.nombre,
             renderer: simboloBloque,
             outFields: ["*"],
+            definitionExpression: capa.condicion ? capa.condicion : '1=1',
             popupTemplate: {
               title: capa.atributos.titulo,
               content: [
@@ -889,6 +892,7 @@ export class MapService {
             id: "Capa buffer",
             title: capa.nombre,
             outFields: ["*"],
+            definitionExpression: capa.condicion ? capa.condicion : '1=1',
             popupTemplate: {
               title: capa.atributos.titulo,
               content: [
@@ -909,6 +913,7 @@ export class MapService {
         id: "Capa buffer",
         title: capa.nombre,
         outFields: ["*"],
+        definitionExpression: capa.condicion ? capa.condicion : '1=1',
         popupTemplate: {
           title: capa.atributos.titulo,
           content: [
