@@ -144,8 +144,9 @@ export class ConsultaGaleriaComponent implements OnInit {
     return values.sort((a, b) => a[prop] > b[prop] ? 1 : a[prop] === b[prop] ? 0 : -1);
   }
 
-  generarFicha(p: any):void{
-    this.router.navigate(['ficha', p.CODIGO_PROYECTO]);
+  generarFicha(p: any): void {
+    const url = ['/ficha', p.CODIGO_PROYECTO];
+    window.open('/#'+this.router.serializeUrl(this.router.createUrlTree(url)), '_blank');
   }
 
 }
