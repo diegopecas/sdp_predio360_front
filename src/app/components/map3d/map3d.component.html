@@ -9,15 +9,9 @@
         <app-consulta-chip *ngIf="opcion == 'consulta-chip' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaChip($event)"></app-consulta-chip>
         <app-consulta-matricula *ngIf="opcion == 'consulta-matricula' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaMatricula($event)"></app-consulta-matricula>
         <app-agregar-capas *ngIf="opcion == 'agregar-capas'" (accion)="accionMenu($event)"></app-agregar-capas>
-        <!--app-consulta-seleccion-espacial *ngIf="opcion == 'consulta-seleccion-multiple' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaPorCapa($event)" (buffer)="setBuffer($event)"></app-consulta-seleccion-espacial-->
         <app-consulta-seleccion-espacial *ngIf="opcion == 'consulta-seleccion-multiple' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaSeleccion($event)" ></app-consulta-seleccion-espacial>
-        <!--<app-consulta-upl *ngIf="opcion == 'consulta-upl' && !resultados" (accion)="accionMenu($event)"></app-consulta-upl>-->
         <app-consulta-galeria *ngIf="opcion == 'consulta-galeria' && !resultados" (accion)="accionMenu($event)" (seleccionProyecto)="seleccionProyectoGaleria($event)"></app-consulta-galeria>
-        <!--<app-resultados *ngIf="resultados" (accion)="regresarResultados($event)" [valores]="valoresResultados" [valorPuntoClick]="valorPuntoClick"></app-resultados>-->
-        <!--<app-resultados *ngIf="resultados" (accion)="regresarResultados($event)" [parametros]="valoresResultados" (loteSeleccionado)="seleccionarPredioByLote($event)" (cambioTipoConsulta)="accionMenu($event)" (cambioCapaBuffer)="cambioCapaBuffer($event)"></app-resultados>-->
-        <!--<app-resultados *ngIf="resultados" (accion)="regresarResultados($event)" [parametros]="valoresResultados" (loteSeleccionado)="seleccionarPredioByLote($event)" (cambioTipoConsulta)="accionMenu($event)"></app-resultados>-->
-        <app-resultados *ngIf="resultados" (accion)="regresarResultados($event)" [parametros]="valoresResultados" (cambioTipoConsulta)="accionMenu($event)"></app-resultados>
-        <!--<app-resultados-estadisticas *ngIf="resultados"></app-resultados-estadisticas>-->
+        <app-resultados *ngIf="resultados" (accion)="regresarResultados($event)" [parametros]="valoresResultados" (cambioTipoConsulta)="accionMenu($event)"></app-resultados>    
     </ng-container>
     <!--<app-toolbar (accion2d3d)="accion2d3d($event)" (capasReferencia)="cargarCapasDeReferencia($event)" (anadirCapaReferencia)="anadirCapaReferencia($event)"></app-toolbar>-->
     <!--<ngx-spinner bdColor = "rgba(0, 0, 0, 0.3)" size = "medium" color = "#fff" type = "ball-circus" [fullScreen] = "true" style="z-index: 999999999999;"></ngx-spinner>-->

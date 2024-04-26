@@ -1,6 +1,6 @@
 <div class="container-home">
   <div class="container-login">
-    <div class="form__group">
+    <!--<div class="form__group">
       <input
         type="usuario"
         class="form__field"
@@ -23,9 +23,12 @@
         [(ngModel)]="usuario.clave"
       />
       <label for="password" class="form__label">Contraseña</label>
+    </div>-->
+    <div class="form__group">
+      <p>Estimado ciudadano: Predio 360 es desarrollado por las Secretaría Distrital de Planeación para sus fines misionales. Por protocolo, la información disponible para la consulta no debe ser compartida a terceros sin autorización, siendo de uso exclusivo al interior de la entidad.</p>
     </div>
     <div class="form__group start-button-container">
-      <button
+      <!--<button
         class="start-button"
         (click)="validar()"
       >
@@ -36,6 +39,12 @@
         [routerLink]="['/3d']"
         routerLinkActive="router-link-active"
       >
+        Iniciar Consulta
+      </button>-->
+      <button
+        class="start-button"
+        [routerLink]="['/3d']"
+        routerLinkActive="router-link-active">
         Iniciar Consulta
       </button>
     </div>

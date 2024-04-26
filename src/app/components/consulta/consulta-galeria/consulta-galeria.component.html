@@ -10,12 +10,13 @@
     <div class="form__group">
       <p class="texto-blanco">Proyecto:</p>
       <select style="background: #000000; color: #ffffff;" class="form__field" [(ngModel)]="currentIndex" (change)="seleccionar()">
+        <option [value]="-1">Seleccione un proyecto</option>
         <option *ngFor="let d of datos; let i = index" [value]="i">
           {{ d.NOM_PROYECTO }}
         </option>
       </select>
     </div>
-    <div class="form__group">
+    <div class="form__group" *ngIf="currentIndex >= 0">
         <ng-container *ngFor="let titulo of titulos">
           <container-element [ngSwitch]="titulo.formato.tipo">
             <some-element *ngSwitchCase="'fecha'">
@@ -47,6 +48,11 @@
               <p><strong class="titulo-azul">{{ titulo.alias }}:</strong> {{ datos[currentIndex][titulo.name] }}</p>
             </some-element>
           </container-element>
+        </ng-container>
+        <ng-container>
+          <button 
+            type="button"  class="button-aqua"
+            (click)="generarFicha(datos[currentIndex])">Ver ficha del proyecto</button>
         </ng-container>
     </div>
   </ng-container>

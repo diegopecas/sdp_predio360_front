@@ -3,6 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MapService } from 'src/app/common/services/map.service';
 import swal from 'sweetalert2';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -17,9 +18,10 @@ export class ConsultaGaleriaComponent implements OnInit {
   public datos:any;
   public titulos = [] as any[];
 
-  public currentIndex = 0;
+  public currentIndex = -1;
 
   constructor(private mapService:MapService,
+    private router: Router,
     private sanitizer: DomSanitizer) {
 
   }
@@ -39,10 +41,12 @@ export class ConsultaGaleriaComponent implements OnInit {
   }
 
   seleccionar() {
-    console.log('PROYECTO SELECCIONADO', this.datos[this.currentIndex])
-    // this.seleccionProyecto.emit({latitud: this.datos[this.currentIndex].latitud, longitud: this.datos[this.currentIndex].longitud});
-    // this.mapService.seleccionProyectoGaleria({latitud: this.datos[this.currentIndex].latitud, longitud: this.datos[this.currentIndex].longitud});
-    this.mapService.seleccionElemento(this.datos[this.currentIndex].OBJECTID,"galeria");
+    if(this.currentIndex >= 0) {
+      console.log('PROYECTO SELECCIONADO', this.datos[this.currentIndex])
+      // this.seleccionProyecto.emit({latitud: this.datos[this.currentIndex].latitud, longitud: this.datos[this.currentIndex].longitud});
+      // this.mapService.seleccionProyectoGaleria({latitud: this.datos[this.currentIndex].latitud, longitud: this.datos[this.currentIndex].longitud});
+      this.mapService.seleccionElemento(this.datos[this.currentIndex].OBJECTID,"galeria");
+    }
   }
 
   /*consultarProyectos(){
@@ -138,6 +142,11 @@ export class ConsultaGaleriaComponent implements OnInit {
   
   sortBy(values:any[], prop: string) {
     return values.sort((a, b) => a[prop] > b[prop] ? 1 : a[prop] === b[prop] ? 0 : -1);
+  }
+
+  generarFicha(p: any): void {
+    const url = ['/ficha', p.CODIGO_PROYECTO];
+    window.open('/#'+this.router.serializeUrl(this.router.createUrlTree(url)), '_blank');
   }
 
 }
