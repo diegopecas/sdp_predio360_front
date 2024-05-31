@@ -46,6 +46,7 @@ export class ResultadosComponent implements OnChanges, OnInit {
   public isUBPanelExpanded: boolean = false;
   public isEPPanelExpanded: boolean = false;
   public panelGIHeight: number = 0;
+  public buscarTexto = '';
 
   ngOnInit() {
     this.capas = environment.capasBuffer;
@@ -275,5 +276,10 @@ export class ResultadosComponent implements OnChanges, OnInit {
 
   seleccionarCapaBuffer() {
     this.cambioCapaBuffer.emit(this.capas[this.currentIndexCapa]);
+  }
+
+  buscar(event: any) {
+    this.buscarTexto = event;
+    console.log("Texto buscado", this.buscarTexto);
   }
 }

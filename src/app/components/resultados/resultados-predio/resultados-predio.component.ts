@@ -12,10 +12,12 @@ import { MapService } from 'src/app/common/services/map.service';
 export class ResultadosPredioComponent implements OnInit, OnChanges {
   
   @Input() predio: any;
+  @Input() buscar: any;
   
   public paneles = [] as any;
   public panelEstadisticas = false;
   public predioEvaluado: any;
+  public buscarTexto = 'sis';
 
   constructor(private sanitizer: DomSanitizer,
     private mapService:MapService) {}
@@ -35,6 +37,7 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.buscarTexto = changes["buscar"]["currentValue"];
     this.predioEvaluado = changes["predio"]["currentValue"];
     if(this.predioEvaluado) {
       console.log('cambio de predio',this.predioEvaluado);

@@ -41,13 +41,16 @@ const right = [
 })
 export class ResultadosEstadisticasPredioComponent implements OnInit, OnChanges {
 
+  @Input() buscar: any;
   @Input() predio: any;
   
   public estadisticas: any[] = [];
   public estadisticasAtributos: any;
   private predioEvaluado: any;
+  public buscarTexto = '';
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.buscarTexto = changes["buscar"]["currentValue"];
     this.predioEvaluado = changes["predio"]["currentValue"];
     console.log('Se cambia el predio evaluado', this.predioEvaluado);
     if(this.predioEvaluado) {
