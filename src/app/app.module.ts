@@ -34,6 +34,7 @@ import { ResultadosUrbanisticoComponent } from './components/resultados/resultad
 import { AgregarCapasComponent } from './components/consulta/agregar-capas/agregar-capas.component';
 import { FichaProyectoComponent } from './components/ficha-proyecto/ficha-proyecto.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { FichaPredioComponent } from './components/ficha-predio/ficha-predio.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,8 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     ResultadosCercanosPredioComponent,
     ResultadosUrbanisticoComponent,
     AgregarCapasComponent,
-    FichaProyectoComponent
+    FichaProyectoComponent,
+    FichaPredioComponent
   ],
   imports: [
     BrowserModule,
