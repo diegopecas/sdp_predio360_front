@@ -15,6 +15,8 @@ export class FichaProyectoComponent implements OnInit   {
 
   private idProyecto:any;
   private proyecto:any;
+  private lote:any;
+  private fichaData:any;
   private mapUrl= "";
 
   constructor(
@@ -29,6 +31,7 @@ export class FichaProyectoComponent implements OnInit   {
     this.idProyecto = this.activatedRoute.snapshot.paramMap.get('idProyecto')!;
 
     this.mapService.consultarProyecto(this.idProyecto).then((response:any)=>{
+      debugger;
       console.log("response", response);
       this.proyecto = response;
       const xmin = this.proyecto.LONGITUD -1;
@@ -36,8 +39,28 @@ export class FichaProyectoComponent implements OnInit   {
       const ymin = this.proyecto.LATITUD -1;
       const ymax = this.proyecto.LATITUD +1;
       this.mapUrl+=`https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/export?bbox=${xmin},${ymin},${xmax},${ymax}&bboxSR=4326&layers=&layerDefs=&size=150%2C220&imageSR=4326&historicMoment=&format=png&transparent=false&dpi=&time=&timeRelation=esriTimeRelationOverlaps&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=8000&rotation=&datumTransformations=&layerParameterValues=&mapRangeValues=&layerRangeValues=&clipping=&spatialFilter=&f=image`;
-      this.export();
+      
 
+    }).catch((error:any)=>{
+      console.log("error", error);
+    });
+
+    this.mapService.consultarFichaProyectoInfo(this.idProyecto).then((response:any)=>{
+      debugger;
+      this.fichaData = response;
+      this.getLoteInfo(this.fichaData.CODIGO_LOTE);
+      console.log("response", response);
+    }).catch((error:any)=>{
+      console.log("error", error);
+    });
+  }
+
+  private getLoteInfo(idLote:any): void {
+    this.mapService.consultarLoteById(idLote).then((response:any)=>{
+      debugger;
+      console.log("response", response);
+      this.lote = response;
+      this.export();
     }).catch((error:any)=>{
       console.log("error", error);
     });
@@ -73,7 +96,7 @@ export class FichaProyectoComponent implements OnInit   {
             widths: [170, 170, 170],
             margin: [0, 20, 0, 8],
             body: [
-              [{text: 'UPL 13 TINTAL', style: 'subheader', fillColor: '#CCC'}, {text: 'Area del proy: XXXX', style: 'subheader', fillColor: '#CCC'}, {text: 'FICHA No. XXX', style: 'subheader', fillColor: '#CCC'}]
+              [{text: 'UPL: '+this.lote.GN_UNI_PLANEMIENTO_LOCAL, style: 'subheader', fillColor: '#CCC'}, {text: 'Area del proy: XXXX', style: 'subheader', fillColor: '#CCC'}, {text: 'FICHA No. XXX', style: 'subheader', fillColor: '#CCC'}]
             ]
           }
         },
@@ -88,7 +111,7 @@ export class FichaProyectoComponent implements OnInit   {
                   [{text: 'LOCALIZACIÓN DEL PROYECTO', style: 'subheader'}],
                   [{image: 'projectMap', width: 150, height: 220, margin: [ 10, 10, 10, 10 ] }],
                   [{text: 'LINK DEL PROYECTO:', style: 'subheader'}],
-                  [{ text: 'https://www.manzanatres.com/', link: 'https://www.manzanatres.com/' }
+                  [{ text: this.proyecto.LINK, link: this.proyecto.LINK }
                 ],
                 ]
               },
@@ -103,10 +126,10 @@ export class FichaProyectoComponent implements OnInit   {
               table: {
                 widths: [70, 89, 70, 89],
                 body: [
-                  [{text: 'PLANO No. ', style: 'subheader'}, {text: 'CU4K43/4-01a'},{text: 'LICENCIA No. ', style: 'subheader'}, {text: 'RES 07-4-1158'}],
+                  [{text: 'PLANO No. ', style: 'subheader'}, {text: this.fichaData.LIC_TIPO_TRAMITE},{text: 'LICENCIA No. ', style: 'subheader'}, {text: this.fichaData.LIC_ID_EXPEDIENTE}],
 
                   [{rowSpan: 5, text: 'NORMA DE EXPEDICIÓN DE LA LICENCIA', style: 'subheader'}, {text: 'MARCO NORMATIVO', style: 'subheader'},{colSpan: 2, text: 'DECRETO DISTRITAL 190 DE 2004'}, {}],
-                  [{}, {text: 'TRATAMIENTO URBANÍSTICO', style: 'subheader'},{colSpan: 2, text: 'Desarrollo'}, {}],
+                  [{}, {text: 'TRATAMIENTO URBANÍSTICO', style: 'subheader'},{colSpan: 2, text: this.lote.NR_TRAT_URBAN_NOMBRE }, {}],
                   [{}, {text: '[AREA DE ACTIVIDAD', style: 'subheader'},{colSpan: 2, text: 'Área Urbana Integral, Zona Residencial y Múltiple'}, {}],
                   [{}, {text: 'FECHA DE RADICADO', style: 'subheader'},{colSpan: 2, text: '8/24/2007'}, {}],
                   [{}, {text: 'NÚMERO DE RADICADO', style: 'subheader'},{colSpan: 2, text: '07-4-1233'}, {}],
