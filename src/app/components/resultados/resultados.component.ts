@@ -7,6 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from "@angular/core";
+import { Router } from "@angular/router";
 import { MapService } from "src/app/common/services/map.service";
 import { environment } from "src/environments/environment";
 import swal from "sweetalert2";
@@ -58,7 +59,10 @@ export class ResultadosComponent implements OnChanges, OnInit {
     });
   }
 
-  constructor(private mapService: MapService) {}
+  constructor(
+    private router: Router,
+    private mapService: MapService
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     
@@ -275,5 +279,10 @@ export class ResultadosComponent implements OnChanges, OnInit {
 
   seleccionarCapaBuffer() {
     this.cambioCapaBuffer.emit(this.capas[this.currentIndexCapa]);
+  }
+
+  generarFicha(p: any): void {
+    const url = ['/ficha', p.CODIGO_PROYECTO];
+    window.open('/#'+this.router.serializeUrl(this.router.createUrlTree(url)), '_blank');
   }
 }

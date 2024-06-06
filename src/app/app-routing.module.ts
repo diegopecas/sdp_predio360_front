@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: 'inicio', component: HomeComponent},
   { path: '3d', component: Map3dComponent},
   { path: 'ficha/:idProyecto', component: FichaProyectoComponent},
-  { path: 'fichaPredio/:chip', component: FichaPredioComponent},
+  { path: 'ficha-predio/:chip', component: FichaPredioComponent},
 ];
 
 @NgModule({

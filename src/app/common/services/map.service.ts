@@ -573,6 +573,32 @@ export class MapService {
       });
   }
 
+  consultarPredioByChip(chip: any): any {
+    const featureLayer = new FeatureLayer({
+      url: environment.capaConsultaPredio.porChip.url,
+    });
+
+    const query = featureLayer.createQuery();
+    query.where =
+      environment.capaConsultaPredio.porChip.atributo + " like '" + chip + "'";
+    query.outFields = ["*"];
+    query.returnGeometry = false;
+    return featureLayer
+      .queryFeatures(query)
+      .then((result: any) => {
+        const features = result.features;
+
+        if (features.length > 0) {
+          return features.map((m: any) => m.attributes)[0];;
+        } else {
+          return [];
+        }
+      })
+      .catch((error: any) => {
+        console.error("Error al consultar la tabla:", error);
+      });
+  }
+
   consultarPrediosByDireccion(direccionConsulta: any): any {
     const featureLayer = new FeatureLayer({
       url: environment.capaConsultaPredio.porDireccion.url,
