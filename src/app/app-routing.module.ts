@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: '', component: HomeComponent},
   { path: 'inicio', component: HomeComponent},
   { path: '3d', component: Map3dComponent},
-  { path: 'ficha/:idProyecto', component: FichaProyectoComponent},
+  { path: 'ficha-proyecto/:idProyecto', component: FichaProyectoComponent},
   { path: 'ficha-predio/:chip', component: FichaPredioComponent},
 ];
 
