@@ -314,6 +314,46 @@ export class MapService {
     });
   }
 
+  removerCapaRestPrecargada(capa:any) {
+    if (capa.featureLayer) {
+      this.map?.remove(capa.featureLayer);
+    }
+  }
+
+  agregarCapaRestPrecargada(capa:any) {
+    try {
+      const popup = {
+        "title": capa.label,
+        "content": capa.popup
+      }
+
+      const nuevaCapa = new FeatureLayer({
+        url: capa.url,
+        outFields: capa.fields,
+        popupTemplate: popup
+      });
+
+      capa.featureLayer = nuevaCapa;
+
+      this.map?.add(nuevaCapa);
+
+      // Escuchar el evento de error al crear la LayerView
+      nuevaCapa.on('layerview-create-error', (errorEvent) => {
+        console.error('Error al crear la LayerView:', errorEvent.error);
+        swal.fire("Error al agregar capa.");
+      });
+
+      // También puedes escuchar el evento 'layerview-create' para realizar acciones después de que se crea la LayerView con éxito
+      nuevaCapa.on('layerview-create', (layerviewEvent) => {
+        console.log('LayerView creada con éxito:', layerviewEvent.layerView);
+        swal.fire("capa agregada correctamente.");
+      });
+
+    }catch(error:any) {
+      swal.fire("Ocurrió un error al agregar la capa.");
+    }
+  }
+
   agregarCapaRest(nombre:any, servicio:any) {
     try {
       const nuevaCapa = new FeatureLayer({
@@ -344,15 +384,6 @@ export class MapService {
     }catch(error:any) {
       swal.fire("Ocurrió un error al agregar la capa.");
     }
-    
-      /*const { value: url } = await swal.fire({
-        input: "url",
-        inputLabel: "URL address",
-        inputPlaceholder: "Enter the URL"
-      });
-      if (url) {
-        swal.fire(`Entered URL: ${url}`);
-      }*/
   }
 
   agregarListaCapas() {
