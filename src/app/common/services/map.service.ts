@@ -469,7 +469,7 @@ export class MapService {
     const query = featureLayer.createQuery();
     query.where =
       environment.capaConsultaPredio.porLote.atributo + " like '" + lote + "'";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
 
     return featureLayer
@@ -499,7 +499,7 @@ export class MapService {
 
     query.where =
       environment.capaConsultaPredio.porLote.atributo + " IN ('" + ids + "')";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
 
     return featureLayer
@@ -529,7 +529,7 @@ export class MapService {
       " like '" +
       matricula +
       "'";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
 
     return featureLayer
@@ -559,7 +559,7 @@ export class MapService {
       " like '" +
       cedula +
       "'";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
 
     return featureLayer
@@ -586,7 +586,7 @@ export class MapService {
     const query = featureLayer.createQuery();
     query.where =
       environment.capaConsultaPredio.porChip.atributo + " like '" + chip + "'";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
     return featureLayer
       .queryFeatures(query)
@@ -595,6 +595,32 @@ export class MapService {
 
         if (features.length > 0) {
           return features.map((m: any) => m.attributes);
+        } else {
+          return [];
+        }
+      })
+      .catch((error: any) => {
+        console.error("Error al consultar la tabla:", error);
+      });
+  }
+
+  consultarPredioByChip(chip: any): any {
+    const featureLayer = new FeatureLayer({
+      url: environment.capaConsultaPredio.porChip.url,
+    });
+
+    const query = featureLayer.createQuery();
+    query.where =
+      environment.capaConsultaPredio.porChip.atributo + " like '" + chip + "'";
+    query.outFields = ["*"];
+    query.returnGeometry = false;
+    return featureLayer
+      .queryFeatures(query)
+      .then((result: any) => {
+        const features = result.features;
+
+        if (features.length > 0) {
+          return features.map((m: any) => m.attributes)[0];;
         } else {
           return [];
         }
@@ -616,7 +642,7 @@ export class MapService {
       " like '" +
       direccionConsulta +
       "%'";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
     return featureLayer
       .queryFeatures(query)
@@ -1121,6 +1147,68 @@ export class MapService {
           proyecto = features.map((m: any) => m.attributes)[0];
         }
         return proyecto;
+      })
+      .catch((error: any) => {
+        // Manejar cualquier error ocurrido durante la consulta
+        console.error("Error al consultar la tabla:", error);
+        return [];
+      });
+  }
+
+  consultarLoteById(idLote:any): any {
+    let lote = [] as any[];
+    // Crear un FeatureLayer con la URL del servicio de tabla
+    const featureLayer = new FeatureLayer({
+      url: environment.urlLoteCatastral
+    });
+
+    // Consultar la tabla y obtener los resultados
+    const query = featureLayer.createQuery();
+    query.where = "GN_CODIGO_LOTE  = "+idLote; // Establecer una condición opcional para filtrar los resultados
+    query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
+
+    return featureLayer
+      .queryFeatures(query)
+      .then((result: any) => {
+        // Manipular los resultados obtenidos
+        const features = result.features;
+        // Realizar acciones con los datos devueltos
+
+        if (features.length > 0) {
+          lote = features.map((m: any) => m.attributes)[0];
+        }
+        return lote;
+      })
+      .catch((error: any) => {
+        // Manejar cualquier error ocurrido durante la consulta
+        console.error("Error al consultar la tabla:", error);
+        return [];
+      });
+  }
+
+  consultarFichaProyectoInfo(idProyecto:any): any {
+    let fichaInfo = [] as any[];
+    // Crear un FeatureLayer con la URL del servicio de tabla
+    const featureLayer = new FeatureLayer({
+      url: environment.urlFichaProyecto
+    });
+
+    // Consultar la tabla y obtener los resultados
+    const query = featureLayer.createQuery();
+    query.where = "CODIGO_PROYECTO  = "+idProyecto; // Establecer una condición opcional para filtrar los resultados
+    query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
+
+    return featureLayer
+      .queryFeatures(query)
+      .then((result: any) => {
+        // Manipular los resultados obtenidos
+        const features = result.features;
+        // Realizar acciones con los datos devueltos
+
+        if (features.length > 0) {
+          fichaInfo = features.map((m: any) => m.attributes)[0];
+        }
+        return fichaInfo;
       })
       .catch((error: any) => {
         // Manejar cualquier error ocurrido durante la consulta

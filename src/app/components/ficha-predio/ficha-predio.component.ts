@@ -7,18 +7,18 @@ import { MapService } from 'src/app/common/services/map.service';
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
-  selector: 'app-ficha-proyecto',
-  templateUrl: './ficha-proyecto.component.html',
-  styleUrls: ['./ficha-proyecto.component.css']
+  selector: 'app-ficha-predio',
+  templateUrl: './ficha-predio.component.html',
+  styleUrls: ['./ficha-predio.component.css']
 })
-export class FichaProyectoComponent implements OnInit   {
+export class FichaPredioComponent implements OnInit   {
 
-  private idProyecto:any;
-  private proyecto:any;
+  private chip:any;
+  private predio:any;
   private lote:any;
-  private fichaData:any;
+  //private fichaData:any;
   private mapUrl= "";
-  private baseMapUrl= "";
+  private baseMapUrl = "";
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -28,45 +28,25 @@ export class FichaProyectoComponent implements OnInit   {
   }
   
 
-  ngOnInit(): void {
-    this.idProyecto = this.activatedRoute.snapshot.paramMap.get('idProyecto')!;
+  async ngOnInit(): Promise<any> {
+    this.chip = this.activatedRoute.snapshot.paramMap.get('chip')!;
 
-    this.mapService.consultarProyecto(this.idProyecto).then((response:any)=>{
-      console.log("response", response);
-      this.proyecto = response;
-      const xmin = this.proyecto.LONGITUD -1;
-      const xmax = this.proyecto.LONGITUD +1;
-      const ymin = this.proyecto.LATITUD -1;
-      const ymax = this.proyecto.LATITUD +1;
-      this.mapUrl+=`https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/export?bbox=${xmin},${ymin},${xmax},${ymax}&bboxSR=4326&layers=show:6=&layerDefs=&size=150%2C220&imageSR=4326&historicMoment=&format=png&transparent=true&dpi=&time=&timeRelation=esriTimeRelationOverlaps&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=8000&rotation=&datumTransformations=&layerParameterValues=&mapRangeValues=&layerRangeValues=&clipping=&spatialFilter=&f=image`;
-      this.baseMapUrl+=`https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/export?bbox=${xmin},${ymin},${xmax},${ymax}&bboxSR=4326&layers=&layerDefs=&size=150%2C220&imageSR=4326&historicMoment=&format=png&transparent=false&dpi=&time=&timeRelation=esriTimeRelationOverlaps&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=8000&rotation=&datumTransformations=&layerParameterValues=&mapRangeValues=&layerRangeValues=&clipping=&spatialFilter=&f=image`;
-      debugger;
-      console.log("mapUrl", this.mapUrl);
+    this.predio = await this.mapService.consultarPredioByChip(this.chip);
+    
+    console.log(this.predio);
+    this.lote = await this.mapService.consultarLoteById (this.predio.GN_CODIGO_LOTE);
 
-    }).catch((error:any)=>{
-      console.log("error", error);
-    });
-
-    this.mapService.consultarFichaProyectoInfo(this.idProyecto).then((response:any)=>{
-      debugger;
-      this.fichaData = response;
-      this.getLoteInfo(this.fichaData.CODIGO_LOTE);
-      console.log("response", response);
-    }).catch((error:any)=>{
-      console.log("error", error);
-    });
+    
+    this.baseMapUrl+=`https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/export?bbox=-75.052872,3.6787329999999994,-73.052872,5.678732999999999&bboxSR=4326&layers=&layerDefs=&size=150,220&imageSR=4326&historicMoment=&format=png&transparent=false&dpi=&time=&timeRelation=esriTimeRelationOverlaps&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=8000&rotation=&datumTransformations=&layerParameterValues=&mapRangeValues=&layerRangeValues=&clipping=&spatialFilter=&f=image`;
+    this.mapUrl+=`https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/export?bbox=-75.052872,3.6787329999999994,-73.052872,5.678732999999999&bboxSR4326&layers=show:10,6&size=150,220&imageSR=4326&format=png&transparent=true&mapScale=8000&f=image`;
+    console.log("error", this.mapUrl);
+    
+    console.log(this.lote);
+    this.export();
   }
 
-  private getLoteInfo(idLote:any): void {
-    this.mapService.consultarLoteById(idLote).then((response:any)=>{
-      debugger;
-      console.log("response", response);
-      this.lote = response;
-      this.export();
-    }).catch((error:any)=>{
-      console.log("error", error);
-    });
-  }
+   
+
 
   public export(): void {
 
@@ -76,151 +56,165 @@ export class FichaProyectoComponent implements OnInit   {
       header: {
         columns: [
           { image: 'logo', width: 150, margin: [ 50, 10, 10, 30 ] },
-          { text: 'Ficha de Proyecto Inmobiliario', style: 'header', margin: [0, 30, 0, 0]}
+          { text: 'Ficha del Predio', style: 'header', margin: [0, 30, 0, 0]}
         ],
       },
       content: [
         {
+          width: '*',
+          margin: [0, 0, 0, 8], 
           style: 'table',
-          margin: [0, 0, 0, 8], 
           table: {
-            widths: [170, 170, 170], 
-            margin: [0, 20, 0, 8],
+            widths: [320, 200],
             body: [
-              [{text: 'Proyecto:'+this.proyecto.NOM_PROYECTO, colSpan: 2, style: 'tableHeader', fillColor: '#CCC'}, {}, {text: 'FECHA: I-2023*', style: 'tableHeader', fillColor: '#CCC'}],
+              [{colSpan:2, text: 'Información de Localización', style: 'header', fillColor: '#CCC'}, {}],
+              // [{colSpan:2, image: 'projectBaseMap', height:280 , width:510 , margin: [ 10, 10, 10, 10 ], absolutePosition: {x: 10, y: 10} }],
+              // [{colSpan:2, image: 'projectMap', height:280 , width:510 , margin: [ 10, 10, 10, 10 ]}],
+              [{text: 'Código Barrio', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_CODIGO_LOTE.substring(0, 6)}],
+              [{text: 'Código Manzana', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_CODIGO_LOTE.substring(6, 8)}],
+              [{text: 'Código Predio', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_CODIGO_LOTE.substring(8, 10)}],
+              [{text: 'Localidad', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.GN_LOCALIDAD}],
+              [{text: 'Unidad de Planeamiento Local (UPL)', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.GN_UNI_PLANEMIENTO_LOCAL}],
+              [{text: 'Sector Catastral', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.GN_SECTOR_CATASTRAL}]
             ]
-          }
+          },
         },
         {
+          width: '*',
+          margin: [0, 0, 0, 8], 
           style: 'table',
-          margin: [0, 0, 0, 8], 
           table: {
-            widths: [170, 170, 170],
-            margin: [0, 20, 0, 8],
+            widths: [320, 200],
             body: [
-              [{text: 'UPL: '+this.lote.GN_UNI_PLANEMIENTO_LOCAL, style: 'subheader', fillColor: '#CCC'}, {text: 'Area del proy: XXXX', style: 'subheader', fillColor: '#CCC'}, {text: 'FICHA No. XXX*', style: 'subheader', fillColor: '#CCC'}]
+              [{colSpan:2, text: 'Datos Generales del Predio', style: 'header', fillColor: '#CCC'}, {}],
+              [{text: 'Dirección oficial', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_DIRECCION}],
+              [{text: 'CHIP', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_CHIP}],
+              [{text: 'Matrícula Inmobiliaria', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_MATRICULA_INMOBILIARIA}],
+              [{text: 'Código del lote', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_CODIGO_LOTE}],
+              [{text: 'Notaria', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_NOTARIA}],
+              [{text: 'Número de escritura', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_NUMERO_DOCUMENTO}],
+              [{text: 'Fecha de escritura', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_FECHA_DOCUMENTO}],
             ]
-          }
+          },
         },
         {
+          width: '*',
           margin: [0, 0, 0, 8], 
-          columns: [
-            {
-              width: 180,
-              style: 'table',
-              table: {
-                body: [
-                  [{text: 'LOCALIZACIÓN DEL PROYECTO', style: 'subheader'}],
-                  [{image: 'projectBaseMap', width: 150, height: 220, margin: [ 10, 10, 10, 10 ] }],
-                  [{text: 'LINK DEL PROYECTO:', style: 'subheader'}],
-                  [{ text: this.proyecto.LINK, link: this.proyecto.LINK }
-                ],
-                ]
-              },
-            },
-            {
-              width: 5,
-              text:''
-            },
-            {
-              width: '*',
-              style: 'table',
-              table: {
-                widths: [70, 89, 70, 89],
-                body: [
-                  [{text: 'PLANO No. ', style: 'subheader'}, {text: this.fichaData.LIC_TIPO_TRAMITE},{text: 'LICENCIA No. ', style: 'subheader'}, {text: this.fichaData.LIC_ID_EXPEDIENTE}],
-
-                  [{rowSpan: 5, text: 'NORMA DE EXPEDICIÓN DE LA LICENCIA', style: 'subheader'}, {text: 'MARCO NORMATIVO', style: 'subheader'},{colSpan: 2, text: 'DECRETO DISTRITAL 190 DE 2004'}, {}],
-                  [{}, {text: 'TRATAMIENTO URBANÍSTICO', style: 'subheader'},{colSpan: 2, text: this.lote.NR_TRAT_URBAN_NOMBRE }, {}],
-                  [{}, {text: 'ÁREA DE ACTIVIDAD', style: 'subheader'},{colSpan: 2, text: this.lote.NR_AREA_ACTIVIDAD }, {}],
-                  [{}, {text: 'FECHA DE RADICADO', style: 'subheader'},{colSpan: 2, text: '8/24/2007'}, {}],
-                  [{}, {text: 'NÚMERO DE RADICADO', style: 'subheader'},{colSpan: 2, text: '07-4-1233'}, {}],
-
-                  [{rowSpan: 2, text: 'DIRECCIÓN', style: 'subheader'}, {rowSpan: 2, text: this.proyecto.DIRECCION},{text: 'ESTADO:', style: 'subheader'}, {text: this.proyecto.ESTADO}],
-                  [{}, {},{text: 'ESTRATO::', style: 'subheader'}, {text: this.proyecto.ESTRATO}],
-                  [{text: 'CHIP:', style: 'subheader'}, {text: 'AAA0137ZEBR'},{text: 'MATRÍCULA INMOBILIARIA:', style: 'subheader'}, {text: '50C-260832'}]
-                ]
-              },
-            }
-
-          ],
-        },
-        {image: 'projectMap', width: 150, height: 220, margin: [ 10, 10, 10, 10 ], absolutePosition: {x: 45, y: 247} },
-        {
-          margin: [0, 0, 0, 8], 
-          columns: [
-            {
-              width: 180,
-              style: 'table',
-              table: {
-                body: [
-                  [{text: 'PLANO 1', style: 'subheader'}],
-                  [{image: 'default', width: 150, margin: [ 10, 10, 10, 10 ] }]
-                ]
-              },
-            },
-            {
-              width: 5,
-              text:''
-            },
-            {
-              width: '*',
-              style: 'table',
-              table: {
-                widths: [185, 150],
-                body: [
-                  [{colSpan:2, text: 'CONDICIONES URBANÍSTICAS', style: 'header', fillColor: '#CCC'}, {}],
-                  [{text: 'ÁREA BRUTA (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '228072.17'}],
-                  [{text: 'ÁREA NO URBANIZABLE-RESERVAS (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '6802.72'}],
-                  [{text: 'ÁREA NETA TODAS LAS ETAPAS LICENCIADAS (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '433,794.65'}],
-                  [{text: 'CESIONES DE MALLA VIAL (Contro Ambiental y vias) (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '41,023.55'}],
-                  [{text: 'CESION EQUIPAMIENTO', style: 'subheader', fillColor: '#CCC'}, {text: '17003.12'}],
-                  [{text: 'CESION ESPACIO PÚBLICO', style: 'subheader', fillColor: '#CCC'}, {text: '36,298.28'}],
-                ]
-              },
-            }
-
-          ],
+          style: 'table',
+          table: {
+            widths: [320, 200],
+            body: [
+              [{colSpan:2, text: 'Información De Uso Actual', style: 'header', fillColor: '#CCC'}, {}],
+              [{text: 'Clase de predio', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_CLASE_PREDIO}],
+              [{text: 'Área en uso actividad conexa a PH', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_AREA_USO_PH}],
+              [{text: 'Área en uso residencial', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_AREA_USO_RESIDENCIAL}],
+              [{text: 'Área en uso comercial', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_AREA_USO_COMERCIAL}],
+              [{text: 'Área en uso servicios', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_AREA_USO_SERVICIOS}],
+              [{text: 'Área en uso industria', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_AREA_USO_INDUSTRIA}],
+              [{text: 'Área en uso dotacional', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_AREA_USO_DOTACIONAL}],
+              [{text: 'Área en uso no urbano', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_AREA_USO_NO_URB}]
+            ]
+          },
         },
         {
+          width: '*',
           margin: [0, 0, 0, 8], 
-          columns: [
-            {
-              width: 180,
-              style: 'table',
-              table: {
-                body: [
-                  [{text: 'PLANO 2', style: 'subheader'}],
-                  [{image: 'default', width: 150, margin: [ 10, 10, 10, 10 ] }]
-                ]
-              },
-            },
-            {
-              width: 5,
-              text:''
-            },
-            {
-              width: '*',
-              style: 'table',
-              table: {
-                widths: [185, 150],
-                body: [
-                  [{text: 'COMPESACIÓN EN DINERO', style: 'subheader', fillColor: '#CCC'}, {text: 'N/A'}],
-                  [{text: 'ÁREA ÚTIL', style: 'subheader', fillColor: '#CCC'}, {text: '127730.48'}],
-                  [{text: 'INDICE DE CONSTRUCCION', style: 'subheader', fillColor: '#CCC'}, {text: '0.91'}],
-                  [{text: 'VIVIENDA (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '197171.74'}],
-                  [{text: 'NO VIS (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '0'}],
-                  [{text: 'VIS (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '0'}],
-                  [{text: 'VIP (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '0'}],
-                  [{text: 'COMERCIO Y SERVICIOS', style: 'subheader', fillColor: '#CCC'}, {text: '1755.55'}],
-                  [{text: 'DOTACIONAL', style: 'subheader', fillColor: '#CCC'}, {text: '0'}],
-                  [{text: 'INDUSTRIA', style: 'subheader', fillColor: '#CCC'}, {text: '0'}],
-                  [{text: 'DENSIDAD POBLACIONAL', style: 'subheader', fillColor: '#CCC'}, {text: 'Resultante'}]
-                ]
-              },
-            }
-
-          ],
+          style: 'table',
+          table: {
+            widths: [320, 200],
+            body: [
+              [{colSpan:2, text: 'Información Física Del Lote', style: 'header', fillColor: '#CCC'}, {}],
+              [{text: 'Área del lote', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.FS_AREA}],
+              [{text: 'Área de terreno del predio', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.FS_AREA_TERRENO}],
+              [{text: 'Área construida del lote', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.FS_AREA_CONSTRUIDA}],
+              [{text: 'Área construida del predio', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.FS_AREA_CONSTRUIDA}],
+              [{text: 'Índice de construcción', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.FS_INDICE_CONSTRUCCION}],
+              [{text: 'Índice de ocupación', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.FS_INDICE_OCUPACION}],
+              [{text: 'Tiene semisotano', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.FS_SEMISOTANO}],
+              [{text: 'Número de pisos', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.FS_NUMERO_PISOS}],
+              [{text: 'Vetustez', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.FS_VETUSTEZ }]
+            ]
+          },
+        },
+        {
+          width: '*',
+          margin: [0, 0, 0, 8], 
+          style: 'table',
+          table: {
+            widths: [320, 200],
+            body: [
+              [{colSpan:2, text: 'Información Normativa', style: 'header', fillColor: '#CCC'}, {}],
+              [{text: 'Nombre del Tratamiento Urbanístico:', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_TRAT_URBAN_NOMBRE}],
+              [{text: 'Tipología del Tratamiento Urbanístico', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_TRAT_URBAN_TIPOLOGIA}],
+              [{text: 'Altura máxima por tratamiento urbanístico', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_TRAT_URBAN_ALTURA_MAXIMA}],
+              [{text: 'Área de Actividad', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_AREA_ACTIVIDAD}],
+              [{text: 'Sector de uso residencial', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_BARRIO_SECTOR_USO_RESIDEN}],
+              [{text: 'Incompatibilidad con el uso residencial', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_ES_SEC_INCOMPA_USO_RESI}],
+              [{text: 'Manzana comercial', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_MANZANA_COMERCIAL_ACTO_ADM}],
+              [{text: 'Sector', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_ES_SECTOR_CONSOLIDADO}],
+              [{text: 'Nombre del Plan Parcial', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_PLAN_PARCIAL_NOMBRE }],
+              [{text: 'Tipo del Plan Parcial', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_PLAN_PARCIAL_TIPO}],
+              [{text: 'Estado del Plan Parcial', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_PLAN_PARCIAL_ESTADO}],
+              [{text: 'Acto Administrativo del Plan Parcial', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_PLAN_PARCIAL_ACTO_ADMTIVO}],
+              [{text: 'Número Acto Administrativo del Plan Parcial', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_PLAN_PARCIAL_ACTO_ADM_NRO}],
+              [{text: 'Área de Desarrollo Naranja', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_AREA_DESARR_NARANJA}],
+              [{text: 'Área de Integración Multimodal', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_AREA_INTE_MULTIMODAL}],
+              [{text: 'Localización frente a vía', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_FRENTE_VIA_CLASIFICACION }],
+              [{text: 'Estado construcción frente a vía', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_FRENTE_VIA_ESTADO_CONSTR}],
+              [{text: 'Nombre de la vía', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_FRENTE_VIA_NOMBRE_VIA}],
+              [{text: 'Área de influencia cota 64 aeropuerto', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_ES_AREA_INFLUENCIA_COTA5_AI}],
+              [{text: 'Elevación cota máxima en altura', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_AREA_ELEV_MAXIMA_ALTURA }],
+              [{text: 'Área de Elevación Máxima: Elevación', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_AREA_ELEV_MAXIMA_ELEVACION}],
+              [{text: 'Bien de Interés Cultural', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_BIEN_INTERES_CULT}],
+              [{text: 'Nombre sectores interés urbanístico', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_SEC_INTERES_URBANI_NOMBRE }],
+              [{text: 'Modalidad sectores interés urbanístico', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_SEC_INTERES_URBANI_MODALI}],
+              [{text: 'Componente de la Estructura Ecológica Principal', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_ESTUC_ECO_PRIN_COMPONENTE}],
+              [{text: 'Categoría de la Estructura Ecológica PrincipaL', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_ESTUC_ECO_PRIN_CATEGORIA}],
+              [{text: 'Elemento de la Estructura Ecológica Principal', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_ESTUC_ECO_PRIN_ELEMENTO }],
+              [{text: 'Nombre Total de la Estructura Ecológica Principal', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_ESTUC_ECO_PRIN_NOMBRE }],
+              [{text: 'Suelo de protección por riesgo', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_SUELO_PROTECC_RIESGO}],
+              [{text: 'Nivel de amenaza avenida torrencial', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_AME_AVENIDA_TORRENCI_URB}],
+              [{text: 'Nivel de amenaza incendio forestal', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_AME_INCEN_FORES_URB }],
+              [{text: 'Nivel de amenaza desbordamiento', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_AME_INUNDA_DESBOR}],
+              [{text: 'Nivel de amenaza avenida encharcamiento', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_AME_INUNDA_ENCHAR}],
+              [{text: 'Nivel de amenaza rompimiento jarillón', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_AME_INUNDA_ROMPI_JARILL}],
+              [{text: 'Nivel de amenaza remoción en masa', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_AME_MOVIM_MASA_URBANO }]
+            ]
+          },
+        },
+        {
+          width: '*',
+          margin: [0, 0, 0, 8], 
+          style: 'table',
+          table: {
+            widths: [320, 200],
+            body: [
+              [{colSpan:2, text: 'Información Económica', style: 'header', fillColor: '#CCC'}, {}],
+              [{text: 'Valor de Referencia del Suelo m2', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.EC_VALOR_REFERENCIA_SUELO}],
+              [{text: 'Valor m2 Terreno', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.EC_VALOR_M2_TERRENO}],
+              [{text: 'Valor m2 Construcción', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.EC_VALOR_M2_CONSTRUCCION}],
+              [{text: 'Valor total de terreno', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.EC_VALOR_TOTAL_TERRENO }],
+              [{text: 'Valor total de construcción', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.EC_VALOR_TOTAL_CONSTRUCCION }],
+              [{text: 'Avalúo', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.EC_AVALUO}],
+              [{text: 'Año avalúo catastral', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.EC_AVALUO_ANO}]
+            ]
+          },
+        },
+        {
+          width: '*',
+          margin: [0, 0, 0, 8], 
+          style: 'table',
+          table: {
+            widths: [320, 200],
+            body: [
+              [{colSpan:2, text: 'Información de Hogares Sisbén', style: 'header', fillColor: '#CCC'}, {}],
+              [{text: 'Total hogares Sisbén IV', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.SE_HOGARES_SISBEN_IV}],
+              [{text: 'Total hogares Sisbén en pobreza extrema', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.SE_HOGARES_SISBEN_POB_EXTREMA}],
+              [{text: 'Total hogares Sisbén con pobreza moderada', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.SE_HOGARES_SISBEN_POB_MODERADA}],
+              [{text: 'Total hogares Sisbén vulnerables', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.SE_HOGARES_SISBEN_VULNERABLES }],
+              [{text: 'Total hogares Sisbén en no pobres', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.SE_HOGARES_SISBEN_NO_POBRES }]
+            ]
+          },
         }
       ],
       images: {
