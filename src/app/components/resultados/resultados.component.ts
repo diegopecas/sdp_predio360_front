@@ -282,7 +282,7 @@ export class ResultadosComponent implements OnChanges, OnInit {
   }
 
   generarFicha(p: any): void {
-    const url = ['/ficha', p.CODIGO_PROYECTO];
+    const url = ['/ficha-predio', p.GN_CHIP];
     window.open('/#'+this.router.serializeUrl(this.router.createUrlTree(url)), '_blank');
   }
 }

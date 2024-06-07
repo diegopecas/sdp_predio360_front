@@ -438,7 +438,7 @@ export class MapService {
     const query = featureLayer.createQuery();
     query.where =
       environment.capaConsultaPredio.porLote.atributo + " like '" + lote + "'";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
 
     return featureLayer
@@ -468,7 +468,7 @@ export class MapService {
 
     query.where =
       environment.capaConsultaPredio.porLote.atributo + " IN ('" + ids + "')";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
 
     return featureLayer
@@ -498,7 +498,7 @@ export class MapService {
       " like '" +
       matricula +
       "'";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
 
     return featureLayer
@@ -528,7 +528,7 @@ export class MapService {
       " like '" +
       cedula +
       "'";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
 
     return featureLayer
@@ -555,7 +555,7 @@ export class MapService {
     const query = featureLayer.createQuery();
     query.where =
       environment.capaConsultaPredio.porChip.atributo + " like '" + chip + "'";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
     return featureLayer
       .queryFeatures(query)
@@ -611,7 +611,7 @@ export class MapService {
       " like '" +
       direccionConsulta +
       "%'";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
     return featureLayer
       .queryFeatures(query)
