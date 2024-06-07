@@ -68,8 +68,8 @@ export class FichaPredioComponent implements OnInit   {
             widths: [320, 200],
             body: [
               [{colSpan:2, text: 'Información de Localización', style: 'header', fillColor: '#CCC'}, {}],
-              [{colSpan:2, image: 'projectBaseMap', height:280 , width:510 , margin: [ 10, 10, 10, 10 ], absolutePosition: {x: 10, y: 10} }],
-              [{colSpan:2, image: 'projectMap', height:280 , width:510 , margin: [ 10, 10, 10, 10 ]}],
+              // [{colSpan:2, image: 'projectBaseMap', height:280 , width:510 , margin: [ 10, 10, 10, 10 ], absolutePosition: {x: 10, y: 10} }],
+              // [{colSpan:2, image: 'projectMap', height:280 , width:510 , margin: [ 10, 10, 10, 10 ]}],
               [{text: 'Código Barrio', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_CODIGO_LOTE.substring(0, 6)}],
               [{text: 'Código Manzana', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_CODIGO_LOTE.substring(6, 8)}],
               [{text: 'Código Predio', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_CODIGO_LOTE.substring(8, 10)}],
