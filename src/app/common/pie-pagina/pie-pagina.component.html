@@ -1,18 +1,15 @@
 <div class="logo-container">
   <img class="logo-sdp" src="/assets/images/logo_sdp_blanco.png" />
   <p class="texto-encuesta">{{ invitacion }}</p>
-  <a
-  href="https://forms.gle/QRoQuZpmzdYk67Z6A"
-  target="_blank"
-  class="boton-azul"
+  <button class="button-predio raise"
+  (click)="abrirEncuesta()"
   >
   Trabajemos juntos
-  </a>
-  <button
-  class="boton-azul"
+</button>
+  <button class="button-predio raise"
   (click)="verAyuda()"
   >
-  Ver ayuda
+    Ver ayuda
 </button>
 </div>
 <div class="barra-pie"></div>

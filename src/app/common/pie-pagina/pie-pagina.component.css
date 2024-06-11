@@ -3,3 +3,50 @@
     color: #eeeeee !important;
     text-align: center !important;
 }
+
+/* Colores principales */
+:root {
+    --primary-color: #03ffff; /* Color principal */
+    --text-color: #ffffff; /* Color de texto */
+    --hover-color: #02cccc; /* Color al pasar el ratón */
+  }
+  
+  /* Estilo para los botones */
+  .modern-button {
+    background-color: #03ffff;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 16px; /* Tamaño de fuente ajustado */
+    border: none;
+    border-radius: 25px; /* Bordes redondeados */
+    padding: 12px 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra sutil */
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .modern-button:hover {
+    background-color: #02cccc;
+    transform: translateY(-2px); /* Efecto de elevación */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modern-button:active {
+    transform: translateY(0); /* Efecto al presionar */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modern-button:focus {
+    outline: none;
+    box-shadow: 0 0 6px #03ffff;
+  }
+  
+  .modern-button a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+  
+  .modern-button a:hover {
+    text-decoration: none;
+  }
+  

@@ -17,6 +17,7 @@ import Search from "@arcgis/core/widgets/Search";
 import Point from "@arcgis/core/geometry/Point";
 import BasemapGallery from "@arcgis/core/widgets/BasemapGallery";
 import ScaleBar from "@arcgis/core/widgets/ScaleBar";
+import Slider from "@arcgis/core/widgets/Slider";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils";
 import ButtonMenu from "@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenu";
 import ButtonMenuItem from "@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenuItem";
@@ -386,15 +387,95 @@ export class MapService {
     }
   }
 
+  async defineActions(event:any) {
+    const item = event.item;
+  
+    await item.layer.when();
+  
+      item.actionsSections = [
+        [
+          {
+            title: "Go to full extent",
+            icon: "zoom-out-fixed",
+            id: "full-extent"
+          },
+          {
+            title: "Layer information",
+            icon: "information",
+            id: "information"
+          }
+        ],
+        [
+          {
+            title: "Increase opacity",
+            icon: "chevron-up",
+            id: "increase-opacity"
+          },
+          {
+            title: "Decrease opacity",
+            icon: "chevron-down",
+            id: "decrease-opacity"
+          }
+        ]
+      ];
+    
+  }
+
   agregarListaCapas() {
+   
     const layerList = new LayerList({
       view: this.views.activeView,
+      // listItemCreatedFunction: this.defineActions
     });
+
+    layerList.listItemCreatedFunction = async (event:any) => {
+      const { item } = event;
+      await item.layer.when();
+    
+      // Adds a slider for updating a group layer's opacity
+      if (item.children.length > 1 && item.parent) {
+        const slider = new Slider({
+          min: 0,
+          max: 1,
+          precision: 2,
+          values: [1],
+          visibleElements: {
+            labels: true,
+            rangeLabels: true
+          }
+        });
+    
+        item.panel = {
+          content: slider,
+          icon: "sliders-horizontal",
+          title: "Change layer opacity"
+        };
+    
+        // Watch the slider's values array and update the layer's opacity
+        reactiveUtils.watch(
+          () => slider.values.map((value) => value),
+          (values) => (item.layer.opacity = values[0])
+        );
+      }
+    }
 
     const bgExpand = new Expand({
       view: this.views.activeView,
       content: layerList,
     });
+
+    /*const mySlider = new Slider({
+      // container: "sliderDiv",
+      min: 0,
+      max: 1,
+      steps: .05,
+      values: [1],
+      snapOnClickEnabled: true,
+      visibleElements: {labels: true,
+                          rangeLabels: true}
+    });
+
+    mySlider.on('thumb-drag', (index:any) => console.log(index));*/
 
     this.views.activeView?.ui.add(bgExpand, "bottom-right");
   }
@@ -499,7 +580,7 @@ export class MapService {
 
     query.where =
       environment.capaConsultaPredio.porLote.atributo + " IN ('" + ids + "')";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION, GN_CHIP"];
     query.returnGeometry = false;
 
     return featureLayer

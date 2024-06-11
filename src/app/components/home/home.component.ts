@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
   public session = false;
 
   ngOnInit() {
-    swal.fire({
+    /*swal.fire({
       title: "¡Bienvenido!",
       background: "#000000ff",
       html: `
@@ -30,9 +30,14 @@ export class HomeComponent implements OnInit {
       confirmButtonText: `
         <i class="fa fa-thumbs-up"></i> Ingresar
       `
-    });
+    });*/
   }
 
+  abrirEncuesta() {
+    const url = 'https://forms.gle/QRoQuZpmzdYk67Z6A';
+    window.open(url, '_blank');
+  }
+  
   constructor(private authService: AuthService) {}
   
   validar() {

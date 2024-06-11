@@ -258,6 +258,8 @@ export class ResultadosComponent implements OnChanges, OnInit {
 
   seleccionarPredio() {
     this.predioSeleccionado = this.datos[this.currentIndex];
+
+    console.log("CONSULTAR PREDIO SELECCIONADO", this.predioSeleccionado);
     // this.loteSeleccionado.emit(this.predioSeleccionado.GN_CODIGO_LOTE);
     this.mapService.seleccionarPredioByLote(this.predioSeleccionado.GN_CODIGO_LOTE);
   }
@@ -281,5 +283,9 @@ export class ResultadosComponent implements OnChanges, OnInit {
   buscar(event: any) {
     this.buscarTexto = event;
     console.log("Texto buscado", this.buscarTexto);
+  }
+
+  atributosPredio(event:any){
+    console.log("Datos del predio", event);
   }
 }

@@ -29,4 +29,9 @@ export class PiePaginaComponent implements OnInit {
       `
     });
   }
+
+  abrirEncuesta() {
+    const url = 'https://forms.gle/QRoQuZpmzdYk67Z6A';
+    window.open(url, '_blank');
+  }
 }

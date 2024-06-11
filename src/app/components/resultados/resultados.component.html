@@ -21,7 +21,7 @@
   </div>
   <app-buscar *ngIf="currentIndex >= 0" (buscar)="buscar($event)"></app-buscar>
   <br/>
-  <app-resultados-predio *ngIf="currentIndex >= 0" [predio]="predioSeleccionado" [buscar]="buscarTexto"></app-resultados-predio>
+  <app-resultados-predio *ngIf="currentIndex >= 0" [predio]="predioSeleccionado" [buscar]="buscarTexto" (atributosPredio)="atributosPredio($event)"></app-resultados-predio>
   <div class="panel" [ngClass]="{ active: isUBPanelExpanded }" *ngIf="currentIndex >= 0">
     <div class="panel-header" (click)="togglePanel('UB')">
       Información Urbanística
@@ -55,8 +55,4 @@
     </div>
   </div>
   <app-pie-pagina></app-pie-pagina>
-  <!--<div class="logo-container">
-    <img class="logo-sdp" src="/assets/images/logo_sdp_blanco.png" />
-  </div>
-  <div class="barra-pie"></div>-->
 </div>

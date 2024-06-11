@@ -25,21 +25,25 @@
       <label for="password" class="form__label">Contraseña</label>
     </div>-->
     <div class="form__group">
+        <video width="100%" controls>
+          <source src="/assets/Predio360.mp4" type="video/mp4">
+          Tu navegador no soporta la etiqueta de video.
+        </video>
       <p>Estimado ciudadano: Predio 360 es desarrollado por las Secretaría Distrital de Planeación para sus fines misionales. Por protocolo, la información disponible para la consulta no debe ser compartida a terceros sin autorización, siendo de uso exclusivo al interior de la entidad.</p>
     </div>
     <br/>
-    <p class="text-center">
+    <div class="text-center" style="text-align: center;">
+      
       <button
-        class="start-button"
+        class="button-predio fill"
         [routerLink]="['/3d']"
         routerLinkActive="router-link-active">
         Iniciar Consulta
       </button>&nbsp;&nbsp;
-      <a href="https://forms.gle/QRoQuZpmzdYk67Z6A" target="_blank"
-        class="start-button">
+      <button (click)="abrirEncuesta()" class="button-predio fill">
         Trabajemos juntos
-      </a>
-    </p>
+      </button>
+    </div>
     <div class="form__group start-button-container">
       <!--<button
         class="start-button"
