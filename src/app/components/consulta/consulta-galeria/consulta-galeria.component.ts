@@ -145,7 +145,7 @@ export class ConsultaGaleriaComponent implements OnInit {
   }
 
   generarFicha(p: any): void {
-    const url = ['/ficha', p.CODIGO_PROYECTO];
+    const url = ['/ficha-proyecto', p.CODIGO_PROYECTO];
     window.open('/#'+this.router.serializeUrl(this.router.createUrlTree(url)), '_blank');
   }
 

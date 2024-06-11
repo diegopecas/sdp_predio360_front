@@ -34,6 +34,7 @@ import { ResultadosUrbanisticoComponent } from './components/resultados/resultad
 import { AgregarCapasComponent } from './components/consulta/agregar-capas/agregar-capas.component';
 import { FichaProyectoComponent } from './components/ficha-proyecto/ficha-proyecto.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { FichaPredioComponent } from './components/ficha-predio/ficha-predio.component';
 import { SearchPipeGeneral } from './common/pipes/search';
 import { BuscarComponent } from './common/buscar/buscar.component';
 import { AgregarCapasPrecargadasComponent } from './components/consulta/agregar-capas-precargadas/agregar-capas-precargadas.component';
@@ -66,6 +67,7 @@ import { EncabezadoComponent } from './common/encabezado/encabezado.component';
     ResultadosUrbanisticoComponent,
     AgregarCapasComponent,
     FichaProyectoComponent,
+    FichaPredioComponent,
     BuscarComponent,
     SearchPipeGeneral,
     AgregarCapasPrecargadasComponent,
