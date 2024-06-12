@@ -47,9 +47,11 @@
     </div>
   </div>
   <div class="panel" *ngIf="currentIndex >= 0">
-    <button type="button"  class="button-aqua"
-      (click)="generarFicha(predioSeleccionado)">Ver ficha del predio</button>
+    <div class="form__group text-center">
+      <button type="button"  class="button-predio fill"
+        (click)="generarFicha(predioSeleccionado)">Ver ficha del predio</button>
     </div>
+  </div>
   <hr class="separador" />
   <div class="logo-container">
     <div class="item-regresar" (click)="regresar()">

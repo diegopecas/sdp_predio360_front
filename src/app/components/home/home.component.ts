@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/common/services/auth.service';
 import { environment } from 'src/environments/environment';
 import swal from "sweetalert2";
@@ -38,7 +39,11 @@ export class HomeComponent implements OnInit {
     window.open(url, '_blank');
   }
   
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router, 
+    private route: ActivatedRoute
+  ) {}
   
   validar() {
     console.log("clave", this.usuario.usuario, this.usuario.clave, environment.auth);
@@ -52,5 +57,9 @@ export class HomeComponent implements OnInit {
     /*this.authService.autenticar(this.usuario.usuario, this.usuario.password).subscribe(response => {
       console.log('auth', response);
     })*/
+  }
+
+  irMapa(){
+    this.router.navigate(['/3d']);
   }
 }

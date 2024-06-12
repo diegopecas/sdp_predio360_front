@@ -50,9 +50,11 @@
           </container-element>
         </ng-container>
         <ng-container>
-          <button 
-            type="button"  class="button-aqua"
-            (click)="generarFicha(datos[currentIndex])">Ver ficha del proyecto</button>
+          <div class="form__group text-center">
+            <button 
+              type="button"  class="button-predio fill"
+              (click)="generarFicha(datos[currentIndex])">Ver ficha del proyecto</button>
+          </div>
         </ng-container>
     </div>
   </ng-container>
@@ -63,8 +65,5 @@
       <p class="icono-item-atras"></p>
     </div>
   </div>
-  <div class="logo-container">
-    <img class="logo-sdp" src="/assets/images/logo_sdp_blanco.png" />
-  </div>
-  <div class="barra-pie"></div>
+  <app-pie-pagina></app-pie-pagina>
 </div>

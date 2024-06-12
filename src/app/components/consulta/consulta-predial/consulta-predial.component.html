@@ -3,7 +3,8 @@
     <img class="logo" src="/assets/images/logo_predio360.png" />
   </div>
   <hr class="separador" />
-  <div class="item" (click)="seleccion('consulta-direccion')">
+  <!--<div class="item" (click)="seleccion('consulta-direccion')">-->
+  <div class="item" (click)="openPopup()">
     <p>Consulta por direccion</p>
     <span class="icono-item"></span>
   </div>
@@ -30,4 +31,13 @@
     </div>
   </div>
   <app-pie-pagina></app-pie-pagina>
+</div>
+<div class="popup-overlay" *ngIf="isPopupOpen">
+  <div class="popup-content">
+    <app-crear-direccion
+      [direccionInput]="consDireccion"
+      (accion)="cambioDireccion($event)"
+    ></app-crear-direccion>
+    <button class="button-predio fill" (click)="closePopup()">Consultar</button>
+  </div>
 </div>

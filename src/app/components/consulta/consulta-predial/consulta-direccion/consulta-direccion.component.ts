@@ -57,6 +57,7 @@ export class ConsultaDireccionComponent {
 
   closePopup() {
     this.isPopupOpen = false;
+    this.consultar();
   }
 
   cambioDireccion(ev:any){

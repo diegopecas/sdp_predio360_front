@@ -3,7 +3,7 @@
     <div #mapView id="mapView" class="cursor-normal"></div>
     <ng-container>
         <app-consulta *ngIf="(opcion == 'menu' || opcion == 'consulta-seleccion') && !resultados" (accion)="accionMenu($event)"></app-consulta>
-        <app-consulta-predial *ngIf="opcion == 'consulta-predial' && !resultados" (accion)="accionMenu($event)"></app-consulta-predial>
+        <app-consulta-predial *ngIf="opcion == 'consulta-predial' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaDireccion($event)"></app-consulta-predial>
         <app-consulta-direccion *ngIf="opcion == 'consulta-direccion' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaDireccion($event)"></app-consulta-direccion>
         <app-consulta-cedula *ngIf="opcion == 'consulta-cedula' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaCedula($event)"></app-consulta-cedula>
         <app-consulta-chip *ngIf="opcion == 'consulta-chip' && !resultados" (accion)="accionMenu($event)" (accionConsultar)="consultaChip($event)"></app-consulta-chip>
