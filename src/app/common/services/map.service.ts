@@ -1,6 +1,7 @@
 import { ElementRef, Injectable, NgZone } from "@angular/core";
 import { environment } from "src/environments/environment";
 
+
 import config from "@arcgis/core/config";
 import Map from "@arcgis/core/Map";
 import MapView from "@arcgis/core/views/MapView";
@@ -24,6 +25,10 @@ import ButtonMenuItem from "@arcgis/core/widgets/FeatureTable/Grid/support/Butto
 import { RenderedSymbols } from "../symbols/rendered-symbols";
 import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
 import swal from "sweetalert2";
+import  SpatialReference from "@arcgis/core/geometry/SpatialReference";
+import esriRequest from "@arcgis/core/request.js";
+import MapImageLayer from "@arcgis/core/layers/MapImageLayer";
+import { Observable, lastValueFrom } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -1274,6 +1279,37 @@ export class MapService {
       });
   }
 
+  consultarExtentLote (idLote:any): any {
+    // Crear un FeatureLayer con la URL del servicio de tabla
+    const layer = new FeatureLayer({
+      url: environment.urlLoteCatastral
+    });
+
+    // Consultar la tabla y obtener los resultados
+    let query = layer.createQuery();
+
+
+    query.where = "GN_CODIGO_LOTE  = '"+idLote+"'"; // Establecer una condición opcional para filtrar los resultados
+    query.returnGeometry = false; // Especificar los campos que deseas obtener (en este caso, todos)
+    query.outSpatialReference = SpatialReference.WebMercator; // Especificar los campos que deseas obtener (en este caso, todos)
+    return layer
+      .queryExtent(query)
+      .then((result: any) => {
+        console.log ("resultado consulta extent", result);
+        // Manipular los resultados obtenidos
+        const extent = result.extent;
+        // Realizar acciones con los datos devueltos
+
+        
+        return extent;
+      })
+      .catch((error: any) => {
+        // Manejar cualquier error ocurrido durante la consulta
+        console.error("Error al consultar la tabla:", error);
+        return [];
+      });
+  }
+
   consultarFichaProyectoInfo(idProyecto:any): any {
     let fichaInfo = [] as any[];
     // Crear un FeatureLayer con la URL del servicio de tabla
@@ -1456,4 +1492,110 @@ export class MapService {
         console.error("Error al consultar el servicio:", error);
       });
   }
+
+  consultarPlanoteca(long:any, lat:any): any {
+    let planoteca = [] as any[];
+    // Crear un FeatureLayer con la URL del servicio de tabla
+    const featureLayer = new FeatureLayer({
+      url: environment.urlPlanoteca
+    });
+
+    const point = new Point({
+      x: long,
+      y: lat,
+      spatialReference: SpatialReference.WGS84
+    });
+
+
+    // Consultar la tabla y obtener los resultados
+    const query = featureLayer.createQuery();
+    query.geometry = point; // Establecer una condición opcional para filtrar los resultados
+    query.spatialRelationship =  "intersects"; 
+    query.returnGeometry = false;
+    query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
+
+    return featureLayer
+      .queryFeatures(query)
+      .then((result: any) => {
+        // Manipular los resultados obtenidos
+        const features = result.features;
+        // Realizar acciones con los datos devueltos
+
+        if (features.length > 0) {
+          planoteca = features.map((m: any) => m.attributes)[0];
+        }
+        return planoteca;
+      })
+      .catch((error: any) => {
+        // Manejar cualquier error ocurrido durante la consulta
+        console.error("Error al consultar la tabla:", error);
+        return [];
+      });
+  }
+
+  consultarExtentPlanoteca (llavePlano:any): any {
+    // Crear un FeatureLayer con la URL del servicio de tabla
+    const layer = new FeatureLayer({
+      url: environment.urlPlanoteca
+    });
+
+    // Consultar la tabla y obtener los resultados
+    let query = layer.createQuery();
+
+
+    query.where = "LLAVE_PLANO = '"+llavePlano+"'"; // Establecer una condición opcional para filtrar los resultados
+    query.returnGeometry = false; // Especificar los campos que deseas obtener (en este caso, todos)
+    query.outSpatialReference = SpatialReference.WebMercator; // Especificar los campos que deseas obtener (en este caso, todos)
+    return layer
+      .queryExtent(query)
+      .then((result: any) => {
+        console.log ("resultado consulta extent", result);
+        // Manipular los resultados obtenidos
+        const extent = result.extent;
+        // Realizar acciones con los datos devueltos
+
+        
+        return extent;
+      })
+      .catch((error: any) => {
+        // Manejar cualquier error ocurrido durante la consulta
+        console.error("Error al consultar la tabla:", error);
+        return [];
+      });
+  }
+
+  consultarImagenPlanoteca (extent:any, llavePlano:any): Promise<any>{
+    //const urlSearchParams = new URLSearchParams();
+
+    
+
+    const options: any = {
+      body: this.jsonToFormData({
+        bbox: `${extent.xmin},${extent.ymin},${extent.xmax},${extent.ymax}`,
+        bboxSR: '102100',
+        layerDefs: JSON.stringify({"1":"LLAVE_PLANO = '"+llavePlano+"'","2":"LLAVE_PLANO = '"+llavePlano+"'","3":"LLAVE_PLANO = '"+llavePlano+"'","5":"LLAVE_PLANO = '"+llavePlano+"'","7":"LLAVE_PLANO = '"+llavePlano+"'","8":"LLAVE_PLANO = '"+llavePlano+"'","9":"LLAVE_PLANO = '"+llavePlano+"'","10":"LLAVE_PLANO = '"+llavePlano+"'","11":"LLAVE_PLANO = '"+llavePlano+"'","12":"LLAVE_PLANO = '"+llavePlano+"'","13":"LLAVE_PLANO = '"+llavePlano+"'","15":"LLAVE_PLANO = '"+llavePlano+"'","17":"LLAVE_PLANO = '"+llavePlano+"'","19":"LLAVE_PLANO = '"+llavePlano+"'","20":"LLAVE_PLANO = '"+llavePlano+"'","21":"LLAVE_PLANO = '"+llavePlano+"'","22":"LLAVE_PLANO = '"+llavePlano+"'","24":"LLAVE_PLANO = '"+llavePlano+"'","25":"LLAVE_PLANO = '"+llavePlano+"'","26":"LLAVE_PLANO = '"+llavePlano+"'","27":"LLAVE_PLANO = '"+llavePlano+"'","28":"LLAVE_PLANO = '"+llavePlano+"'","29":"LLAVE_PLANO = '"+llavePlano+"'","31":"LLAVE_PLANO = '"+llavePlano+"'","32":"LLAVE_PLANO = '"+llavePlano+"'","33":"LLAVE_PLANO = '"+llavePlano+"'","34":"LLAVE_PLANO = '"+llavePlano+"'","35":"LLAVE_PLANO = '"+llavePlano+"'","36":"LLAVE_PLANO = '"+llavePlano+"'","37":"LLAVE_PLANO = '"+llavePlano+"'","39":"LLAVE_PLANO = '"+llavePlano+"'","40":"LLAVE_PLANO = '"+llavePlano+"'","41":"LLAVE_PLANO = '"+llavePlano+"'","43":"LLAVE_PLANO = '"+llavePlano+"'","44":"LLAVE_PLANO = '"+llavePlano+"'","45":"LLAVE_PLANO = '"+llavePlano+"'","46":"LLAVE_PLANO = '"+llavePlano+"'","47":"LLAVE_PLANO = '"+llavePlano+"'","48":"LLAVE_PLANO = '"+llavePlano+"'","49":"LLAVE_PLANO = '"+llavePlano+"'","51":"LLAVE_PLANO = '"+llavePlano+"'","53":"LLAVE_PLANO = '"+llavePlano+"'","54":"LLAVE_PLANO = '"+llavePlano+"'","55":"LLAVE_PLANO = '"+llavePlano+"'"}),
+        size: '800,600',
+        format: 'png8',
+        transparent: 'true',
+        dpi: '96',
+        f: "pjson"
+      }),
+      method: "post",
+      responseType : "json"
+    };
+
+    return esriRequest(environment.urlCapasPlanoteca, options);
+  }
+
+  jsonToFormData(json: { [key: string]: any }): FormData {
+    const formData = new FormData();
+     
+    for (const key in json) {
+    if (json.hasOwnProperty(key)) {
+          formData.append(key, json[key]);
+        }
+      }
+     
+      return formData;
+    }
 }
