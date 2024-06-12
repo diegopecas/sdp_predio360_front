@@ -25,7 +25,7 @@
         <input
         [(ngModel)]="consDireccion.parte2"
         type="text"
-        (change)="construirDireccion()"
+        (keyup)="construirDireccion()"
         class="form__field"
       />
       </div>
@@ -71,7 +71,7 @@
           (change)="construirDireccion()"
           class="form__field"
         >
-          <option>--</option>
+          <option value="">--</option>
           <option value="ESTE">Este</option>
           <option value="SUR">Sur</option>
         </select>
@@ -90,7 +90,7 @@
         <input
           [(ngModel)]="consDireccion.parte7"
           type="text"
-          (change)="construirDireccion()"
+          (keyup)="construirDireccion()"
           class="form__field"
         />
       </div>
@@ -121,7 +121,7 @@
         <input
           [(ngModel)]="consDireccion.parte9"
           type="text"
-          (change)="construirDireccion()"
+          (keyup)="construirDireccion()"
           class="form__field"
         />
       </div>
@@ -132,7 +132,7 @@
           (change)="construirDireccion()"
           class="form__field"
         >
-          <option>--</option>
+          <option value="">--</option>
           <option value="ESTE">Este</option>
           <option value="SUR">Sur</option>
         </select>

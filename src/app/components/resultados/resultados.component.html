@@ -8,6 +8,7 @@
       Selección de Predio
     </div>
     <div class="panel-content">
+      <p>Se han encontrado {{ datos.length }} resultados en la búsqueda.</p>
       <p>
         Dirección:
         <select style="background: #000000; color: #ffffff;" class="form__field" [(ngModel)]="currentIndex" (change)="seleccionarPredio()">

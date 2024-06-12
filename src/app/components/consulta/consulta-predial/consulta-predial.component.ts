@@ -35,9 +35,11 @@ export class ConsultaPredialComponent {
     this.isPopupOpen = true;
   }
 
-  closePopup() {
+  closePopup(consultar:any) {
     this.isPopupOpen = false;
-    this.consultar();
+    if(consultar) {
+      this.consultar();
+    }
   }
 
   consultar() {

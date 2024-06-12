@@ -14,11 +14,11 @@ export class EncabezadoComponent {
   
   cambio3D() {
     console.log("Cambio a 3D");
-    this.mapService.switchView();
+    this.mapService.switchView("3D");
   }
 
   cambio2D() {
     console.log("Cambio a 2D");
-    this.mapService.switchView();
+    this.mapService.switchView("2D");
   }
 }

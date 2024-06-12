@@ -6,7 +6,7 @@ import {
   AfterViewInit,
   OnDestroy,
 } from "@angular/core";
-// import { loadModules } from "esri-loader";
+
 import { NgxSpinnerService } from "ngx-spinner";
 import { environment } from "src/environments/environment";
 import swal from "sweetalert2";
@@ -75,16 +75,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.initMap();
     this.mapService.initDefaultMap(this.mapElementRef);
-    /*const driverObj = driver();
-
-    driverObj.highlight({
-      element: "#consulta-predial-panel",
-      popover: {
-        title: "Panel de acciones",
-        description: "En este panel puede seleccionar la opción de consulta y ver su resultado."
-      }
-    });*/
-
+    
     const driverObj = driver({
       nextBtnText: 'Siguiente >',
       prevBtnText: '< Anterior',
@@ -99,8 +90,6 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
         { element: '#item-consulta-seleccion', popover: { title: 'Consulta de predio por selección', description: 'Establezca un buffer de consulta y seleccione un predio dentro del buffer.' } },
         { element: '#item-consulta-galeria', popover: { title: 'Galería inmobiliaria', description: 'Consulte aquí información relacionada con los proyectos inmobiliarios en desarrollo.' } },
         { element: '#item-agregar-capas', popover: { title: 'Agregar capa', description: 'En esta opción puede activar capas precargadas o agregar capas externas.' } },
-        /*{ element: '.sidebar', popover: { title: 'Title', description: 'Description' } },
-        { element: '.footer', popover: { title: 'Title', description: 'Description' } },*/
       ]
     });
     
@@ -470,43 +459,6 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
     // window.open("https://www.google.com/maps/@4.8657416,-74.0382613","_blank");
   }
 
-  /*agregarPuntoSeleccionado(x: any, y: any, z: any) {
-    loadModules([
-      "esri/symbols/PointSymbol3D",
-      "esri/Graphic",
-      "esri/geometry/Point",
-      "esri/symbols/ObjectSymbol3DLayer",
-    ]).then(([PointSymbol3D, Graphic, Point, ObjectSymbol3DLayer]) => {
-      const objectSymbol = new PointSymbol3D({
-        symbolLayers: [
-          new ObjectSymbol3DLayer({
-            width: 2,
-            height: z,
-            resource: {
-              primitive: "inverted-cone",
-            },
-            material: {
-              color: "#FFD700",
-            },
-          }),
-        ],
-      });
-
-      const point = new Point({
-        longitude: x,
-        latitude: y,
-      });
-
-      const graphicPoint = new Graphic({
-        geometry: point,
-        symbol: objectSymbol,
-      });
-
-      this.capaPuntosSeleccionados.removeAll();
-      this.capaPuntosSeleccionados.add(graphicPoint);
-    });
-  }*/
-
   crearCapaGaleria(
     IconSymbol3DLayer: any,
     PointSymbol3D: any,
@@ -548,7 +500,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
             ],
           },
         ],
-        // actions: [this.streetViewAction]
+        actions: [this.streetViewAction]
       },
     });
   }
@@ -780,68 +732,6 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  /*seleccionarPredioByLote(lote: any) {
-    let capa = this.capa3d;
-    let simbolo = {};
-    if (this.vista2d3d === "3D") {
-      capa === this.capa3d;
-      simbolo = {};
-    } else {
-      capa === this.capa2d;
-      simbolo = {};
-    }
-
-    console.log("CONSULTA POR LOTE SELECCIONADO POR ATRIBUTO", lote);
-    console.log("LA VISTA", this.view.layerViews);
-
-    const query = capa.createQuery();
-    query.where = "CODIGO_LOTE like '" + lote + "'";
-    query.outFields = "CODIGO_LOTE, OBJECTID";
-    query.returnGeometry = true;
-    query.returnCentroid = true;
-
-    capa
-      .queryFeatures(query)
-      .then((result: any) => {
-        if (result.features.length > 0) {
-          console.log("extent", result.features[0].geometry.extent);
-
-          this.view.goTo(result.features[0].geometry.extent.expand(4), {
-            speedFactor: 0.5,
-          });
-
-          if (this.highlight) {
-            (this.highlight as any).remove();
-          }
-
-          this.highlight = this.capa3dView.highlight(
-            result.features.map((f: any) => f.attributes.OBJECTID)
-          );
-        }
-      })
-      .catch((error: any) => {
-        console.error("Error al consultar el servicio:", error);
-      });
-  }*/
-
-  /*seleccionarProyecto(screenPoint: any, event: any) {
-    this.view.hitTest(screenPoint).then((response: any) => {
-      if (response.results.length) {
-        let graphic = response.results.filter((result: any) => {
-          return result.graphic.layer === this.capaGaleria;
-        })[0].graphic;
-
-        if (graphic) {
-          this.proyectoSeleccionado = graphic.attributes.cod_proyecto;
-
-          if (this.proyectoSeleccionado) {
-            this.consultarProyectos();
-          }
-        }
-      }
-    });
-  }*/
-
   accionMenu(valor: any) {
     this.opcion = valor;
   }
@@ -862,79 +752,6 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
       this.resultados = false;
     }
   }
-
-  /*consultarProyectos() {
-    loadModules(["esri/config", "esri/layers/FeatureLayer"]).then(
-      ([esriConfig, FeatureLayer]) => {
-        esriConfig.apiKey = environment.esriConfigApiKey;
-
-        // Crear un FeatureLayer con la URL del servicio de tabla
-        const featureLayer = new FeatureLayer({
-          url: environment.urlServicioGaleria,
-        });
-
-        // Consultar la tabla y obtener los resultados
-        const query = featureLayer.createQuery();
-        query.where = "cod_proyecto=" + this.proyectoSeleccionado; // Establecer una condición opcional para filtrar los resultados
-        query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
-
-        featureLayer
-          .queryFeatures(query)
-          .then((result: any) => {
-            // Manipular los resultados obtenidos
-            const features = result.features;
-            // Realizar acciones con los datos devueltos
-
-            // const datos = features.map((m:any)=>m.attributes);
-            const datos = features[0].attributes;
-
-            swal.fire({
-              html: `
-                <p>Código de proyecto: ${datos.cod_proyecto}</p>
-                <p>Código lote: ${datos.cod_lote}</p>
-                <p><strong>Proyecto: ${datos.proyecto}</strong></p>
-                <p>Vendedor: ${datos.vendedor}</p>
-                <p>Constructor: ${datos.constructor}</p>
-                <p>Dirección: ${datos.direccion}</p>
-                <p>Estrato: ${datos.estrato}</p>
-                <p>Zona: ${datos.zona}</p>
-                <p>Barrio: ${datos.barrio}</p>
-                <p>Subzona: ${datos.subzona}</p>
-                <p>Fecha inicio: ${datos.fecha_inicio}</p>
-                <p>Estado: ${datos.estado}</p>
-                <p>Activo: ${datos.activo}</p>
-                <p>Unidades totales: ${datos.unidades_totales}</p>
-                <p>Unidades ofertadas: ${datos.unidades_ofertadas}</p>
-                <p>Unidades por lanzar: ${datos.unidades_por_lanzar}</p>
-                <p>Unidades vendidas: ${datos.unidades_vendidas}</p>
-                <p>Unidades disponibles: ${datos.unidades_dispobibles_proy}</p>
-                <p>Última etapa lanzada: ${datos.ult_etapa_lanzada}</p>
-                <p>Sótanos: ${datos.sotanos}</p>
-                <p>Semisótanos: ${datos.semisotanos}</p>
-                <p>Pisos de parqueadero: ${datos.pisos_parqueadero}</p>
-                <p>Pisos de parqueadero en edificio: ${datos.pisos_parqueadero_edificio_vivi}</p>
-                <p>Incremento de precio por piso: ${datos.incremento_precio_pisos}</p>
-                <p>Otro uso: ${datos.otro_uso}</p>
-                <p>Fecha de entrega: ${datos.fecha_entrega}</p>
-                <p>Entrega con acabados: ${datos.acabados_entrega}</p>
-                <p>Tipo de inmueble: ${datos.tipo_inmueble}</p>
-                <p>Es vivienda VIS: ${datos.vivienda_vis}</p>
-                <p>Fecha desistido: ${datos.fecha_desistido}</p>
-                <p>Unidades desistidas: ${datos.unidades_desistidas}</p>
-                <p>Certificado sostenible: ${datos.certificado_sostenible}</p>
-                `,
-              showCancelButton: false,
-              confirmButtonColor: "#acc962",
-              confirmButtonText: "Cerrar",
-            });
-          })
-          .catch((error: any) => {
-            // Manejar cualquier error ocurrido durante la consulta
-            console.error("Error al consultar la tabla:", error);
-          });
-      }
-    );
-  }*/
 
   seleccionProyectoGaleria(proyecto: any) {
     // console.log('seleccionProyectoGaleria', proyecto)
@@ -989,54 +806,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
     this.resultados = true;
   }
 
-  /*controlCapaSinupot() {
-    loadModules(["esri/layers/FeatureLayer"]).then(([FeatureLayer]) => {
-      if (!this.capaSinupot) {
-        this.capaSinupot = new FeatureLayer({
-          url: environment.urlSinupot,
-          id: "capa-sinupot",
-        });
-        this.map.add(this.capaSinupot);
-      }
-    });
-  }*/
-
-  /*cargarCapaArbolado() {
-    loadModules(["esri/layers/FeatureLayer"]).then(([FeatureLayer]) => {
-      
-        this.capaArbolado = new FeatureLayer({
-          url: environment.capaArbolado.url,
-          id: "capa-arbolado",
-        });
-        // this.map.add(capa);
-      
-    });
-  }*/
-
-  /*cargarCapasDeReferencia(event: any) {
-    loadModules(["esri/layers/FeatureLayer"]).then(([FeatureLayer]) => {
-      environment.capasSinupot.forEach((capa: any) => {
-        this.capaSinupot = new FeatureLayer({
-          url: capa.url,
-          id: capa.nombre,
-        });
-        this.map.add(this.capaSinupot);
-      });
-    });
-  }*/
-
   private capasN = 0;
-
-  /*anadirCapaReferencia(event: any) {
-    loadModules(["esri/layers/FeatureLayer"]).then(([FeatureLayer]) => {
-      const nuevaCapa = new FeatureLayer({
-        url: event,
-        title: "capaN-" + this.capasN,
-      });
-      this.capasN++;
-      this.map.add(nuevaCapa);
-    });
-  }*/
 
   private medidaBuffer = 0;
 
@@ -1048,25 +818,4 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  /*cambioCapaBuffer(evt: any) {
-    loadModules(["esri/layers/FeatureLayer"]).then(([FeatureLayer]) => {
-      const capa = new FeatureLayer({
-        url: evt.url,
-        id: evt.nombre, //"capa_buffer",
-        outFields: [evt.outfields],
-        popupTemplate: {
-          // autocasts as new PopupTemplate()
-          title: "{OBJECTID}",
-          content: [
-            {
-              type: "fields",
-              fieldInfos: evt.fieldinfos,
-            },
-          ],
-          // actions: [this.streetViewAction]
-        },
-      });
-      this.map.add(capa);
-    });
-  }*/
 }

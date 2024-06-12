@@ -150,9 +150,9 @@ export class MapService {
     );*/
 
     // this.agregarCapasBase();
-    this.agregarListaCapas();
+    /*this.agregarListaCapas();
     this.agregarLeyenda();
-    this.agregarBusquedas();
+    this.agregarBusquedas();*/
   }
 
   agregarWidgets() {
@@ -958,7 +958,7 @@ export class MapService {
             "rgb(50, 50, 50)"
           );*/
 
-    if (capa.formato?.dimensiones == 3) {
+    if (capa.formato?.dimensiones == 3 && this.views.actual == "3D") {
       switch (capa.formato?.simbolo) {
         case "bloque":
           this.bufferLayer = new FeatureLayer({
@@ -1068,6 +1068,7 @@ export class MapService {
   }
 
   switchView(dims: any = "3D", capaAux: any = null) {
+    console.log("ingresa a switchview", dims, this.views.actual);
     /*if (this.views.activeView) {
       this.views.activeView.container = null;
     }*/
@@ -1123,6 +1124,9 @@ export class MapService {
     );
 
     this.agregarCapasBase();
+    this.agregarListaCapas();
+    this.agregarLeyenda();
+    this.agregarBusquedas();
     this.agregarWidgets();
 
     if (capaAux) {
@@ -1167,6 +1171,9 @@ export class MapService {
     );
 
     this.agregarCapasBase();
+    this.agregarListaCapas();
+    this.agregarLeyenda();
+    this.agregarBusquedas();
     this.agregarWidgets();
 
     if (capaAux) {

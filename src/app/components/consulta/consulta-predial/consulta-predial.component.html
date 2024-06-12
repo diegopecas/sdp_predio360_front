@@ -38,6 +38,9 @@
       [direccionInput]="consDireccion"
       (accion)="cambioDireccion($event)"
     ></app-crear-direccion>
-    <button class="button-predio fill" (click)="closePopup()">Consultar</button>
+    <div class="form__group text-center">
+      <button class="button-predio fill" (click)="closePopup(true)">Consultar</button>&nbsp;&nbsp;
+      <button class="button-predio fill" (click)="closePopup(false)">Cancelar</button>
+    </div>
   </div>
 </div>

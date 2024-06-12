@@ -60,6 +60,10 @@ export class ConsultaDireccionComponent {
     this.consultar();
   }
 
+  closePopupCancelar() {
+    this.isPopupOpen = false;
+  }
+
   cambioDireccion(ev:any){
     console.log(ev)
     this.direccion = ev[0];
