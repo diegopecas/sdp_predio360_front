@@ -1160,6 +1160,37 @@ export class MapService {
       });
   }
 
+  consultarExtentLote (idLote:any): any {
+    // Crear un FeatureLayer con la URL del servicio de tabla
+    const layer = new FeatureLayer({
+      url: environment.urlLoteCatastral
+    });
+
+    // Consultar la tabla y obtener los resultados
+    let query = layer.createQuery();
+
+
+    query.where = "GN_CODIGO_LOTE  = '"+idLote+"'"; // Establecer una condición opcional para filtrar los resultados
+    query.returnGeometry = false; // Especificar los campos que deseas obtener (en este caso, todos)
+    query.outSpatialReference = SpatialReference.WebMercator; // Especificar los campos que deseas obtener (en este caso, todos)
+    return layer
+      .queryExtent(query)
+      .then((result: any) => {
+        console.log ("resultado consulta extent", result);
+        // Manipular los resultados obtenidos
+        const extent = result.extent;
+        // Realizar acciones con los datos devueltos
+
+        
+        return extent;
+      })
+      .catch((error: any) => {
+        // Manejar cualquier error ocurrido durante la consulta
+        console.error("Error al consultar la tabla:", error);
+        return [];
+      });
+  }
+
   consultarFichaProyectoInfo(idProyecto:any): any {
     let fichaInfo = [] as any[];
     // Crear un FeatureLayer con la URL del servicio de tabla

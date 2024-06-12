@@ -16,6 +16,7 @@ export class FichaPredioComponent implements OnInit   {
   private chip:any;
   private predio:any;
   private lote:any;
+  private extentLote:any;
   //private fichaData:any;
   private mapUrl= "";
   private baseMapUrl = "";
@@ -36,10 +37,18 @@ export class FichaPredioComponent implements OnInit   {
     console.log(this.predio);
     this.lote = await this.mapService.consultarLoteById (this.predio.GN_CODIGO_LOTE);
 
+    this.extentLote = await this.mapService.consultarExtentLote (this.predio.GN_CODIGO_LOTE);
+
+    console.log("extentLote", this.extentLote);
+    const xmin = this.extentLote.xmin;
+    const xmax = this.extentLote.xmax;
+    const ymin = this.extentLote.ymin;
+    const ymax = this.extentLote.ymax;
     
-    this.baseMapUrl+=`https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/export?bbox=-75.052872,3.6787329999999994,-73.052872,5.678732999999999&bboxSR=4326&layers=&layerDefs=&size=150,220&imageSR=4326&historicMoment=&format=png&transparent=false&dpi=&time=&timeRelation=esriTimeRelationOverlaps&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=8000&rotation=&datumTransformations=&layerParameterValues=&mapRangeValues=&layerRangeValues=&clipping=&spatialFilter=&f=image`;
-    this.mapUrl+=`https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/export?bbox=-75.052872,3.6787329999999994,-73.052872,5.678732999999999&bboxSR4326&layers=show:10,6&size=150,220&imageSR=4326&format=png&transparent=true&mapScale=8000&f=image`;
-    console.log("error", this.mapUrl);
+    this.baseMapUrl+=`https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/export?bbox=${xmin},${ymin},${xmax},${ymax}&size=510%2C280&format=png&transparent=true&mapScale=2000&f=image`;
+    this.mapUrl+=`https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/export?bbox=${xmin},${ymin},${xmax},${ymax}&layers=show%3A4&layerDefs=%7B%224%22%3A%22GN_CODIGO_LOTE+%3D+%27${this.predio.GN_CODIGO_LOTE}%27%22%7D&size=510%2C280&format=png&transparent=true&mapScale=2000&f=image`;
+    console.log("baseMapUrl", this.baseMapUrl);
+    console.log("mapUrl", this.mapUrl);
     
     console.log(this.lote);
     this.export();
@@ -68,8 +77,7 @@ export class FichaPredioComponent implements OnInit   {
             widths: [320, 200],
             body: [
               [{colSpan:2, text: 'Información de Localización', style: 'header', fillColor: '#CCC'}, {}],
-              // [{colSpan:2, image: 'projectBaseMap', height:280 , width:510 , margin: [ 10, 10, 10, 10 ], absolutePosition: {x: 10, y: 10} }],
-              // [{colSpan:2, image: 'projectMap', height:280 , width:510 , margin: [ 10, 10, 10, 10 ]}],
+              [{colSpan:2, image: 'projectBaseMap', height:280 , width:510 , margin: [ 10, 10, 10, 10 ]}],
               [{text: 'Código Barrio', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_CODIGO_LOTE.substring(0, 6)}],
               [{text: 'Código Manzana', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_CODIGO_LOTE.substring(6, 8)}],
               [{text: 'Código Predio', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_CODIGO_LOTE.substring(8, 10)}],
@@ -79,6 +87,7 @@ export class FichaPredioComponent implements OnInit   {
             ]
           },
         },
+        {image: 'projectMap', height:280 , width:510 , margin: [ 10, 10, 10, 10 ], absolutePosition: {x: 45, y: 170} },
         {
           width: '*',
           margin: [0, 0, 0, 8], 
