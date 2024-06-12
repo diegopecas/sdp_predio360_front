@@ -34,14 +34,25 @@
       <button class="button-aqua" (click)="agregar()">Agregar</button>
   </div>
   <hr class="separador" />
+  <div class="titulo-seccion">
+    <p>Agregar capa precargada</p>
+  </div>
+  <ul>
+    <ng-container *ngFor="let capa of capas">
+      <li class="titulo-azul">
+        <button class="btn warning" (click)="agregarCapa(capa)" *ngIf="capa.estado != 1">add</button>
+        <button class="btn danger" (click)="removerCapa(capa)" *ngIf="capa.estado == 1">rem</button>
+        &nbsp;{{ capa.label }}
+      </li>
+    </ng-container>
+  </ul>
+  <hr class="separador" />
   <div class="logo-container">
     <div class="item-regresar" (click)="seleccion('menu')">
       <p>Regresar</p>
       <p class="icono-item-atras"></p>
     </div>
   </div>
-  <div class="logo-container">
-    <img class="logo-sdp" src="/assets/images/logo_sdp_blanco.png" />
-  </div>
-  <div class="barra-pie"></div>
+  <app-pie-pagina></app-pie-pagina>
+  <br/>
 </div>

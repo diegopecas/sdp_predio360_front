@@ -18,6 +18,7 @@ import Search from "@arcgis/core/widgets/Search";
 import Point from "@arcgis/core/geometry/Point";
 import BasemapGallery from "@arcgis/core/widgets/BasemapGallery";
 import ScaleBar from "@arcgis/core/widgets/ScaleBar";
+import Slider from "@arcgis/core/widgets/Slider";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils";
 import ButtonMenu from "@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenu";
 import ButtonMenuItem from "@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenuItem";
@@ -319,6 +320,46 @@ export class MapService {
     });
   }
 
+  removerCapaRestPrecargada(capa:any) {
+    if (capa.featureLayer) {
+      this.map?.remove(capa.featureLayer);
+    }
+  }
+
+  agregarCapaRestPrecargada(capa:any) {
+    try {
+      const popup = {
+        "title": capa.label,
+        "content": capa.popup
+      }
+
+      const nuevaCapa = new FeatureLayer({
+        url: capa.url,
+        outFields: capa.fields,
+        popupTemplate: popup
+      });
+
+      capa.featureLayer = nuevaCapa;
+
+      this.map?.add(nuevaCapa);
+
+      // Escuchar el evento de error al crear la LayerView
+      nuevaCapa.on('layerview-create-error', (errorEvent) => {
+        console.error('Error al crear la LayerView:', errorEvent.error);
+        swal.fire("Error al agregar capa.");
+      });
+
+      // También puedes escuchar el evento 'layerview-create' para realizar acciones después de que se crea la LayerView con éxito
+      nuevaCapa.on('layerview-create', (layerviewEvent) => {
+        console.log('LayerView creada con éxito:', layerviewEvent.layerView);
+        swal.fire("capa agregada correctamente.");
+      });
+
+    }catch(error:any) {
+      swal.fire("Ocurrió un error al agregar la capa.");
+    }
+  }
+
   agregarCapaRest(nombre:any, servicio:any) {
     try {
       const nuevaCapa = new FeatureLayer({
@@ -349,26 +390,97 @@ export class MapService {
     }catch(error:any) {
       swal.fire("Ocurrió un error al agregar la capa.");
     }
+  }
+
+  async defineActions(event:any) {
+    const item = event.item;
+  
+    await item.layer.when();
+  
+      item.actionsSections = [
+        [
+          {
+            title: "Go to full extent",
+            icon: "zoom-out-fixed",
+            id: "full-extent"
+          },
+          {
+            title: "Layer information",
+            icon: "information",
+            id: "information"
+          }
+        ],
+        [
+          {
+            title: "Increase opacity",
+            icon: "chevron-up",
+            id: "increase-opacity"
+          },
+          {
+            title: "Decrease opacity",
+            icon: "chevron-down",
+            id: "decrease-opacity"
+          }
+        ]
+      ];
     
-      /*const { value: url } = await swal.fire({
-        input: "url",
-        inputLabel: "URL address",
-        inputPlaceholder: "Enter the URL"
-      });
-      if (url) {
-        swal.fire(`Entered URL: ${url}`);
-      }*/
   }
 
   agregarListaCapas() {
+   
     const layerList = new LayerList({
       view: this.views.activeView,
+      // listItemCreatedFunction: this.defineActions
     });
+
+    layerList.listItemCreatedFunction = async (event:any) => {
+      const { item } = event;
+      await item.layer.when();
+    
+      // Adds a slider for updating a group layer's opacity
+      if (item.children.length > 1 && item.parent) {
+        const slider = new Slider({
+          min: 0,
+          max: 1,
+          precision: 2,
+          values: [1],
+          visibleElements: {
+            labels: true,
+            rangeLabels: true
+          }
+        });
+    
+        item.panel = {
+          content: slider,
+          icon: "sliders-horizontal",
+          title: "Change layer opacity"
+        };
+    
+        // Watch the slider's values array and update the layer's opacity
+        reactiveUtils.watch(
+          () => slider.values.map((value) => value),
+          (values) => (item.layer.opacity = values[0])
+        );
+      }
+    }
 
     const bgExpand = new Expand({
       view: this.views.activeView,
       content: layerList,
     });
+
+    /*const mySlider = new Slider({
+      // container: "sliderDiv",
+      min: 0,
+      max: 1,
+      steps: .05,
+      values: [1],
+      snapOnClickEnabled: true,
+      visibleElements: {labels: true,
+                          rangeLabels: true}
+    });
+
+    mySlider.on('thumb-drag', (index:any) => console.log(index));*/
 
     this.views.activeView?.ui.add(bgExpand, "bottom-right");
   }

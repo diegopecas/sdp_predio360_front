@@ -6,6 +6,7 @@ export const environment = {
   },
   esriConfigApiKey:
     "AAPK18837c198fe14f849f5237a94fb8c4d9nyUIHfhPmykTR_afDukiTorJHXPimhB05XjXQ6o6rDQ-GAsclkcQJjNfsUX-ulMj",
+  textoEncuesta: "Queremos seguir mejorando la solución de Predio360, con tu ayuda lo podremos lograr, te invitamos a participar de la lluvia de ideas y necesidades en la siguiente encuesta.",  
   baseConfigs: {
     basemapId: "streets-vector",
     ground: "world-elevation",
@@ -16,6 +17,64 @@ export const environment = {
     },
     zoomLevel: 17,
   },
+  capasPrecargadas: [
+    {
+      id: 'pre-localidades',
+      label: 'Localidades',
+      url: 'https://serviciosg.sdp.gov.co/server/rest/services/SERVICIOS_GEOGRAFICOS/DIVISION_FISICA/MapServer/4',
+      tipo: 'rest',
+      fields: ["OBJECTID", "NOMBRE"],
+      popup: "<b>ID Objeto:</b> {OBJECTID}<br/><b>Nombre localidad:</b> {NOMBRE}"
+    },
+    {
+      id: 'pre-actuaciones',
+      label: 'Capa Actuaciones estratégicas',
+      url: 'https://serviciosg.sdp.gov.co/server/rest/services/POT555/NORMA_URBAN%C3%8DSTICA_Y_OT/FeatureServer/32',
+      tipo: 'rest',
+      fields: ["OBJECTID"],
+      popup: "<b>ID Objeto:</b> {OBJECTID}"
+    },
+    {
+      id: 'pre-manzanas-cuidado',
+      label: 'Manzanas del cuidado',
+      url: 'https://serviciosg.sdp.gov.co/server/rest/services/POT555/Sistema_del_cuidado_y_servicios_sociales/FeatureServer/11',
+      tipo: 'rest',
+      fields: ["OBJECTID"],
+      popup: "<b>ID Objeto:</b> {OBJECTID}"
+    },
+    {
+      id: 'pre-upl',
+      label: 'UPL',
+      url: 'https://serviciosg.sdp.gov.co/server/rest/services/POT555/NORMA_URBAN%C3%8DSTICA_Y_OT/FeatureServer/28',
+      tipo: 'rest',
+      fields: ["OBJECTID"],
+      popup: "<b>ID Objeto:</b> {OBJECTID}"
+    },
+    {
+      id: 'pre-planes-parciales',
+      label: 'Planes parciales de desarrollo y renovación urbana',
+      url: 'https://serviciosg.sdp.gov.co/server/rest/services/POT555/NORMA_URBAN%C3%8DSTICA_Y_OT/FeatureServer/26',
+      tipo: 'rest',
+      fields: ["OBJECTID"],
+      popup: "<b>ID Objeto:</b> {OBJECTID}"
+    },
+    {
+      id: 'pre-areas-integracion-multi',
+      label: 'Áreas de integración multimodal',
+      url: 'https://serviciosg.sdp.gov.co/server/rest/services/POT555/ESTRUCTURA_SOCIOECON%C3%93MICA_CREATIVA_Y_DEL_CUIDADO/FeatureServer/28',
+      tipo: 'rest',
+      fields: ["OBJECTID"],
+      popup: "<b>ID Objeto:</b> {OBJECTID}"
+    },
+    {
+      id: 'pre-cluster-comercio-mas',
+      label: 'Clúster de comercio masivo',
+      url: 'https://serviciosg.sdp.gov.co/server/rest/services/POT555/ESTRUCTURA_SOCIOECON%C3%93MICA_CREATIVA_Y_DEL_CUIDADO/FeatureServer/9',
+      tipo: 'rest',
+      fields: ["OBJECTID"],
+      popup: "<b>ID Objeto:</b> {OBJECTID}"
+    },
+  ],
   capasBase: [
     {
       id: "construcciones",

@@ -16,6 +16,8 @@ import { RenderedSymbols } from "src/app/common/symbols/rendered-symbols";
 import esriConfig from "@arcgis/core/config";
 import { MapService } from "src/app/common/services/map.service";
 
+import { driver } from "driver.js";
+
 @Component({
   selector: "app-map3d",
   templateUrl: "./map3d.component.html",
@@ -73,6 +75,37 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.initMap();
     this.mapService.initDefaultMap(this.mapElementRef);
+    /*const driverObj = driver();
+
+    driverObj.highlight({
+      element: "#consulta-predial-panel",
+      popover: {
+        title: "Panel de acciones",
+        description: "En este panel puede seleccionar la opción de consulta y ver su resultado."
+      }
+    });*/
+
+    const driverObj = driver({
+      nextBtnText: 'Siguiente >',
+      prevBtnText: '< Anterior',
+      doneBtnText: 'Finalizar tour',
+      showProgress: true,
+      overlayColor: '#eeeeeeee',
+      steps: [
+        { popover: { title: 'Bienvenido al recorrido por Predio360', description: 'Conozca las opciones que tenemos disponibles para consulta de predios (presione ESC o haga clic en la zona gris para salir del tour).' } },
+        { element: '#consulta-predial-panel', popover: { title: 'Panel de acciones', description: 'En este panel puede seleccionar la opción de consulta y ver su resultado.' } },
+        { element: '#cambio-dimensiones', popover: { title: 'Cambiar dimensiones', description: 'En esta opción puede cambiar la vista de mapa de 2D a 3D o viceversa.' } },
+        { element: '#item-consulta-predial', popover: { title: 'Consulta de predio por atributos', description: 'Seleccione un atributo como dirección, CHIP, matrícula inmobiliaria o cédula catastral para realizar la búsqueda de un predio.' } },
+        { element: '#item-consulta-seleccion', popover: { title: 'Consulta de predio por selección', description: 'Establezca un buffer de consulta y seleccione un predio dentro del buffer.' } },
+        { element: '#item-consulta-galeria', popover: { title: 'Galería inmobiliaria', description: 'Consulte aquí información relacionada con los proyectos inmobiliarios en desarrollo.' } },
+        { element: '#item-agregar-capas', popover: { title: 'Agregar capa', description: 'En esta opción puede activar capas precargadas o agregar capas externas.' } },
+        /*{ element: '.sidebar', popover: { title: 'Title', description: 'Description' } },
+        { element: '.footer', popover: { title: 'Title', description: 'Description' } },*/
+      ]
+    });
+    
+    driverObj.drive();
+
   }
 
   initMap() {

@@ -35,6 +35,11 @@ import { AgregarCapasComponent } from './components/consulta/agregar-capas/agreg
 import { FichaProyectoComponent } from './components/ficha-proyecto/ficha-proyecto.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { FichaPredioComponent } from './components/ficha-predio/ficha-predio.component';
+import { SearchPipeGeneral } from './common/pipes/search';
+import { BuscarComponent } from './common/buscar/buscar.component';
+import { AgregarCapasPrecargadasComponent } from './components/consulta/agregar-capas-precargadas/agregar-capas-precargadas.component';
+import { PiePaginaComponent } from './common/pie-pagina/pie-pagina.component';
+import { EncabezadoComponent } from './common/encabezado/encabezado.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +67,12 @@ import { FichaPredioComponent } from './components/ficha-predio/ficha-predio.com
     ResultadosUrbanisticoComponent,
     AgregarCapasComponent,
     FichaProyectoComponent,
-    FichaPredioComponent
+    FichaPredioComponent,
+    BuscarComponent,
+    SearchPipeGeneral,
+    AgregarCapasPrecargadasComponent,
+    PiePaginaComponent,
+    EncabezadoComponent
   ],
   imports: [
     BrowserModule,
@@ -72,6 +82,9 @@ import { FichaPredioComponent } from './components/ficha-predio/ficha-predio.com
     FontAwesomeModule,
     HttpClientModule,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })
+  ],
+  exports: [
+    SearchPipeGeneral
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   providers: [

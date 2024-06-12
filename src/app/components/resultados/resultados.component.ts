@@ -47,6 +47,7 @@ export class ResultadosComponent implements OnChanges, OnInit {
   public isUBPanelExpanded: boolean = false;
   public isEPPanelExpanded: boolean = false;
   public panelGIHeight: number = 0;
+  public buscarTexto = '';
 
   ngOnInit() {
     this.capas = environment.capasBuffer;
@@ -261,6 +262,8 @@ export class ResultadosComponent implements OnChanges, OnInit {
 
   seleccionarPredio() {
     this.predioSeleccionado = this.datos[this.currentIndex];
+
+    console.log("CONSULTAR PREDIO SELECCIONADO", this.predioSeleccionado);
     // this.loteSeleccionado.emit(this.predioSeleccionado.GN_CODIGO_LOTE);
     this.mapService.seleccionarPredioByLote(this.predioSeleccionado.GN_CODIGO_LOTE);
   }
@@ -280,9 +283,19 @@ export class ResultadosComponent implements OnChanges, OnInit {
   seleccionarCapaBuffer() {
     this.cambioCapaBuffer.emit(this.capas[this.currentIndexCapa]);
   }
-
+  
+  
   generarFicha(p: any): void {
     const url = ['/ficha-predio', p.GN_CHIP];
     window.open('/#'+this.router.serializeUrl(this.router.createUrlTree(url)), '_blank');
+  }
+
+  buscar(event: any) {
+    this.buscarTexto = event;
+    console.log("Texto buscado", this.buscarTexto);
+  }
+
+  atributosPredio(event:any){
+    console.log("Datos del predio", event);
   }
 }
