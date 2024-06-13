@@ -136,11 +136,16 @@ export const environment = {
   urlTablaPredios:
     "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
   urlLoteCatastral:
-    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
-  urlConstruccion:
     "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/4",
+  urlConstruccion:
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
   urlFichaProyecto:
     "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/8",
+    urlPlanoteca:
+    "https://sinupot.sdp.gov.co/serverr/rest/services/Planoteca/ConsultasPUT/MapServer/0",
+  urlCapasPlanoteca:
+    "https://sinupot.sdp.gov.co/serverr/rest/services/Planoteca/CapasPUT/MapServer/export",
+  
   urlSinupot: "https://sinupot.sdp.gov.co/serverp/rest/services/",
   capaArbolado: {
     url: "https://geoportal.jbb.gov.co/agc/rest/services/SIGAU/CensoArbol/MapServer/0",

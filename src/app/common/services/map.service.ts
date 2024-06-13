@@ -75,6 +75,9 @@ export class MapService {
   constructor() {}
 
   public initDefaultMap(mapElementRef?: ElementRef): void {
+    
+    // setInterval(this.checkDiaNoche, 60000);
+    
     // config.assetsPath = 'assets/';
     config.apiKey = environment.esriConfigApiKey;
     this.views.container = mapElementRef?.nativeElement;
@@ -83,7 +86,7 @@ export class MapService {
       basemap: environment.baseConfigs.basemapId,
       ground: "world-elevation",
     });
-
+    
     /*this.views.sceneView = new SceneView({
       map: this.map,
       // container: mapElementRef?.nativeElement,
@@ -158,6 +161,17 @@ export class MapService {
     /*this.agregarListaCapas();
     this.agregarLeyenda();
     this.agregarBusquedas();*/
+  }
+
+  // Función para comprobar si son las 6 de la tarde
+  checkDiaNoche() {
+    const now = new Date();
+    const hours = now.getHours();
+    if (hours === 18) {
+        console.log("¡Son las 6 de la tarde!");
+    } else {
+        console.log("No son las 6 de la tarde");
+    }
   }
 
   agregarWidgets() {
