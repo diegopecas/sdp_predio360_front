@@ -90,6 +90,8 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
         { element: '#item-consulta-seleccion', popover: { title: 'Consulta de predio por selección', description: 'Establezca un buffer de consulta y seleccione un predio dentro del buffer.' } },
         { element: '#item-consulta-galeria', popover: { title: 'Galería inmobiliaria', description: 'Consulte aquí información relacionada con los proyectos inmobiliarios en desarrollo.' } },
         { element: '#item-agregar-capas', popover: { title: 'Agregar capa', description: 'En esta opción puede activar capas precargadas o agregar capas externas.' } },
+        { element: '.esri-zoom', popover: { title: 'Zoom', description: '(+) acercar el mapa y (-) alejar el mapa.' } },
+        { element: '#basemap-widget', popover: { title: 'Galería de mapas base', description: 'Seleccione un mapa como mapa de fondo para referencia visual.' } },
       ]
     });
     
@@ -566,13 +568,7 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
         this.seleccionarPredioByBuffer();
         break;
       case "consulta-galeria":
-        /*this.seleccionarProyecto(
-          {
-            x: event.x,
-            y: event.y,
-          },
-          event
-        );*/
+        // this.mapService.switchGaleria(true);
         break;
       default:
         if (this.opcion !== "") {

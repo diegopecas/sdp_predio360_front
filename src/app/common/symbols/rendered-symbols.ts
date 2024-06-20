@@ -104,27 +104,50 @@ export class RenderedSymbols {
 
     return renderer;
   }
+  
+  public construirLuminariaDia(): Renderer {
+    const webStyleSymbol = new WebStyleSymbol({
+      name: "Light_On_Post_-_Light_off",
+      styleName: "EsriRealisticStreetSceneStyle"
+    });
+    const renderer:any = {
+      type: "simple",
+      symbol: webStyleSymbol,
+    };
+    return renderer;
+  }
+
+  public construirLuminariaNoche(): Renderer {
+    const webStyleSymbol = new WebStyleSymbol({
+      name: "Light_On_Post_-_Light_on",
+      styleName: "EsriRealisticStreetSceneStyle"
+    });
+    const renderer:any = {
+      type: "simple",
+      symbol: webStyleSymbol
+    };
+    return renderer;
+  }
 
   public construirGrua(factor:any): Renderer {
     const webStyleSymbol = new WebStyleSymbol({
       name: "Tower_Crane",
       styleName: "EsriRealisticTransportationStyle",
     });
-
     const renderer:any = {
       type: "simple",
       symbol: webStyleSymbol,
-      /*visualVariables: [
-        {
-          type: "size",
-          valueUnit: "meters",
-          valueExpression: "return "+factor+";",
-        },
-      ],*/
     };
-
     return renderer;
   }
+
+  /*visualVariables: [
+    {
+      type: "size",
+      valueUnit: "meters",
+      valueExpression: "return "+factor+";",
+    },
+  ],*/
 
   public construirBloque(atributoAltura:any, factor:any, color:any): Renderer {
     const renderer:any = {

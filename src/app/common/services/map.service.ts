@@ -7,28 +7,19 @@ import Map from "@arcgis/core/Map";
 import MapView from "@arcgis/core/views/MapView";
 import SceneView from "@arcgis/core/views/SceneView";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
-import BasemapToggle from "@arcgis/core/widgets/BasemapToggle";
-import Zoom from "@arcgis/core/widgets/Zoom";
-import Graphic from "@arcgis/core/Graphic";
 import Color from "@arcgis/core/Color";
 import LayerList from "@arcgis/core/widgets/LayerList";
 import Expand from "@arcgis/core/widgets/Expand";
 import Legend from "@arcgis/core/widgets/Legend";
-import Search from "@arcgis/core/widgets/Search";
 import Point from "@arcgis/core/geometry/Point";
 import BasemapGallery from "@arcgis/core/widgets/BasemapGallery";
-import ScaleBar from "@arcgis/core/widgets/ScaleBar";
 import Slider from "@arcgis/core/widgets/Slider";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils";
-import ButtonMenu from "@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenu";
-import ButtonMenuItem from "@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenuItem";
 import { RenderedSymbols } from "../symbols/rendered-symbols";
 import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
 import swal from "sweetalert2";
 import  SpatialReference from "@arcgis/core/geometry/SpatialReference";
 import esriRequest from "@arcgis/core/request.js";
-import MapImageLayer from "@arcgis/core/layers/MapImageLayer";
-import { Observable, lastValueFrom } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -82,95 +73,35 @@ export class MapService {
     config.apiKey = environment.esriConfigApiKey;
     this.views.container = mapElementRef?.nativeElement;
 
+    // https://developers.arcgis.com/javascript/latest/api-reference/esri-Map.html#basemap-id
     this.map = new Map({
-      basemap: environment.baseConfigs.basemapId,
+      basemap: this.checkDiaNoche() ? environment.baseConfigsDay.basemapId : environment.baseConfigsNight.basemapId,
       ground: "world-elevation",
     });
     
-    /*this.views.sceneView = new SceneView({
-      map: this.map,
-      // container: mapElementRef?.nativeElement,
-      camera: {
-        position: {
-          latitude: environment.baseConfigs.center.latitud,
-          longitude: environment.baseConfigs.center.longitud,
-          z: environment.baseConfigs.center.altitud, // Altura en metros
-        },
-        heading: 0, // grados de rotación respecto del norte
-        tilt: 45, // grados de rotación respecto de la superficie
-      },
-      highlightOptions: {
-        haloColor: new Color("rgb(3, 255, 255)"),
-        color: new Color("rgb(3, 255, 255)"),
-        fillOpacity: 0.3,
-      },
-    });
-
-    this.views.mapView = new MapView({
-      map: this.map,
-      // container: mapElementRef?.nativeElement,
-      center: [
-        environment.baseConfigs.center.longitud,
-        environment.baseConfigs.center.latitud,
-      ],
-      zoom: 17,
-      highlightOptions: {
-        haloColor: new Color("rgb(3, 255, 255)"),
-        color: new Color("rgb(3, 255, 255)"),
-        fillOpacity: 0.3,
-      },
-    });*/
-
     // Vista inicial en 3D
-    // this.views.activeView = this.views.sceneView;
     this.switchView("0");
-
-    /*this.views.sceneView.on("click", (event: any) => {
-      console.log("clic sobre el mapa", event);
-      this.puntoClickeado = event.mapPoint;
-      this.clicEnMapa(event);
-    });
-
-    this.views.mapView.on("click", (event: any) => {
-      console.log("clic sobre el mapa", event);
-      this.puntoClickeado = event.mapPoint;
-      this.clicEnMapa(event);
-    });
-
-    reactiveUtils.on(
-      () => this.views.sceneView?.popup,
-      "trigger-action",
-      (event: any) => {
-        if (event.action.id === "verStreetView") {
-          this.verStreetView();
-        }
-      }
-    );
-
-    reactiveUtils.on(
-      () => this.views.mapView?.popup,
-      "trigger-action",
-      (event: any) => {
-        if (event.action.id === "verStreetView") {
-          this.verStreetView();
-        }
-      }
-    );*/
-
-    // this.agregarCapasBase();
-    /*this.agregarListaCapas();
-    this.agregarLeyenda();
-    this.agregarBusquedas();*/
   }
 
   // Función para comprobar si son las 6 de la tarde
   checkDiaNoche() {
     const now = new Date();
     const hours = now.getHours();
-    if (hours === 18) {
-        console.log("¡Son las 6 de la tarde!");
-    } else {
-        console.log("No son las 6 de la tarde");
+    if (hours >= 17 || hours <= 6) {
+        console.log("¡Son las 6 de la tarde!", hours, hours-5);
+        return false;
+        } else {
+          console.log("No son las 6 de la tarde", hours, hours-5);
+          return true;
+    }
+  }
+
+  switchGaleria(accion:boolean) {
+    const capa = (environment.capasBase.filter(c => c.id == 'galeria')[0] as any).capa;
+    if(accion) {
+      capa.setVisible(true);
+      } else {
+      capa.setVisible(false);
     }
   }
 
@@ -178,12 +109,11 @@ export class MapService {
     const basemapGallery = new BasemapGallery({
       view: this.views.activeView,
     });
-
     const bgExpand = new Expand({
       view: this.views.activeView,
       content: basemapGallery,
+      id: 'basemap-widget'
     });
-
     this.views.activeView?.ui.add(bgExpand, "bottom-right");
   }
 
@@ -229,6 +159,7 @@ export class MapService {
               title: capa.nombre,
               renderer: simboloArbol,
               outFields: ["*"],
+              visible: capa.encendida
             });
             this.map?.add(featureLayerArbol);
             this.views.activeView
@@ -236,6 +167,28 @@ export class MapService {
               .then((layerView: any) => {
                 this.layers?.push({
                   capa: featureLayerArbol,
+                  datos: capa,
+                  view: layerView,
+                });
+              });
+            break;
+          case "luminaria":
+
+            const simboloLuminaria = this.checkDiaNoche() ? new RenderedSymbols().construirLuminariaDia() : new RenderedSymbols().construirLuminariaNoche();
+            const featureLayerLuminaria = new FeatureLayer({
+              url: capa.url,
+              id: capa.id,
+              title: capa.nombre,
+              renderer: simboloLuminaria,
+              outFields: ["*"],
+              visible: capa.encendida
+            });
+            this.map?.add(featureLayerLuminaria);
+            this.views.activeView
+              ?.whenLayerView(featureLayerLuminaria)
+              .then((layerView: any) => {
+                this.layers?.push({
+                  capa: featureLayerLuminaria,
                   datos: capa,
                   view: layerView,
                 });
@@ -262,7 +215,8 @@ export class MapService {
                 ],
                 actions: [this.streetViewAction],
               },
-              definitionExpression: "activo not in ('No')"
+              definitionExpression: "activo not in ('No')",
+              visible: capa.encendida
             });
             this.map?.add(featureLayerGrua);
             this.views.activeView
@@ -293,6 +247,7 @@ export class MapService {
               title: capa.nombre,
               renderer: simboloBloque,
               outFields: ["*"],
+              visible: capa.encendida
             });
             this.map?.add(featureLayerBloque);
 
@@ -307,11 +262,6 @@ export class MapService {
                 });
                 console.log("capa agregada", this.layers);
               });
-
-            /*featureLayerBloque.on("load",(e)=>{
-              console.log('AGREGAR', { capa: featureLayerBloque, datos: capa })
-              this.layers?.push({ capa: featureLayerBloque, datos: capa });
-            })*/
             break;
         }
       } else {
@@ -319,6 +269,7 @@ export class MapService {
           title: capa.nombre,
           id: capa.id,
           url: capa.url,
+          visible: capa.encendida
         });
         this.map?.add(featureLayer);
         this.views.activeView
@@ -381,20 +332,12 @@ export class MapService {
         id: nombre,
         title: nombre,
       });
-      console.log("CAPA NUEVA", nuevaCapa);
-      /*nuevaCapa.load((r:any),(e:any)=>{
-        this.map?.add(nuevaCapa);
-        
-      });*/
-
       this.map?.add(nuevaCapa);
-
       // Escuchar el evento de error al crear la LayerView
       nuevaCapa.on('layerview-create-error', (errorEvent) => {
         console.error('Error al crear la LayerView:', errorEvent.error);
         swal.fire("Error al agregar capa.");
       });
-
       // También puedes escuchar el evento 'layerview-create' para realizar acciones después de que se crea la LayerView con éxito
       nuevaCapa.on('layerview-create', (layerviewEvent) => {
         console.log('LayerView creada con éxito:', layerviewEvent.layerView);
@@ -477,25 +420,10 @@ export class MapService {
         );
       }
     }
-
     const bgExpand = new Expand({
       view: this.views.activeView,
       content: layerList,
     });
-
-    /*const mySlider = new Slider({
-      // container: "sliderDiv",
-      min: 0,
-      max: 1,
-      steps: .05,
-      values: [1],
-      snapOnClickEnabled: true,
-      visibleElements: {labels: true,
-                          rangeLabels: true}
-    });
-
-    mySlider.on('thumb-drag', (index:any) => console.log(index));*/
-
     this.views.activeView?.ui.add(bgExpand, "bottom-right");
   }
 
@@ -846,7 +774,6 @@ export class MapService {
       .then((result: any) => {
         console.log("el resultado es", query, result);
         if (result.features.length > 0) {
-          // this.lotesSeleccionados = result.features.map((lt:any) => lt.attributes.CODIGO_LOTE);
 
           const ids = result.features.map(
             (lt: any) => lt.attributes.CODIGO_LOTE
@@ -893,26 +820,6 @@ export class MapService {
     }
   }
 
-  /*_clicEnMapa(point: any) {
-    if (this.buffer.consulta) {
-      switch (this.buffer.tipo) {
-        case "predio":
-          this.centrar(point.mapPoint);
-          break;
-        case "predios":
-          this.centrar(point.mapPoint);
-          const capa = this.layers?.filter(
-            (f: any) => f.datos.busquedaBufferPredio
-          )[0];
-          console.log("capa para buffer de predios", capa);
-          this.seleccionarPredioByBuffer(capa, point);
-          break;
-        default:
-          break;
-      }
-    }
-  }*/
-
   centrar(centroide: any) {
     this.views.activeView?.goTo(
       { target: centroide, zoom: 19 },
@@ -923,14 +830,6 @@ export class MapService {
   }
 
   agregarCapaBuffer(capa: any) {
-    /*if(capa.vista != this.views.actual) {
-      this.switchView();
-    }*/
-    /*if (capa.formato.dimensiones == 2) {
-      this.switchView("2D");
-    } else {
-      this.switchView("3D");
-    }*/
     if (capa.formato.vista != this.views.actual) {
       this.switchView(capa.formato.vista, capa);
     } else {
@@ -942,17 +841,6 @@ export class MapService {
     if (this.bufferLayer) {
       this.map?.remove(this.bufferLayer);
     }
-
-    /*const simboloGrua = new RenderedSymbols().construirGrua(
-      capa.factor
-    );
-    const featureLayerGrua = new FeatureLayer({
-      url: capa.url,
-      id: capa.id,
-      title: capa.nombre,
-      renderer: simboloGrua,
-      outFields: ["*"],
-    });*/
 
     let simboloBloque = null;
     switch(capa.formato.simbolo) {
@@ -970,13 +858,7 @@ export class MapService {
         );
         break;    
     }
-      /*capa.formato.simbolo == "bloque-parque"
-        ? new RenderedSymbols().construirBloqueConstante(0.4, "rgb(0, 255, 0)")
-        : new RenderedSymbols().construirBloqueConstante(
-            2.4,
-            "rgb(50, 50, 50)"
-          );*/
-
+      
     if (capa.formato?.dimensiones == 3 && this.views.actual == "3D") {
       switch (capa.formato?.simbolo) {
         case "bloque":
@@ -1114,10 +996,13 @@ export class MapService {
     this.views.activeView = new MapView({
       map: this.map,
       container: this.views.container, // mapElementRef?.nativeElement,
-      center: [
-        environment.baseConfigs.center.longitud,
-        environment.baseConfigs.center.latitud,
-      ],
+      center: this.checkDiaNoche() ? [
+        environment.baseConfigsDay.center.longitud,
+        environment.baseConfigsDay.center.latitud,
+      ] : [
+        environment.baseConfigsNight.center.longitud,
+        environment.baseConfigsNight.center.latitud,
+      ], 
       zoom: 17,
       highlightOptions: {
         haloColor: new Color("rgb(3, 255, 255)"),
@@ -1159,9 +1044,9 @@ export class MapService {
       container: this.views.container, // mapElementRef?.nativeElement,
       camera: {
         position: {
-          latitude: environment.baseConfigs.center.latitud,
-          longitude: environment.baseConfigs.center.longitud,
-          z: environment.baseConfigs.center.altitud, // Altura en metros
+          latitude: this.checkDiaNoche() ? environment.baseConfigsDay.center.latitud : environment.baseConfigsNight.center.latitud,
+          longitude: this.checkDiaNoche() ? environment.baseConfigsDay.center.longitud : environment.baseConfigsNight.center.longitud,
+          z: this.checkDiaNoche() ? environment.baseConfigsDay.center.altitud : environment.baseConfigsNight.center.altitud, // Altura en metros
         },
         heading: 0, // grados de rotación respecto del norte
         tilt: 45, // grados de rotación respecto de la superficie

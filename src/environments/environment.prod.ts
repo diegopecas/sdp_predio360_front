@@ -7,7 +7,7 @@ export const environment = {
   esriConfigApiKey:
     "AAPK18837c198fe14f849f5237a94fb8c4d9nyUIHfhPmykTR_afDukiTorJHXPimhB05XjXQ6o6rDQ-GAsclkcQJjNfsUX-ulMj",
   textoEncuesta: "Queremos seguir mejorando la solución de Predio360, con tu ayuda lo podremos lograr, te invitamos a participar de la lluvia de ideas y necesidades en la siguiente encuesta.",  
-  baseConfigs: {
+  baseConfigsDay: {
     basemapId: "streets-vector",
     ground: "world-elevation",
     center: {
@@ -15,7 +15,17 @@ export const environment = {
       longitud: -74.08188893966589,
       altitud: 4000,
     },
-    zoomLevel: 17,
+    zoomLevel: 20,
+  },
+  baseConfigsNight: {
+    basemapId: "streets-night-vector",
+    ground: "world-elevation",
+    center: {
+      latitud: 4.618554114844545,
+      longitud: -74.08188893966589,
+      altitud: 4000,
+    },
+    zoomLevel: 20,
   },
   capasPrecargadas: [
     {
@@ -79,7 +89,7 @@ export const environment = {
     {
       id: "construcciones",
       nombre: "construcciones",
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/0",
       tipo: "3D",
       altura: "NUMERO_PISOS",
       factor: 2.4,
@@ -91,19 +101,22 @@ export const environment = {
         placeholder: "Buscar construcción",
       },
       busquedaBufferPredio: true,
+      encendida: true
     },
     {
       id: "arbolado",
       nombre: "arbolado",
-      url: "https://geoportal.jbb.gov.co/agc/rest/services/SIGAU/CensoArbol/MapServer/0",
+      url: "https://geoportal.jbb.gov.co/agc/rest/services/SIGAU/CensoArbol/FeatureServer/0",
+      /* url: "https://geoportal.jbb.gov.co/agc/rest/services/SIGAU/CensoArbol/MapServer/0", */
       tipo: "3D",
       altura: "Altura_Total",
       factor: 1,
       simbolo: "arbol",
       color: "rgb(1, 90, 0)",
       busquedaBufferPredio: false,
+      encendida: true
     },
-    {
+    /*{
       id: "parques",
       nombre: "parques",
       url: "https://visorsrv.idrd.gov.co/srv/rest/services/Parques_IDRD_Publicos/ServiciosIDRD_Publico/FeatureServer/12",
@@ -113,17 +126,30 @@ export const environment = {
       simbolo: "bloque",
       color: "rgb(136, 166, 94)",
       busquedaBufferPredio: false,
-    },
+    },*/
     {
       id: "galeria",
       nombre: "galería inmobiliaria",
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/6",
       tipo: "3D",
       altura: "",
       factor: 20,
       simbolo: "grua",
       color: "rgb(136, 166, 94)",
       busquedaBufferPredio: false,
+      encendida: false
+    },
+    {
+      id: "luminarias",
+      nombre: "Luminarias",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/10",
+      tipo: "3D",
+      simbolo: "luminaria",
+      altura: "",
+      factor: 20,
+      color: "rgb(255, 235, 63)",
+      busquedaBufferPredio: false,
+      encendida: true
     },
   ],
 
@@ -132,20 +158,19 @@ export const environment = {
   // urlServicioPredios:
   //  "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
   urlServicioGaleria:
-    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/6",
   urlTablaPredios:
-    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
   urlLoteCatastral:
-    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/4",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/4",
   urlConstruccion:
-    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/0",
   urlFichaProyecto:
-    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/8",
-    urlPlanoteca:
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/8",
+  urlPlanoteca:
     "https://sinupot.sdp.gov.co/serverr/rest/services/Planoteca/ConsultasPUT/MapServer/0",
   urlCapasPlanoteca:
     "https://sinupot.sdp.gov.co/serverr/rest/services/Planoteca/CapasPUT/MapServer/export",
-  
   urlSinupot: "https://sinupot.sdp.gov.co/serverp/rest/services/",
   capaArbolado: {
     url: "https://geoportal.jbb.gov.co/agc/rest/services/SIGAU/CensoArbol/MapServer/0",
@@ -153,33 +178,36 @@ export const environment = {
   capaParques: {
     url: "https://visorsrv.idrd.gov.co/srv/rest/services/Parques_IDRD_Publicos/ServiciosIDRD_Publico/FeatureServer/12",
   },
+  capaLuminarias: {
+    url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/10",
+  },
   capaConsultaClick: {
-    url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/4",
+    url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/4",
     /*url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",*/
     id: "CODIGO_LOTE",
   },
   capaSitiosInteres: {
-    url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/1",
+    url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/1",
   },
   capaConsultaPredio: {
     porLote: {
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
       atributo: "GN_CODIGO_LOTE",
     },
     porDireccion: {
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
       atributo: "GN_DIRECCION",
     },
     porMatricula: {
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
       atributo: "GN_MATRICULA_INMOBILIARIA",
     },
     porChip: {
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
       atributo: "GN_CHIP",
     },
     porCedula: {
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
       atributo: "GN_CEDULA_CATASTRAL",
     },
   },
@@ -247,22 +275,41 @@ export const environment = {
     },
   ],
   serviciosInterception: [
-    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
-    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/4",
-    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
-    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/MapServer/0",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/MapServer/1",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/MapServer/2",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/MapServer/3",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/MapServer/4",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/MapServer/5",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/MapServer/6",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/MapServer/7",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/MapServer/8",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/MapServer/9",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/MapServer/10",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/MapServer/11",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/0",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/1",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/2",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/4",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/5",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/6",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/7",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/8",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/9",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/10",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/11",
     "https://serviciosg.sdp.gov.co/server/rest/services/POT555/Sistema_del_cuidado_y_servicios_sociales/MapServer/8",
     "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/2",
     "https://gis.transmilenio.gov.co/arcgis/rest/services/Troncal/consulta_esquemas_estaciones/FeatureServer/0",
     "https://serviciosg.sdp.gov.co/server/rest/services/POT555/ESTRUCTURA_INTEGRADORES_DE_PATRIMONIO/FeatureServer/37",
     "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer/171",
     "https://sinupot.sdp.gov.co/serverp/rest/services/POT555/ESTRUCTURA_FUNCIONAL_Y_DEL_CUIDADO/MapServer/185",
-    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/1"
   ],
   serviciosResultados: [
     {
       // url: "https://services8.arcgis.com/2gedZBw4OrdjULOA/arcgis/rest/services/construccion_predio_360/FeatureServer/0",
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/0",
       id: "construccion",
       name: "Construcción",
       filter: ["CODIGO_LOTE", "GN_CODIGO_LOTE"],
@@ -402,7 +449,7 @@ export const environment = {
       ],
     },
     {
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/4",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/4",
       id: "lote_catastral",
       name: "Lote Catastral",
       filter: ["GN_CODIGO_LOTE", "GN_CODIGO_LOTE"],
@@ -1628,10 +1675,21 @@ export const environment = {
             mostrarSinInformacion: "S",
           },
         },
+        {
+          name: "NR_ACTUACION_ESTRATEGICA",
+          alias: "Actuación estratégica",
+          panel: "NR",
+          orden: 9,
+          formato: {
+            tipo: "texto",
+            sinInformacion: "",
+            mostrarSinInformacion: "S",
+          },
+        },
       ],
     },
     {
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
       id: "predio",
       name: "Predio",
       filter: ["OBJECTID", "OBJECTID"],
@@ -2429,7 +2487,7 @@ export const environment = {
         {
           name: "GN_ESTRATO",
           alias: "Estrato",
-          panel: "",
+          panel: "DG",
           orden: 0,
           formato: {
             tipo: "texto",
