@@ -83,7 +83,8 @@ export class FichaPredioComponent implements OnInit   {
               [{text: 'Código Predio', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_CODIGO_LOTE.substring(8, 10)}],
               [{text: 'Localidad', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.GN_LOCALIDAD}],
               [{text: 'Unidad de Planeamiento Local (UPL)', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.GN_UNI_PLANEMIENTO_LOCAL}],
-              [{text: 'Sector Catastral', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.GN_SECTOR_CATASTRAL}]
+              [{text: 'Sector Catastral', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.GN_SECTOR_CATASTRAL}],
+              [{text: 'Estrato', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_ESTRATO}]
             ]
           },
         },
@@ -154,6 +155,7 @@ export class FichaPredioComponent implements OnInit   {
             body: [
               [{colSpan:2, text: 'Información Normativa', style: 'header', fillColor: '#CCC'}, {}],
               [{text: 'Nombre del Tratamiento Urbanístico:', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_TRAT_URBAN_NOMBRE}],
+              [{text: 'Nombre de la Actuación Estratégica:', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_ACTUACION_ESTRATEGICA}],
               [{text: 'Tipología del Tratamiento Urbanístico', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_TRAT_URBAN_TIPOLOGIA}],
               [{text: 'Altura máxima por tratamiento urbanístico', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_TRAT_URBAN_ALTURA_MAXIMA}],
               [{text: 'Área de Actividad', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_AREA_ACTIVIDAD}],
