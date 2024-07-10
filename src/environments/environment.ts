@@ -127,6 +127,8 @@ export const environment = {
     },
   ],
 
+  urlExportMap:
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/MapServer/export?",
   urlServicioPredios:
     "https://services8.arcgis.com/2gedZBw4OrdjULOA/arcgis/rest/services/construccion_predio_360/FeatureServer/0",
   // urlServicioPredios:

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import { environment } from "src/environments/environment";
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { MapService } from 'src/app/common/services/map.service';
@@ -40,11 +40,11 @@ export class FichaProyectoComponent implements OnInit   {
     const xmax = this.proyecto.LONGITUD +1;
     const ymin = this.proyecto.LATITUD -1;
     const ymax = this.proyecto.LATITUD +1;
-    this.mapUrl+=`https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/export?bbox=${xmin},${ymin},${xmax},${ymax}&bboxSR=4326&layers=show:6=&layerDefs=&size=150%2C220&imageSR=4326&historicMoment=&format=png&transparent=true&dpi=&time=&timeRelation=esriTimeRelationOverlaps&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=8000&rotation=&datumTransformations=&layerParameterValues=&mapRangeValues=&layerRangeValues=&clipping=&spatialFilter=&f=image`;
+    this.mapUrl+=`${environment.urlExportMap}bbox=${xmin},${ymin},${xmax},${ymax}&bboxSR=4326&layers=show:6&layerDefs=%7B"6"%3A"CODIGO_PROYECTO+%3D+${this.idProyecto}"%7D&size=510%2C280&imageSR=4326&historicMoment=&format=png&transparent=true&dpi=&time=&timeRelation=esriTimeRelationOverlaps&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=8000&rotation=&datumTransformations=&layerParameterValues=&mapRangeValues=&layerRangeValues=&clipping=&spatialFilter=&f=image`;
     
     console.log("mapUrl", this.mapUrl);
 
-    this.baseMapUrl+=`https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/export?bbox=${xmin},${ymin},${xmax},${ymax}&bboxSR=4326&layers=&layerDefs=&size=150%2C220&imageSR=4326&historicMoment=&format=png&transparent=false&dpi=&time=&timeRelation=esriTimeRelationOverlaps&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=8000&rotation=&datumTransformations=&layerParameterValues=&mapRangeValues=&layerRangeValues=&clipping=&spatialFilter=&f=image`;
+    this.baseMapUrl+=`https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/export?bbox=${xmin},${ymin},${xmax},${ymax}&bboxSR=4326&layers=&layerDefs=&size=510%2C280&imageSR=4326&historicMoment=&format=png&transparent=false&dpi=&time=&timeRelation=esriTimeRelationOverlaps&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=8000&rotation=&datumTransformations=&layerParameterValues=&mapRangeValues=&layerRangeValues=&clipping=&spatialFilter=&f=image`;
 
     this.fichaData = await this.mapService.consultarFichaProyectoInfo(this.idProyecto);
 
@@ -103,124 +103,83 @@ export class FichaProyectoComponent implements OnInit   {
           }
         },
         {
-          margin: [0, 0, 0, 8], 
-          columns: [
-            {
-              width: 180,
-              style: 'table',
-              table: {
-                body: [
-                  [{text: 'LOCALIZACIÓN DEL PROYECTO', style: 'subheader'}],
-                  [{image: 'projectBaseMap', width: 150, height: 220, margin: [ 10, 10, 10, 10 ] }],
-                  [{text: 'LINK DEL PROYECTO:', style: 'subheader'}],
-                  [{ text: this.proyecto.LINK, link: this.proyecto.LINK }
-                ],
-                ]
-              },
-            },
-            {
-              width: 5,
-              text:''
-            },
-            {
-              width: '*',
-              style: 'table',
-              table: {
-                widths: [70, 89, 70, 89],
-                body: [
-                  [{text: 'PLANO No. ', style: 'subheader'}, {text: this.fichaData.LIC_TIPO_TRAMITE},{text: 'LICENCIA No. ', style: 'subheader'}, {text: this.fichaData.LIC_ID_EXPEDIENTE}],
-
-                  [{rowSpan: 5, text: 'NORMA DE EXPEDICIÓN DE LA LICENCIA', style: 'subheader'}, {text: 'MARCO NORMATIVO', style: 'subheader'},{colSpan: 2, text: 'DECRETO DISTRITAL 190 DE 2004'}, {}],
-                  [{}, {text: 'TRATAMIENTO URBANÍSTICO', style: 'subheader'},{colSpan: 2, text: this.lote.NR_TRAT_URBAN_NOMBRE }, {}],
-                  [{}, {text: 'ÁREA DE ACTIVIDAD', style: 'subheader'},{colSpan: 2, text: this.lote.NR_AREA_ACTIVIDAD }, {}],
-                  [{}, {text: 'FECHA DE RADICADO', style: 'subheader'},{colSpan: 2, text: '8/24/2007'}, {}],
-                  [{}, {text: 'NÚMERO DE RADICADO', style: 'subheader'},{colSpan: 2, text: '07-4-1233'}, {}],
-
-                  [{rowSpan: 2, text: 'DIRECCIÓN', style: 'subheader'}, {rowSpan: 2, text: this.proyecto.DIRECCION},{text: 'ESTADO:', style: 'subheader'}, {text: this.proyecto.ESTADO}],
-                  [{}, {},{text: 'ESTRATO::', style: 'subheader'}, {text: this.proyecto.ESTRATO}],
-                  [{text: 'CHIP:', style: 'subheader'}, {text: 'AAA0137ZEBR'},{text: 'MATRÍCULA INMOBILIARIA:', style: 'subheader'}, {text: '50C-260832'}]
-                ]
-              },
-            }
-
-          ],
+          width: '*',
+          margin: [0, 0, 0, 8],
+          style: 'table',
+          table: {
+            widths: [320, 200],
+            body: [
+              [{colSpan:2, text: 'LOCALIZACIÓN DEL PROYECTO', style: 'header', fillColor: '#CCC'}, {}],
+              [{colSpan:2, image: 'projectBaseMap', height:280 , width:510 , margin: [ 10, 10, 10, 10 ]}],
+              [{text: 'DIRECCIÓN', style: 'subheader', fillColor: '#CCC'}, {text: this.proyecto.DIRECCION}],
+              [{text: 'ESTADO', style: 'subheader', fillColor: '#CCC'}, {text: this.proyecto.ESTADO}],
+              [{text: 'ESTRATO', style: 'subheader', fillColor: '#CCC'}, {text: this.proyecto.ESTRATO}],
+              [{text: 'CHIP', style: 'subheader', fillColor: '#CCC'}, {text: 'AAA0137ZEBR'}],
+              [{text: 'MATRÍCULA INMOBILIARIA', style: 'subheader', fillColor: '#CCC'}, {text: '50C-260832'}],
+              [{text: 'LINK DEL PROYECTO', style: 'subheader', fillColor: '#CCC'}, { text: this.proyecto.LINK, link: this.proyecto.LINK }]
+            ]
+          }
         },
-        {image: 'projectMap', width: 150, height: 220, margin: [ 10, 10, 10, 10 ], absolutePosition: {x: 45, y: 247} },
+        {image: 'projectMap', height:280 , width:510, margin: [ 10, 10, 10, 10 ], absolutePosition: {x: 45, y: 238} },
         {
+          width: '*',
           margin: [0, 0, 0, 8], 
-          columns: [
-            {
-              width: 180,
-              style: 'table',
-              table: {
-                body: [
-                  [{text: 'PLANO 1', style: 'subheader'}],
-                  [{image: 'planotecaMap', width: 150, margin: [ 10, 10, 10, 10 ] }]
-                ]
-              },
-            },
-            {
-              width: 5,
-              text:''
-            },
-            {
-              width: '*',
-              style: 'table',
-              table: {
-                widths: [185, 150],
-                body: [
-                  [{colSpan:2, text: 'CONDICIONES URBANÍSTICAS', style: 'header', fillColor: '#CCC'}, {}],
-                  [{text: 'ÁREA BRUTA (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '228072.17'}],
-                  [{text: 'ÁREA NO URBANIZABLE-RESERVAS (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '6802.72'}],
-                  [{text: 'ÁREA NETA TODAS LAS ETAPAS LICENCIADAS (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '433,794.65'}],
-                  [{text: 'CESIONES DE MALLA VIAL (Contro Ambiental y vias) (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '41,023.55'}],
-                  [{text: 'CESION EQUIPAMIENTO', style: 'subheader', fillColor: '#CCC'}, {text: '17003.12'}],
-                  [{text: 'CESION ESPACIO PÚBLICO', style: 'subheader', fillColor: '#CCC'}, {text: '36,298.28'}],
-                ]
-              },
-            }
-
-          ],
+          style: 'table',
+          table: {
+            widths: [320, 200],
+            body: [
+              [{colSpan:2, text: 'PLANO URBANÍSTICO', style: 'header', fillColor: '#CCC'}, {}],
+              [{colSpan:2, image: 'planotecaMap', height:280 , width:510 , margin: [ 10, 10, 10, 10 ]}],
+              [{text: 'PLANO No. ', style: 'subheader', fillColor: '#CCC'}, {text:  this.fichaData.LIC_TIPO_TRAMITE}],
+              [{text: 'LICENCIA No. ', style: 'subheader', fillColor: '#CCC'}, {text: this.fichaData.LIC_ID_EXPEDIENTE}],
+              [{colSpan:2, text: 'NORMA DE EXPEDICIÓN DE LA LICENCIA', style: 'header', fillColor: '#CCC'}, {}],
+              [{text: 'MARCO NORMATIVO', style: 'subheader', fillColor: '#CCC'}, {text: 'DECRETO DISTRITAL 190 DE 2004'}],
+              [{text: 'TRATAMIENTO URBANÍSTICO', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_TRAT_URBAN_NOMBRE}],
+              [{text: 'ÁREA DE ACTIVIDAD', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_AREA_ACTIVIDAD}],
+              [{text: 'FECHA DE RADICADO', style: 'subheader', fillColor: '#CCC'}, {text: '8/24/2007'}],
+              [{text: 'NÚMERO DE RADICADO', style: 'subheader', fillColor: '#CCC'}, {text: '07-4-1233'}]
+            ]
+          },
         },
         {
+          width: '*',
           margin: [0, 0, 0, 8], 
-          columns: [
-            {
-              width: 180,
-              style: 'table',
-              table: {
-                body: [
-                  [{text: 'PLANO 2', style: 'subheader'}],
-                  [{image: 'default', width: 150, margin: [ 10, 10, 10, 10 ] }]
-                ]
-              },
-            },
-            {
-              width: 5,
-              text:''
-            },
-            {
-              width: '*',
-              style: 'table',
-              table: {
-                widths: [185, 150],
-                body: [
-                  [{text: 'COMPESACIÓN EN DINERO', style: 'subheader', fillColor: '#CCC'}, {text: 'N/A'}],
-                  [{text: 'ÁREA ÚTIL', style: 'subheader', fillColor: '#CCC'}, {text: '127730.48'}],
-                  [{text: 'INDICE DE CONSTRUCCION', style: 'subheader', fillColor: '#CCC'}, {text: '0.91'}],
-                  [{text: 'VIVIENDA (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '197171.74'}],
-                  [{text: 'NO VIS (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '0'}],
-                  [{text: 'VIS (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '0'}],
-                  [{text: 'VIP (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '0'}],
-                  [{text: 'COMERCIO Y SERVICIOS', style: 'subheader', fillColor: '#CCC'}, {text: '1755.55'}],
-                  [{text: 'DOTACIONAL', style: 'subheader', fillColor: '#CCC'}, {text: '0'}],
-                  [{text: 'INDUSTRIA', style: 'subheader', fillColor: '#CCC'}, {text: '0'}],
-                  [{text: 'DENSIDAD POBLACIONAL', style: 'subheader', fillColor: '#CCC'}, {text: 'Resultante'}]
-                ]
-              },
-            }
-
-          ],
+          style: 'table',
+          table: {
+            widths: [320, 200],
+            body: [
+              [{colSpan:2, text: 'CONDICIONES URBANÍSTICAS', style: 'header', fillColor: '#CCC'}, {}],
+              [{text: 'ÁREA BRUTA (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '228072.17'}],
+              [{text: 'ÁREA NO URBANIZABLE-RESERVAS (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '6802.72'}],
+              [{text: 'ÁREA NETA TODAS LAS ETAPAS LICENCIADAS (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '433,794.65'}],
+              [{text: 'CESIONES DE MALLA VIAL (Contro Ambiental y vias) (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '41,023.55'}],
+              [{text: 'CESION EQUIPAMIENTO', style: 'subheader', fillColor: '#CCC'}, {text: '17003.12'}],
+              [{text: 'CESION ESPACIO PÚBLICO', style: 'subheader', fillColor: '#CCC'}, {text: '36,298.28'}],
+            ]
+          },
+        },
+        {
+          width: '*',
+          margin: [0, 0, 0, 8], 
+          style: 'table',
+          table: {
+            widths: [320, 200],
+            body: [
+              [{colSpan:2, text: 'PLANO 2', style: 'header', fillColor: '#CCC'}, {}],
+              [{colSpan:2, image: 'default', height:280 , width:510 , margin: [ 10, 10, 10, 10 ]}],
+              [{text: 'COMPESACIÓN EN DINERO', style: 'subheader', fillColor: '#CCC'}, {text: 'N/A'}],
+              [{text: 'ÁREA ÚTIL', style: 'subheader', fillColor: '#CCC'}, {text: '127730.48'}],
+              [{text: 'INDICE DE CONSTRUCCION', style: 'subheader', fillColor: '#CCC'}, {text: '0.91'}],
+              [{text: 'VIVIENDA (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '197171.74'}],
+              [{text: 'NO VIS (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '0'}],
+              [{text: 'VIS (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '0'}],
+              [{text: 'VIP (M2)', style: 'subheader', fillColor: '#CCC'}, {text: '0'}],
+              [{text: 'COMERCIO Y SERVICIOS', style: 'subheader', fillColor: '#CCC'}, {text: '1755.55'}],
+              [{text: 'DOTACIONAL', style: 'subheader', fillColor: '#CCC'}, {text: '0'}],
+              [{text: 'INDUSTRIA', style: 'subheader', fillColor: '#CCC'}, {text: '0'}],
+              [{text: 'DENSIDAD POBLACIONAL', style: 'subheader', fillColor: '#CCC'}, {text: 'Resultante'}]
+            ]
+          },
         }
       ],
       images: {

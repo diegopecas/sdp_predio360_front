@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import { environment } from "src/environments/environment";
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { MapService } from 'src/app/common/services/map.service';
@@ -46,7 +46,7 @@ export class FichaPredioComponent implements OnInit   {
     const ymax = this.extentLote.ymax;
     
     this.baseMapUrl+=`https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/export?bbox=${xmin},${ymin},${xmax},${ymax}&size=510%2C280&format=png&transparent=true&mapScale=4000&f=image`;
-    this.mapUrl+=`https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/export?bbox=${xmin},${ymin},${xmax},${ymax}&layers=show%3A4&layerDefs=%7B%224%22%3A%22GN_CODIGO_LOTE+%3D+%27${this.predio.GN_CODIGO_LOTE}%27%22%7D&size=510%2C280&format=png&transparent=true&mapScale=4000&f=image`;
+    this.mapUrl+=`${environment.urlExportMap}bbox=${xmin},${ymin},${xmax},${ymax}&layers=show%3A4&layerDefs=%7B%224%22%3A%22GN_CODIGO_LOTE+%3D+%27${this.predio.GN_CODIGO_LOTE}%27%22%7D&size=510%2C280&format=png&transparent=true&mapScale=4000&f=image`;
     console.log("baseMapUrl", this.baseMapUrl);
     console.log("mapUrl", this.mapUrl);
     
