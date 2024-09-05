@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkpredio360_app=self.webpackChunkpredio360_app||[]).push([[2573],{52573:(o,n,e)=>{e.r(n),e.d(n,{CalciteAction:()=>s,defineCustomElement:()=>c});var t=e(48346);const s=t.A,c=t.d}}]);

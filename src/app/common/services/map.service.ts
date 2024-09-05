@@ -20,6 +20,7 @@ import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
 import swal from "sweetalert2";
 import  SpatialReference from "@arcgis/core/geometry/SpatialReference";
 import esriRequest from "@arcgis/core/request.js";
+import NavigationToggle from "@arcgis/core/widgets/NavigationToggle.js";
 
 @Injectable({
   providedIn: "root",
@@ -80,7 +81,8 @@ export class MapService {
     });
     
     // Vista inicial en 3D
-    this.switchView("0");
+    // this.switchView("0");
+    this.configuraVista3D(null);
   }
 
   // Función para comprobar si son las 6 de la tarde
@@ -97,17 +99,19 @@ export class MapService {
   }
 
   switchGaleria(accion:boolean) {
-    const capa = (environment.capasBase.filter(c => c.id == 'galeria')[0] as any).capa;
-    if(accion) {
-      capa.setVisible(true);
+    console.log("Capas", this.layers);
+    const capa = (this.layers?.filter(c => c.id == 'galeria')[0] as any).capa;
+    if(accion && capa) {
+      capa.visible = true;
       } else {
-      capa.setVisible(false);
+      capa.visible = false;
     }
   }
 
   agregarWidgets() {
     const basemapGallery = new BasemapGallery({
       view: this.views.activeView,
+      id: 'basemap-widget'
     });
     const bgExpand = new Expand({
       view: this.views.activeView,
@@ -115,6 +119,12 @@ export class MapService {
       id: 'basemap-widget'
     });
     this.views.activeView?.ui.add(bgExpand, "bottom-right");
+
+    let navigationToggle = new NavigationToggle({
+      view: this.views.activeView
+    });
+
+    this.views.activeView.ui.add(navigationToggle, "top-right");
   }
 
   private streetViewAction: any = {
@@ -169,6 +179,7 @@ export class MapService {
                   capa: featureLayerArbol,
                   datos: capa,
                   view: layerView,
+                  id: capa.id
                 });
               });
             break;
@@ -191,6 +202,7 @@ export class MapService {
                   capa: featureLayerLuminaria,
                   datos: capa,
                   view: layerView,
+                  id: capa.id
                 });
               });
             break;
@@ -226,6 +238,7 @@ export class MapService {
                   capa: featureLayerGrua,
                   datos: capa,
                   view: layerView,
+                  id: capa.id
                 });
               });
             break;
@@ -259,6 +272,7 @@ export class MapService {
                   capa: featureLayerBloque,
                   datos: capa,
                   view: layerView,
+                  id: capa.id
                 });
                 console.log("capa agregada", this.layers);
               });
@@ -279,6 +293,7 @@ export class MapService {
               capa: featureLayer,
               datos: capa,
               view: layerView,
+              id: capa.id
             });
           });
       }
@@ -387,6 +402,7 @@ export class MapService {
    
     const layerList = new LayerList({
       view: this.views.activeView,
+      id: 'expand-layerlist'
       // listItemCreatedFunction: this.defineActions
     });
 
@@ -423,6 +439,7 @@ export class MapService {
     const bgExpand = new Expand({
       view: this.views.activeView,
       content: layerList,
+      id: 'expand-layerlist'
     });
     this.views.activeView?.ui.add(bgExpand, "bottom-right");
   }
@@ -430,12 +447,14 @@ export class MapService {
   agregarLeyenda() {
     const legend = new Legend({
       view: this.views.activeView,
-      style: "card",
+      /*style: "card",*/
+      id: 'expand-legend'
     });
 
     const bgExpand = new Expand({
       view: this.views.activeView,
       content: legend,
+      id: 'expand-legend'
     });
 
     this.views.activeView?.ui.add(bgExpand, "bottom-right");

@@ -56,6 +56,48 @@
               ],
               "outputHashing": "all"
             },
+            "certification": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.cert.ts"
+                }
+              ],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "50mb",
+                  "maximumError": "50mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "50mb",
+                  "maximumError": "50mb"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development-sdp": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "50mb",
+                  "maximumError": "50mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "50mb",
+                  "maximumError": "50mb"
+                }
+              ],
+              "outputHashing": "all"
+            },
             "development": {
               "buildOptimizer": false,
               "optimization": false,
@@ -72,6 +114,12 @@
           "configurations": {
             "production": {
               "browserTarget": "predio360-app:build:production"
+            },
+            "certification": {
+              "browserTarget": "predio360-app:build:certification"
+            },
+            "development-sdp": {
+              "browserTarget": "predio360-app:build:development-sdp"
             },
             "development": {
               "browserTarget": "predio360-app:build:development"

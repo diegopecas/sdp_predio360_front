@@ -27,7 +27,16 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
 ## Compilar para producción
-ng build --configuration production
+ng build --configuration production --output-path=dist/prod/predio-360
+
+## Compilar para pruebas
+ng build --configuration certification --output-path=dist/cert/predio-360
+
+## Compilar para desarrollo SDP
+ng build --configuration development-sdp --output-path=dist/dev/predio-360
+
+## Compilar para local
+npm start
 
 ## Pasos para el despliegue
 

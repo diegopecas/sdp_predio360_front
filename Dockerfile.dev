@@ -11,10 +11,10 @@ COPY . /app
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy the compiled app to the nginx static content directory
-RUN cp -r dist/predio360-app/* /usr/share/nginx/html/
+RUN cp -r dist/dev/predio360/* /usr/share/nginx/html/
 COPY  nginx.conf /etc/nginx/conf.d/default.conf
-# ADD  predio360.cer /etc/ssl/certs/
-# ADD  predio360.key /etc/ssl/private/
+ADD  predio360.cer /etc/ssl/certs/
+ADD  predio360.key /etc/ssl/private/
 
 # Expose port 80
 EXPOSE 80

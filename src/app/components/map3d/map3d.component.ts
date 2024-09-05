@@ -91,7 +91,9 @@ export class Map3dComponent implements AfterViewInit, OnDestroy {
         { element: '#item-consulta-galeria', popover: { title: 'Galería inmobiliaria', description: 'Consulte aquí información relacionada con los proyectos inmobiliarios en desarrollo.' } },
         { element: '#item-agregar-capas', popover: { title: 'Agregar capa', description: 'En esta opción puede activar capas precargadas o agregar capas externas.' } },
         { element: '.esri-zoom', popover: { title: 'Zoom', description: '(+) acercar el mapa y (-) alejar el mapa.' } },
-        { element: '#basemap-widget', popover: { title: 'Galería de mapas base', description: 'Seleccione un mapa como mapa de fondo para referencia visual.' } },
+        { element: '#basemap-widget_controls_content', popover: { title: 'Galería de mapas base', description: 'Seleccione un mapa como mapa de fondo para referencia visual.' } },
+        { element: '#expand-legend_controls_content', popover: { title: 'Leyenda', description: 'Con esta funcionalidad puede ver la simbología de las capas que se encuentran cargadas en el espacio de trabajo.' } },
+        { element: '#expand-layerlist_controls_content', popover: { title: 'Lista de capas', description: 'Con esta funcionalidad puede encender o apagar la visualización de las capas que se encuentran cargadas en el espacio de trabajo.' } },
       ]
     });
     
