@@ -4,12 +4,15 @@ import { environment } from "src/environments/environment";
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import { MapService } from 'src/app/common/services/map.service';
+import { DatePipe  } from '@angular/common';
+import { CustomDecimalFormatPipe } from 'src/app/common/pipes/custom-decimal-format.pipe';
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
   selector: 'app-ficha-predio',
   templateUrl: './ficha-predio.component.html',
-  styleUrls: ['./ficha-predio.component.css']
+  styleUrls: ['./ficha-predio.component.css'],
+  providers: [DatePipe, CustomDecimalFormatPipe]
 })
 export class FichaPredioComponent implements OnInit   {
 
@@ -24,7 +27,10 @@ export class FichaPredioComponent implements OnInit   {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private mapService:MapService
+    private mapService:MapService,
+    private datePipe: DatePipe,
+    private customDecimalFormatPipe: CustomDecimalFormatPipe,
+    
   ) {
   }
   
@@ -54,7 +60,33 @@ export class FichaPredioComponent implements OnInit   {
     this.export();
   }
 
-   
+  private trasfArea (value : number){
+    if (!value) {
+      return "No registra información."
+    }
+    return this.customDecimalFormatPipe.transform (value) + " m²";
+  }
+
+  private trasfDinero (value : number){
+    if (!value) {
+      return "No registra información."
+    }
+    return '$ ' + this.customDecimalFormatPipe.transform (value);
+  }
+
+  private trasfDecimal (value : number){
+    if (!value) {
+      return "No registra información."
+    }
+    return this.customDecimalFormatPipe.transform (value);
+  }
+
+  private trasfFecha (value : string){
+    if (!value) {
+      return "No registra información."
+    }
+    return this.datePipe.transform(value, 'dd/MM/yyyy', 'en-US');
+  }
 
 
   public export(): void {
@@ -103,7 +135,7 @@ export class FichaPredioComponent implements OnInit   {
               [{text: 'Código del lote', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_CODIGO_LOTE}],
               [{text: 'Notaria', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_NOTARIA}],
               [{text: 'Número de escritura', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_NUMERO_DOCUMENTO}],
-              [{text: 'Fecha de escritura', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_FECHA_DOCUMENTO}],
+              [{text: 'Fecha de escritura', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfFecha(this.predio.GN_FECHA_DOCUMENTO)}],
             ]
           },
         },
@@ -116,13 +148,13 @@ export class FichaPredioComponent implements OnInit   {
             body: [
               [{colSpan:2, text: 'Información De Uso Actual', style: 'header', fillColor: '#CCC'}, {}],
               [{text: 'Clase de predio', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_CLASE_PREDIO}],
-              [{text: 'Área en uso actividad conexa a PH', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_AREA_USO_PH}],
-              [{text: 'Área en uso residencial', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_AREA_USO_RESIDENCIAL}],
-              [{text: 'Área en uso comercial', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_AREA_USO_COMERCIAL}],
-              [{text: 'Área en uso servicios', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_AREA_USO_SERVICIOS}],
-              [{text: 'Área en uso industria', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_AREA_USO_INDUSTRIA}],
-              [{text: 'Área en uso dotacional', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_AREA_USO_DOTACIONAL}],
-              [{text: 'Área en uso no urbano', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.GN_AREA_USO_NO_URB}]
+              [{text: 'Área en uso actividad conexa a PH', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfArea(this.predio.GN_AREA_USO_PH)}],
+              [{text: 'Área en uso residencial', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfArea(this.predio.GN_AREA_USO_RESIDENCIAL)}],
+              [{text: 'Área en uso comercial', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfArea(this.predio.GN_AREA_USO_COMERCIAL)}],
+              [{text: 'Área en uso servicios', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfArea(this.predio.GN_AREA_USO_SERVICIOS)}],
+              [{text: 'Área en uso industria', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfArea(this.predio.GN_AREA_USO_INDUSTRIA)}],
+              [{text: 'Área en uso dotacional', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfArea(this.predio.GN_AREA_USO_DOTACIONAL)}],
+              [{text: 'Área en uso no urbano', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfArea(this.predio.GN_AREA_USO_NO_URB)}]
             ]
           },
         },
@@ -134,12 +166,12 @@ export class FichaPredioComponent implements OnInit   {
             widths: [320, 200],
             body: [
               [{colSpan:2, text: 'Información Física Del Lote', style: 'header', fillColor: '#CCC'}, {}],
-              [{text: 'Área del lote', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.FS_AREA}],
-              [{text: 'Área de terreno del predio', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.FS_AREA_TERRENO}],
-              [{text: 'Área construida del lote', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.FS_AREA_CONSTRUIDA}],
-              [{text: 'Área construida del predio', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.FS_AREA_CONSTRUIDA}],
-              [{text: 'Índice de construcción', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.FS_INDICE_CONSTRUCCION}],
-              [{text: 'Índice de ocupación', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.FS_INDICE_OCUPACION}],
+              [{text: 'Área del lote', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfArea(this.lote.FS_AREA)}],
+              [{text: 'Área de terreno del predio', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfArea(this.predio.FS_AREA_TERRENO)}],
+              [{text: 'Área construida del lote', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfArea(this.lote.FS_AREA_CONSTRUIDA)}],
+              [{text: 'Área construida del predio', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfArea(this.predio.FS_AREA_CONSTRUIDA)}],
+              [{text: 'Índice de construcción', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfDecimal(this.lote.FS_INDICE_CONSTRUCCION)}],
+              [{text: 'Índice de ocupación', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfDecimal(this.lote.FS_INDICE_OCUPACION)}],
               [{text: 'Tiene semisotano', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.FS_SEMISOTANO}],
               [{text: 'Número de pisos', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.FS_NUMERO_PISOS}],
               [{text: 'Vetustez', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.FS_VETUSTEZ }]
@@ -175,12 +207,12 @@ export class FichaPredioComponent implements OnInit   {
               [{text: 'Nombre de la vía', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_FRENTE_VIA_NOMBRE_VIA}],
               [{text: 'Área de influencia cota 64 aeropuerto', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_ES_AREA_INFLUENCIA_COTA5_AI}],
               [{text: 'Elevación cota máxima en altura', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_AREA_ELEV_MAXIMA_ALTURA }],
-              [{text: 'Área de Elevación Máxima: Elevación', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_AREA_ELEV_MAXIMA_ELEVACION}],
+              [{text: 'Área de Elevación Máxima: Elevación', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfDecimal(this.lote.NR_AREA_ELEV_MAXIMA_ELEVACION)}],
               [{text: 'Bien de Interés Cultural', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_BIEN_INTERES_CULT}],
               [{text: 'Nombre sectores interés urbanístico', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_SEC_INTERES_URBANI_NOMBRE }],
               [{text: 'Modalidad sectores interés urbanístico', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_SEC_INTERES_URBANI_MODALI}],
               [{text: 'Componente de la Estructura Ecológica Principal', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_ESTUC_ECO_PRIN_COMPONENTE}],
-              [{text: 'Categoría de la Estructura Ecológica PrincipaL', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_ESTUC_ECO_PRIN_CATEGORIA}],
+              [{text: 'Categoría de la Estructura Ecológica Principal', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_ESTUC_ECO_PRIN_CATEGORIA}],
               [{text: 'Elemento de la Estructura Ecológica Principal', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_ESTUC_ECO_PRIN_ELEMENTO }],
               [{text: 'Nombre Total de la Estructura Ecológica Principal', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_ESTUC_ECO_PRIN_NOMBRE }],
               [{text: 'Suelo de protección por riesgo', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.NR_SUELO_PROTECC_RIESGO}],
@@ -201,12 +233,12 @@ export class FichaPredioComponent implements OnInit   {
             widths: [320, 200],
             body: [
               [{colSpan:2, text: 'Información Económica', style: 'header', fillColor: '#CCC'}, {}],
-              [{text: 'Valor de Referencia del Suelo m2', style: 'subheader', fillColor: '#CCC'}, {text: this.lote.EC_VALOR_REFERENCIA_SUELO}],
-              [{text: 'Valor m2 Terreno', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.EC_VALOR_M2_TERRENO}],
-              [{text: 'Valor m2 Construcción', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.EC_VALOR_M2_CONSTRUCCION}],
-              [{text: 'Valor total de terreno', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.EC_VALOR_TOTAL_TERRENO }],
-              [{text: 'Valor total de construcción', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.EC_VALOR_TOTAL_CONSTRUCCION }],
-              [{text: 'Avalúo', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.EC_AVALUO}],
+              [{text: 'Valor de Referencia del Suelo m²', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfDinero(this.lote.EC_VALOR_REFERENCIA_SUELO)}],
+              [{text: 'Valor m² Terreno', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfDinero(this.predio.EC_VALOR_M2_TERRENO)}],
+              [{text: 'Valor m² Construcción', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfDinero(this.predio.EC_VALOR_M2_CONSTRUCCION)}],
+              [{text: 'Valor total de terreno', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfDinero(this.predio.EC_VALOR_TOTAL_TERRENO) }],
+              [{text: 'Valor total de construcción', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfDinero(this.predio.EC_VALOR_TOTAL_CONSTRUCCION) }],
+              [{text: 'Avalúo', style: 'subheader', fillColor: '#CCC'}, {text: this.trasfDinero(this.predio.EC_AVALUO)}],
               [{text: 'Año avalúo catastral', style: 'subheader', fillColor: '#CCC'}, {text: this.predio.EC_AVALUO_ANO}]
             ]
           },
