@@ -26,7 +26,10 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
-# Pasos para el despliegue
+## Compilar para producción
+ng build --configuration production
+
+## Pasos para el despliegue
 
 1. crear el archivo nginx.conf
 /u01/app/docker/predio360/sdp_predio360_front-main/nginx.conf

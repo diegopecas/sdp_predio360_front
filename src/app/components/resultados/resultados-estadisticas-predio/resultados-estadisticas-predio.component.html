@@ -2,7 +2,7 @@
   <p>
     <strong class="titulo-azul">{{ est.categoriaLabel }}</strong>
   </p>
-  <ng-container *ngFor="let estValores of est.valores">
+  <ng-container *ngFor="let estValores of est.valores | SearchPipeGeneral: buscarTexto">
     <table style="border: none; width: 100%; text-align: center">
       <tr>
         <th colspan="3">

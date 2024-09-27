@@ -1,6 +1,7 @@
 import { ElementRef, Injectable, NgZone } from "@angular/core";
 import { environment } from "src/environments/environment";
 
+
 import config from "@arcgis/core/config";
 import Map from "@arcgis/core/Map";
 import MapView from "@arcgis/core/views/MapView";
@@ -17,12 +18,17 @@ import Search from "@arcgis/core/widgets/Search";
 import Point from "@arcgis/core/geometry/Point";
 import BasemapGallery from "@arcgis/core/widgets/BasemapGallery";
 import ScaleBar from "@arcgis/core/widgets/ScaleBar";
+import Slider from "@arcgis/core/widgets/Slider";
 import * as reactiveUtils from "@arcgis/core/core/reactiveUtils";
 import ButtonMenu from "@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenu";
 import ButtonMenuItem from "@arcgis/core/widgets/FeatureTable/Grid/support/ButtonMenuItem";
 import { RenderedSymbols } from "../symbols/rendered-symbols";
 import { BehaviorSubject } from "rxjs/internal/BehaviorSubject";
 import swal from "sweetalert2";
+import  SpatialReference from "@arcgis/core/geometry/SpatialReference";
+import esriRequest from "@arcgis/core/request.js";
+import MapImageLayer from "@arcgis/core/layers/MapImageLayer";
+import { Observable, lastValueFrom } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -69,6 +75,9 @@ export class MapService {
   constructor() {}
 
   public initDefaultMap(mapElementRef?: ElementRef): void {
+    
+    // setInterval(this.checkDiaNoche, 60000);
+    
     // config.assetsPath = 'assets/';
     config.apiKey = environment.esriConfigApiKey;
     this.views.container = mapElementRef?.nativeElement;
@@ -77,7 +86,7 @@ export class MapService {
       basemap: environment.baseConfigs.basemapId,
       ground: "world-elevation",
     });
-
+    
     /*this.views.sceneView = new SceneView({
       map: this.map,
       // container: mapElementRef?.nativeElement,
@@ -149,9 +158,20 @@ export class MapService {
     );*/
 
     // this.agregarCapasBase();
-    this.agregarListaCapas();
+    /*this.agregarListaCapas();
     this.agregarLeyenda();
-    this.agregarBusquedas();
+    this.agregarBusquedas();*/
+  }
+
+  // Función para comprobar si son las 6 de la tarde
+  checkDiaNoche() {
+    const now = new Date();
+    const hours = now.getHours();
+    if (hours === 18) {
+        console.log("¡Son las 6 de la tarde!");
+    } else {
+        console.log("No son las 6 de la tarde");
+    }
   }
 
   agregarWidgets() {
@@ -314,6 +334,46 @@ export class MapService {
     });
   }
 
+  removerCapaRestPrecargada(capa:any) {
+    if (capa.featureLayer) {
+      this.map?.remove(capa.featureLayer);
+    }
+  }
+
+  agregarCapaRestPrecargada(capa:any) {
+    try {
+      const popup = {
+        "title": capa.label,
+        "content": capa.popup
+      }
+
+      const nuevaCapa = new FeatureLayer({
+        url: capa.url,
+        outFields: capa.fields,
+        popupTemplate: popup
+      });
+
+      capa.featureLayer = nuevaCapa;
+
+      this.map?.add(nuevaCapa);
+
+      // Escuchar el evento de error al crear la LayerView
+      nuevaCapa.on('layerview-create-error', (errorEvent) => {
+        console.error('Error al crear la LayerView:', errorEvent.error);
+        swal.fire("Error al agregar capa.");
+      });
+
+      // También puedes escuchar el evento 'layerview-create' para realizar acciones después de que se crea la LayerView con éxito
+      nuevaCapa.on('layerview-create', (layerviewEvent) => {
+        console.log('LayerView creada con éxito:', layerviewEvent.layerView);
+        swal.fire("capa agregada correctamente.");
+      });
+
+    }catch(error:any) {
+      swal.fire("Ocurrió un error al agregar la capa.");
+    }
+  }
+
   agregarCapaRest(nombre:any, servicio:any) {
     try {
       const nuevaCapa = new FeatureLayer({
@@ -344,26 +404,97 @@ export class MapService {
     }catch(error:any) {
       swal.fire("Ocurrió un error al agregar la capa.");
     }
+  }
+
+  async defineActions(event:any) {
+    const item = event.item;
+  
+    await item.layer.when();
+  
+      item.actionsSections = [
+        [
+          {
+            title: "Go to full extent",
+            icon: "zoom-out-fixed",
+            id: "full-extent"
+          },
+          {
+            title: "Layer information",
+            icon: "information",
+            id: "information"
+          }
+        ],
+        [
+          {
+            title: "Increase opacity",
+            icon: "chevron-up",
+            id: "increase-opacity"
+          },
+          {
+            title: "Decrease opacity",
+            icon: "chevron-down",
+            id: "decrease-opacity"
+          }
+        ]
+      ];
     
-      /*const { value: url } = await swal.fire({
-        input: "url",
-        inputLabel: "URL address",
-        inputPlaceholder: "Enter the URL"
-      });
-      if (url) {
-        swal.fire(`Entered URL: ${url}`);
-      }*/
   }
 
   agregarListaCapas() {
+   
     const layerList = new LayerList({
       view: this.views.activeView,
+      // listItemCreatedFunction: this.defineActions
     });
+
+    layerList.listItemCreatedFunction = async (event:any) => {
+      const { item } = event;
+      await item.layer.when();
+    
+      // Adds a slider for updating a group layer's opacity
+      if (item.children.length > 1 && item.parent) {
+        const slider = new Slider({
+          min: 0,
+          max: 1,
+          precision: 2,
+          values: [1],
+          visibleElements: {
+            labels: true,
+            rangeLabels: true
+          }
+        });
+    
+        item.panel = {
+          content: slider,
+          icon: "sliders-horizontal",
+          title: "Change layer opacity"
+        };
+    
+        // Watch the slider's values array and update the layer's opacity
+        reactiveUtils.watch(
+          () => slider.values.map((value) => value),
+          (values) => (item.layer.opacity = values[0])
+        );
+      }
+    }
 
     const bgExpand = new Expand({
       view: this.views.activeView,
       content: layerList,
     });
+
+    /*const mySlider = new Slider({
+      // container: "sliderDiv",
+      min: 0,
+      max: 1,
+      steps: .05,
+      values: [1],
+      snapOnClickEnabled: true,
+      visibleElements: {labels: true,
+                          rangeLabels: true}
+    });
+
+    mySlider.on('thumb-drag', (index:any) => console.log(index));*/
 
     this.views.activeView?.ui.add(bgExpand, "bottom-right");
   }
@@ -438,7 +569,7 @@ export class MapService {
     const query = featureLayer.createQuery();
     query.where =
       environment.capaConsultaPredio.porLote.atributo + " like '" + lote + "'";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
 
     return featureLayer
@@ -468,7 +599,7 @@ export class MapService {
 
     query.where =
       environment.capaConsultaPredio.porLote.atributo + " IN ('" + ids + "')";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
 
     return featureLayer
@@ -498,7 +629,7 @@ export class MapService {
       " like '" +
       matricula +
       "'";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
 
     return featureLayer
@@ -528,7 +659,7 @@ export class MapService {
       " like '" +
       cedula +
       "'";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
 
     return featureLayer
@@ -555,7 +686,7 @@ export class MapService {
     const query = featureLayer.createQuery();
     query.where =
       environment.capaConsultaPredio.porChip.atributo + " like '" + chip + "'";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
     return featureLayer
       .queryFeatures(query)
@@ -564,6 +695,32 @@ export class MapService {
 
         if (features.length > 0) {
           return features.map((m: any) => m.attributes);
+        } else {
+          return [];
+        }
+      })
+      .catch((error: any) => {
+        console.error("Error al consultar la tabla:", error);
+      });
+  }
+
+  consultarPredioByChip(chip: any): any {
+    const featureLayer = new FeatureLayer({
+      url: environment.capaConsultaPredio.porChip.url,
+    });
+
+    const query = featureLayer.createQuery();
+    query.where =
+      environment.capaConsultaPredio.porChip.atributo + " like '" + chip + "'";
+    query.outFields = ["*"];
+    query.returnGeometry = false;
+    return featureLayer
+      .queryFeatures(query)
+      .then((result: any) => {
+        const features = result.features;
+
+        if (features.length > 0) {
+          return features.map((m: any) => m.attributes)[0];;
         } else {
           return [];
         }
@@ -585,7 +742,7 @@ export class MapService {
       " like '" +
       direccionConsulta +
       "%'";
-    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION"];
+    query.outFields = ["OBJECTID,GN_CODIGO_LOTE,GN_DIRECCION,GN_CHIP"];
     query.returnGeometry = false;
     return featureLayer
       .queryFeatures(query)
@@ -820,7 +977,7 @@ export class MapService {
             "rgb(50, 50, 50)"
           );*/
 
-    if (capa.formato?.dimensiones == 3) {
+    if (capa.formato?.dimensiones == 3 && this.views.actual == "3D") {
       switch (capa.formato?.simbolo) {
         case "bloque":
           this.bufferLayer = new FeatureLayer({
@@ -930,6 +1087,7 @@ export class MapService {
   }
 
   switchView(dims: any = "3D", capaAux: any = null) {
+    console.log("ingresa a switchview", dims, this.views.actual);
     /*if (this.views.activeView) {
       this.views.activeView.container = null;
     }*/
@@ -985,6 +1143,9 @@ export class MapService {
     );
 
     this.agregarCapasBase();
+    this.agregarListaCapas();
+    this.agregarLeyenda();
+    this.agregarBusquedas();
     this.agregarWidgets();
 
     if (capaAux) {
@@ -1029,6 +1190,9 @@ export class MapService {
     );
 
     this.agregarCapasBase();
+    this.agregarListaCapas();
+    this.agregarLeyenda();
+    this.agregarBusquedas();
     this.agregarWidgets();
 
     if (capaAux) {
@@ -1059,6 +1223,130 @@ export class MapService {
           datosGaleria = features.map((m: any) => m.attributes);
         }
         return datosGaleria;
+      })
+      .catch((error: any) => {
+        // Manejar cualquier error ocurrido durante la consulta
+        console.error("Error al consultar la tabla:", error);
+        return [];
+      });
+  }
+
+  consultarProyecto(idProyecto:any): any {
+    let proyecto = [] as any[];
+    // Crear un FeatureLayer con la URL del servicio de tabla
+    const featureLayer = new FeatureLayer({
+      url: environment.capaGaleria.url
+    });
+
+    // Consultar la tabla y obtener los resultados
+    const query = featureLayer.createQuery();
+    query.where = "CODIGO_PROYECTO = "+idProyecto; // Establecer una condición opcional para filtrar los resultados
+    query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
+
+    return featureLayer
+      .queryFeatures(query)
+      .then((result: any) => {
+        // Manipular los resultados obtenidos
+        const features = result.features;
+        // Realizar acciones con los datos devueltos
+
+        if (features.length > 0) {
+          proyecto = features.map((m: any) => m.attributes)[0];
+        }
+        return proyecto;
+      })
+      .catch((error: any) => {
+        // Manejar cualquier error ocurrido durante la consulta
+        console.error("Error al consultar la tabla:", error);
+        return [];
+      });
+  }
+
+  consultarLoteById(idLote:any): any {
+    let lote = [] as any[];
+    // Crear un FeatureLayer con la URL del servicio de tabla
+    const featureLayer = new FeatureLayer({
+      url: environment.urlLoteCatastral
+    });
+
+    // Consultar la tabla y obtener los resultados
+    const query = featureLayer.createQuery();
+    query.where = "GN_CODIGO_LOTE  = "+idLote; // Establecer una condición opcional para filtrar los resultados
+    query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
+
+    return featureLayer
+      .queryFeatures(query)
+      .then((result: any) => {
+        // Manipular los resultados obtenidos
+        const features = result.features;
+        // Realizar acciones con los datos devueltos
+
+        if (features.length > 0) {
+          lote = features.map((m: any) => m.attributes)[0];
+        }
+        return lote;
+      })
+      .catch((error: any) => {
+        // Manejar cualquier error ocurrido durante la consulta
+        console.error("Error al consultar la tabla:", error);
+        return [];
+      });
+  }
+
+  consultarExtentLote (idLote:any): any {
+    // Crear un FeatureLayer con la URL del servicio de tabla
+    const layer = new FeatureLayer({
+      url: environment.urlLoteCatastral
+    });
+
+    // Consultar la tabla y obtener los resultados
+    let query = layer.createQuery();
+
+
+    query.where = "GN_CODIGO_LOTE  = '"+idLote+"'"; // Establecer una condición opcional para filtrar los resultados
+    query.returnGeometry = false; // Especificar los campos que deseas obtener (en este caso, todos)
+    query.outSpatialReference = SpatialReference.WebMercator; // Especificar los campos que deseas obtener (en este caso, todos)
+    return layer
+      .queryExtent(query)
+      .then((result: any) => {
+        console.log ("resultado consulta extent", result);
+        // Manipular los resultados obtenidos
+        const extent = result.extent;
+        // Realizar acciones con los datos devueltos
+
+        
+        return extent;
+      })
+      .catch((error: any) => {
+        // Manejar cualquier error ocurrido durante la consulta
+        console.error("Error al consultar la tabla:", error);
+        return [];
+      });
+  }
+
+  consultarFichaProyectoInfo(idProyecto:any): any {
+    let fichaInfo = [] as any[];
+    // Crear un FeatureLayer con la URL del servicio de tabla
+    const featureLayer = new FeatureLayer({
+      url: environment.urlFichaProyecto
+    });
+
+    // Consultar la tabla y obtener los resultados
+    const query = featureLayer.createQuery();
+    query.where = "CODIGO_PROYECTO  = "+idProyecto; // Establecer una condición opcional para filtrar los resultados
+    query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
+
+    return featureLayer
+      .queryFeatures(query)
+      .then((result: any) => {
+        // Manipular los resultados obtenidos
+        const features = result.features;
+        // Realizar acciones con los datos devueltos
+
+        if (features.length > 0) {
+          fichaInfo = features.map((m: any) => m.attributes)[0];
+        }
+        return fichaInfo;
       })
       .catch((error: any) => {
         // Manejar cualquier error ocurrido durante la consulta
@@ -1218,4 +1506,110 @@ export class MapService {
         console.error("Error al consultar el servicio:", error);
       });
   }
+
+  consultarPlanoteca(long:any, lat:any): any {
+    let planoteca = [] as any[];
+    // Crear un FeatureLayer con la URL del servicio de tabla
+    const featureLayer = new FeatureLayer({
+      url: environment.urlPlanoteca
+    });
+
+    const point = new Point({
+      x: long,
+      y: lat,
+      spatialReference: SpatialReference.WGS84
+    });
+
+
+    // Consultar la tabla y obtener los resultados
+    const query = featureLayer.createQuery();
+    query.geometry = point; // Establecer una condición opcional para filtrar los resultados
+    query.spatialRelationship =  "intersects"; 
+    query.returnGeometry = false;
+    query.outFields = ["*"]; // Especificar los campos que deseas obtener (en este caso, todos)
+
+    return featureLayer
+      .queryFeatures(query)
+      .then((result: any) => {
+        // Manipular los resultados obtenidos
+        const features = result.features;
+        // Realizar acciones con los datos devueltos
+
+        if (features.length > 0) {
+          planoteca = features.map((m: any) => m.attributes)[0];
+        }
+        return planoteca;
+      })
+      .catch((error: any) => {
+        // Manejar cualquier error ocurrido durante la consulta
+        console.error("Error al consultar la tabla:", error);
+        return [];
+      });
+  }
+
+  consultarExtentPlanoteca (llavePlano:any): any {
+    // Crear un FeatureLayer con la URL del servicio de tabla
+    const layer = new FeatureLayer({
+      url: environment.urlPlanoteca
+    });
+
+    // Consultar la tabla y obtener los resultados
+    let query = layer.createQuery();
+
+
+    query.where = "LLAVE_PLANO = '"+llavePlano+"'"; // Establecer una condición opcional para filtrar los resultados
+    query.returnGeometry = false; // Especificar los campos que deseas obtener (en este caso, todos)
+    query.outSpatialReference = SpatialReference.WebMercator; // Especificar los campos que deseas obtener (en este caso, todos)
+    return layer
+      .queryExtent(query)
+      .then((result: any) => {
+        console.log ("resultado consulta extent", result);
+        // Manipular los resultados obtenidos
+        const extent = result.extent;
+        // Realizar acciones con los datos devueltos
+
+        
+        return extent;
+      })
+      .catch((error: any) => {
+        // Manejar cualquier error ocurrido durante la consulta
+        console.error("Error al consultar la tabla:", error);
+        return [];
+      });
+  }
+
+  consultarImagenPlanoteca (extent:any, llavePlano:any): Promise<any>{
+    //const urlSearchParams = new URLSearchParams();
+
+    
+
+    const options: any = {
+      body: this.jsonToFormData({
+        bbox: `${extent.xmin},${extent.ymin},${extent.xmax},${extent.ymax}`,
+        bboxSR: '102100',
+        layerDefs: JSON.stringify({"1":"LLAVE_PLANO = '"+llavePlano+"'","2":"LLAVE_PLANO = '"+llavePlano+"'","3":"LLAVE_PLANO = '"+llavePlano+"'","5":"LLAVE_PLANO = '"+llavePlano+"'","7":"LLAVE_PLANO = '"+llavePlano+"'","8":"LLAVE_PLANO = '"+llavePlano+"'","9":"LLAVE_PLANO = '"+llavePlano+"'","10":"LLAVE_PLANO = '"+llavePlano+"'","11":"LLAVE_PLANO = '"+llavePlano+"'","12":"LLAVE_PLANO = '"+llavePlano+"'","13":"LLAVE_PLANO = '"+llavePlano+"'","15":"LLAVE_PLANO = '"+llavePlano+"'","17":"LLAVE_PLANO = '"+llavePlano+"'","19":"LLAVE_PLANO = '"+llavePlano+"'","20":"LLAVE_PLANO = '"+llavePlano+"'","21":"LLAVE_PLANO = '"+llavePlano+"'","22":"LLAVE_PLANO = '"+llavePlano+"'","24":"LLAVE_PLANO = '"+llavePlano+"'","25":"LLAVE_PLANO = '"+llavePlano+"'","26":"LLAVE_PLANO = '"+llavePlano+"'","27":"LLAVE_PLANO = '"+llavePlano+"'","28":"LLAVE_PLANO = '"+llavePlano+"'","29":"LLAVE_PLANO = '"+llavePlano+"'","31":"LLAVE_PLANO = '"+llavePlano+"'","32":"LLAVE_PLANO = '"+llavePlano+"'","33":"LLAVE_PLANO = '"+llavePlano+"'","34":"LLAVE_PLANO = '"+llavePlano+"'","35":"LLAVE_PLANO = '"+llavePlano+"'","36":"LLAVE_PLANO = '"+llavePlano+"'","37":"LLAVE_PLANO = '"+llavePlano+"'","39":"LLAVE_PLANO = '"+llavePlano+"'","40":"LLAVE_PLANO = '"+llavePlano+"'","41":"LLAVE_PLANO = '"+llavePlano+"'","43":"LLAVE_PLANO = '"+llavePlano+"'","44":"LLAVE_PLANO = '"+llavePlano+"'","45":"LLAVE_PLANO = '"+llavePlano+"'","46":"LLAVE_PLANO = '"+llavePlano+"'","47":"LLAVE_PLANO = '"+llavePlano+"'","48":"LLAVE_PLANO = '"+llavePlano+"'","49":"LLAVE_PLANO = '"+llavePlano+"'","51":"LLAVE_PLANO = '"+llavePlano+"'","53":"LLAVE_PLANO = '"+llavePlano+"'","54":"LLAVE_PLANO = '"+llavePlano+"'","55":"LLAVE_PLANO = '"+llavePlano+"'"}),
+        size: '1020,560',
+        format: 'png8',
+        transparent: 'true',
+        dpi: '96',
+        f: "pjson"
+      }),
+      method: "post",
+      responseType : "json"
+    };
+
+    return esriRequest(environment.urlCapasPlanoteca, options);
+  }
+
+  jsonToFormData(json: { [key: string]: any }): FormData {
+    const formData = new FormData();
+     
+    for (const key in json) {
+    if (json.hasOwnProperty(key)) {
+          formData.append(key, json[key]);
+        }
+      }
+     
+      return formData;
+    }
 }

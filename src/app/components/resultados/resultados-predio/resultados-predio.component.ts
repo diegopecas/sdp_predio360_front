@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { environment } from 'src/environments/environment';
 // import { loadModules } from "esri-loader";
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -12,10 +12,13 @@ import { MapService } from 'src/app/common/services/map.service';
 export class ResultadosPredioComponent implements OnInit, OnChanges {
   
   @Input() predio: any;
+  @Input() buscar: any;
+  @Output() atributosPredio = new EventEmitter();
   
   public paneles = [] as any;
   public panelEstadisticas = false;
   public predioEvaluado: any;
+  public buscarTexto = 'sis';
 
   constructor(private sanitizer: DomSanitizer,
     private mapService:MapService) {}
@@ -35,6 +38,7 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    this.buscarTexto = changes["buscar"]["currentValue"];
     this.predioEvaluado = changes["predio"]["currentValue"];
     if(this.predioEvaluado) {
       console.log('cambio de predio',this.predioEvaluado);
@@ -67,6 +71,7 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
     if(this.predioEvaluado) {
       environment.serviciosResultados.forEach((capa:any)=>{
         this.mapService.cargarInformacion(this.predioEvaluado, capa).then((response:any)=>{
+          console.log("CARGAR INFORMACION", response);
           if (response.length > 0) {
             const attr = response[0].attributes;
 
@@ -78,6 +83,7 @@ export class ResultadosPredioComponent implements OnInit, OnChanges {
                 }
               })
             })
+            this.atributosPredio.emit(this.paneles);
           }
         }).catch((error:any)=>{
           console.log("error al cargar", error);

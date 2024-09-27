@@ -6,6 +6,7 @@ export const environment = {
   },
   esriConfigApiKey:
     "AAPK18837c198fe14f849f5237a94fb8c4d9nyUIHfhPmykTR_afDukiTorJHXPimhB05XjXQ6o6rDQ-GAsclkcQJjNfsUX-ulMj",
+  textoEncuesta: "Queremos seguir mejorando la solución de Predio360, con tu ayuda lo podremos lograr, te invitamos a participar de la lluvia de ideas y necesidades en la siguiente encuesta.",  
   baseConfigs: {
     basemapId: "streets-vector",
     ground: "world-elevation",
@@ -16,6 +17,64 @@ export const environment = {
     },
     zoomLevel: 17,
   },
+  capasPrecargadas: [
+    {
+      id: 'pre-localidades',
+      label: 'Localidades',
+      url: 'https://serviciosg.sdp.gov.co/server/rest/services/SERVICIOS_GEOGRAFICOS/DIVISION_FISICA/MapServer/4',
+      tipo: 'rest',
+      fields: ["OBJECTID", "NOMBRE"],
+      popup: "<b>ID Objeto:</b> {OBJECTID}<br/><b>Nombre localidad:</b> {NOMBRE}"
+    },
+    {
+      id: 'pre-actuaciones',
+      label: 'Capa Actuaciones estratégicas',
+      url: 'https://serviciosg.sdp.gov.co/server/rest/services/POT555/NORMA_URBAN%C3%8DSTICA_Y_OT/FeatureServer/32',
+      tipo: 'rest',
+      fields: ["OBJECTID"],
+      popup: "<b>ID Objeto:</b> {OBJECTID}"
+    },
+    {
+      id: 'pre-manzanas-cuidado',
+      label: 'Manzanas del cuidado',
+      url: 'https://serviciosg.sdp.gov.co/server/rest/services/POT555/Sistema_del_cuidado_y_servicios_sociales/FeatureServer/11',
+      tipo: 'rest',
+      fields: ["OBJECTID"],
+      popup: "<b>ID Objeto:</b> {OBJECTID}"
+    },
+    {
+      id: 'pre-upl',
+      label: 'UPL',
+      url: 'https://serviciosg.sdp.gov.co/server/rest/services/POT555/NORMA_URBAN%C3%8DSTICA_Y_OT/FeatureServer/28',
+      tipo: 'rest',
+      fields: ["OBJECTID"],
+      popup: "<b>ID Objeto:</b> {OBJECTID}"
+    },
+    {
+      id: 'pre-planes-parciales',
+      label: 'Planes parciales de desarrollo y renovación urbana',
+      url: 'https://serviciosg.sdp.gov.co/server/rest/services/POT555/NORMA_URBAN%C3%8DSTICA_Y_OT/FeatureServer/26',
+      tipo: 'rest',
+      fields: ["OBJECTID"],
+      popup: "<b>ID Objeto:</b> {OBJECTID}"
+    },
+    {
+      id: 'pre-areas-integracion-multi',
+      label: 'Áreas de integración multimodal',
+      url: 'https://serviciosg.sdp.gov.co/server/rest/services/POT555/ESTRUCTURA_SOCIOECON%C3%93MICA_CREATIVA_Y_DEL_CUIDADO/FeatureServer/28',
+      tipo: 'rest',
+      fields: ["OBJECTID"],
+      popup: "<b>ID Objeto:</b> {OBJECTID}"
+    },
+    {
+      id: 'pre-cluster-comercio-mas',
+      label: 'Clúster de comercio masivo',
+      url: 'https://serviciosg.sdp.gov.co/server/rest/services/POT555/ESTRUCTURA_SOCIOECON%C3%93MICA_CREATIVA_Y_DEL_CUIDADO/FeatureServer/9',
+      tipo: 'rest',
+      fields: ["OBJECTID"],
+      popup: "<b>ID Objeto:</b> {OBJECTID}"
+    },
+  ],
   capasBase: [
     {
       id: "construcciones",
@@ -68,6 +127,8 @@ export const environment = {
     },
   ],
 
+  urlExportMap:
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/MapServer/export?",
   urlServicioPredios:
     "https://services8.arcgis.com/2gedZBw4OrdjULOA/arcgis/rest/services/construccion_predio_360/FeatureServer/0",
   // urlServicioPredios:
@@ -75,11 +136,17 @@ export const environment = {
   urlServicioGaleria:
     "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
   urlTablaPredios:
-    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
   urlLoteCatastral:
-    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/4",
   urlConstruccion:
-    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/4",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/0",
+  urlFichaProyecto:
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/8",
+  urlPlanoteca:
+    "https://sinupot.sdp.gov.co/serverr/rest/services/Planoteca/ConsultasPUT/MapServer/0",
+  urlCapasPlanoteca:
+    "https://sinupot.sdp.gov.co/serverr/rest/services/Planoteca/CapasPUT/MapServer/export",
   urlSinupot: "https://sinupot.sdp.gov.co/serverp/rest/services/",
   capaArbolado: {
     url: "https://geoportal.jbb.gov.co/agc/rest/services/SIGAU/CensoArbol/MapServer/0",
@@ -97,23 +164,23 @@ export const environment = {
   },
   capaConsultaPredio: {
     porLote: {
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
       atributo: "GN_CODIGO_LOTE",
     },
     porDireccion: {
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
       atributo: "GN_DIRECCION",
     },
     porMatricula: {
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
       atributo: "GN_MATRICULA_INMOBILIARIA",
     },
     porChip: {
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
       atributo: "GN_CHIP",
     },
     porCedula: {
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
       atributo: "GN_CEDULA_CATASTRAL",
     },
   },
@@ -183,7 +250,7 @@ export const environment = {
   serviciosInterception: [
     "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/0",
     "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/4",
-    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+    "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
     "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/6",
     "https://serviciosg.sdp.gov.co/server/rest/services/POT555/Sistema_del_cuidado_y_servicios_sociales/MapServer/8",
     "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/MapServer/2",
@@ -1565,7 +1632,7 @@ export const environment = {
       ],
     },
     {
-      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360/Predio_360/FeatureServer/3",
+      url: "https://serviciosg.sdp.gov.co/server/rest/services/predio_360_DES/Predio360_DES/FeatureServer/3",
       id: "predio",
       name: "Predio",
       filter: ["OBJECTID", "OBJECTID"],
