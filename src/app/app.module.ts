@@ -9,6 +9,7 @@ import { ConsultaPredialComponent } from './components/consulta/consulta-predial
 import { HomeComponent } from './components/home/home.component';
 import { FormsModule } from '@angular/forms';
 import { Map3dComponent } from './components/map3d/map3d.component';
+import { Map2dComponent } from './components/map2d/map2d.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ConsultaDireccionComponent } from './components/consulta/consulta-predial/consulta-direccion/consulta-direccion.component';
 import { ConsultaMatriculaComponent } from './components/consulta/consulta-predial/consulta-matricula/consulta-matricula.component';
@@ -48,6 +49,7 @@ import { EncabezadoComponent } from './common/encabezado/encabezado.component';
     ConsultaPredialComponent,
     HomeComponent,
     Map3dComponent,
+    Map2dComponent,
     ConsultaDireccionComponent,
     ConsultaMatriculaComponent,
     ConsultaChipComponent,
